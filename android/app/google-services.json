@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "604553621995",
+    "project_id": "uni-cronos-7216",
+    "storage_bucket": "uni-cronos-7216.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:604553621995:android:06298bf76d98af0028e9ae",
+        "android_client_info": {
+          "package_name": "app.com.unicronos"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB-RMI-VXgNY3tg1ibSl4eQGYiDHV4zZSI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

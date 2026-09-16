@@ -1,0 +1,51 @@
+{
+  "conditions": [],
+  "parameters": {
+    "android_share_url": {
+      "defaultValue": {
+        "value": ""
+      },
+      "description": "Android app share URL",
+      "valueType": "STRING"
+    },
+    "ios_share_url": {
+      "defaultValue": {
+        "value": ""
+      },
+      "description": "iOS app share URL",
+      "valueType": "STRING"
+    },
+    "web_share_url": {
+      "defaultValue": {
+        "value": ""
+      },
+      "description": "PWA app share URL",
+      "valueType": "STRING"
+    },
+    "contact_url": {
+      "defaultValue": {
+        "value": ""
+      },
+      "description": "Contact page URL (opens in WebView)",
+      "valueType": "STRING"
+    },
+    "privacy_policy_url": {
+      "defaultValue": {
+        "value": ""
+      },
+      "description": "Privacy Policy page URL (opens in WebView)",
+      "valueType": "STRING"
+    },
+    "terms_url": {
+      "defaultValue": {
+        "value": ""
+      },
+      "description": "Terms of Use page URL (opens in WebView)",
+      "valueType": "STRING"
+    }
+  },
+  "parameterGroups": {},
+  "version": {
+    "description": "Initial Remote Config template for the app"
+  }
+}
