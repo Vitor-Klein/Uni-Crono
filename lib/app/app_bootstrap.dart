@@ -5,6 +5,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 
 import '../core/config/remote_config_service.dart';
+import '../core/theme/font_licenses.dart';
 import '../features/notifications/messages/data/message_storage.dart';
 import '../features/notifications/data/push_service.dart';
 import '../firebase_options.dart';
@@ -25,6 +26,7 @@ class AppBootstrap {
 
   static Future<AppBootstrapResult> initialize() async {
     AppThemeBootstrap.ensureConfigured();
+    FontLicenses.register();
 
     var firebaseInitialized = false;
     try {
