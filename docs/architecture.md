@@ -40,6 +40,18 @@ o código sozinho não conta:
 - … depende de …
 - … **não** depende de … — porque …
 
+## Idioma
+
+pt é o idioma oficial. Sem preferência salva, o `MaterialApp` recebe
+`locale: const Locale('pt')` — o app abre em pt qualquer que seja o idioma do
+aparelho. en e es são traduções: valem quando há uma preferência salva
+(`LocaleCubit`, chave `preferred_locale`). O app ainda não tem seletor de idioma
+na interface.
+
+A geração de l10n usa `lib/l10n/app_pt.arb` como referência (`l10n.yaml`), e
+`AppLocalizations.supportedLocales` começa por pt. Os três ARBs têm as mesmas
+chaves.
+
 ## Tema e design system
 
 O app renderiza **só o tema claro**: o `MaterialApp` recebe `themeMode:
