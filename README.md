@@ -1,24 +1,38 @@
-# uni_cronos
+# Uni Cronos
 
-Generated from the **base_nextup_template** Mason brick. For full architecture documentation and
-how-to guides, see the brick's README in the `next_up_bricks` repository.
+O **Uni Cronos** é um aplicativo desenvolvido para ajudar estudantes a acompanhar e gerenciar suas horas complementares e extracurriculares de forma prática. 
+
+O grande diferencial do projeto é a funcionalidade de **upload de certificados**: ao enviar o documento, um script automatizado realiza a leitura do arquivo, extrai as informações de carga horária e já contabiliza as horas automaticamente no grupo ou categoria corretos de atividades.
+
+## 🌟 Funcionalidades Principais
+
+* **Gestão de Horas:** Visualize facilmente o total de horas acumuladas e o progresso das suas metas, divididas por categoria.
+* **Upload e Leitura Inteligente:** Faça o upload dos seus certificados e deixe o sistema extrair os dados automaticamente.
+* **Categorização Automática:** As horas são interpretadas e alocadas no grupo de atividades certo, poupando o trabalho manual de cadastro.
+
+## 🎨 Protótipo e Design
+
+O design e as telas do aplicativo podem ser visualizados no Figma:
+- [Acessar Protótipo no Figma](https://www.figma.com/design/vNP3TPcSQFyIJEEPhlqSCE/Untitled?node-id=0-1&t=1HmSgf8XhXO0iEt8-1)
 
 ---
 
-## Quick Start
+## 🛠️ Quick Start (Desenvolvimento)
+
+O projeto foi gerado a partir do *base_nextup_template* (Flutter). Para rodar localmente:
 
 ```bash
-# Install dependencies
+# Instalar as dependências
 flutter pub get
 
-# Run the app
+# Rodar o app
 flutter run
 
-# Analyze code (custom lint rules)
+# Analisar o código (custom lint rules)
 dart run custom_lint
 ```
 
-## Remote Config
+## ⚙️ Remote Config
 
 Update Remote Config keys from the command line:
 
@@ -36,11 +50,9 @@ Keys to configure in the Firebase Console:
 | `privacy_policy_url` | Privacy Policy URL (opens in WebView) |
 | `terms_url` | Terms of Use URL (opens in WebView) |
 
-## App Icons
+## 📱 App Icons
 
-`assets/icon/playstore.png` and `assets/icon/appstore.png` ship with a NextUp placeholder
-(cream tile, dark "N") so `dart run flutter_launcher_icons` works out of the box. Replace
-them with real branding before publishing, then regenerate:
+`assets/icon/playstore.png` and `assets/icon/appstore.png` ship with a placeholder. Replace them with real branding before publishing, then regenerate:
 
 ```bash
 # Required files:
@@ -50,31 +62,17 @@ them with real branding before publishing, then regenerate:
 dart run flutter_launcher_icons
 ```
 
-The App Store rejects icons with an alpha channel — export both files as opaque RGB.
-
 ### Notification Icon
 
-Android's status bar renders the *small icon* using only its alpha channel: an opaque,
-colorful app icon becomes a solid white square. That's why the notification uses a
-separate, dedicated asset instead of the app icon:
-
+Android's status bar renders the *small icon* using only its alpha channel. 
 - **App icon** (`assets/icon/*.png`): opaque, full-color square.
-- **Notification icon** (`android/app/src/main/res/drawable-*/ic_notification.png`):
-  monochrome white silhouette on a fully transparent background, no background shape.
+- **Notification icon** (`android/app/src/main/res/drawable-*/ic_notification.png`): monochrome white silhouette on a fully transparent background.
 
-A placeholder `ic_notification.png` ships in every density bucket (`drawable-mdpi` 24px,
-`drawable-hdpi` 36px, `drawable-xhdpi` 48px, `drawable-xxhdpi` 72px, `drawable-xxxhdpi`
-96px). To replace it, export a white-on-transparent silhouette from a single master image
-and resize it into each bucket, keeping some padding from the edges — the OS adds its own.
-
-iOS has no equivalent asset: it always uses the app icon in notifications, so there's
-nothing to embark on that side.
-
-## Splash Screen
+## 🖼️ Splash Screen
 
 Replace `assets/splash.png` with the project splash image.
 
-## Firebase
+## 🔥 Firebase
 
 Firebase was configured automatically during generation. If you need to re-run setup:
 
