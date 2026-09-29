@@ -52,6 +52,12 @@ A geração de l10n usa `lib/l10n/app_pt.arb` como referência (`l10n.yaml`), e
 `AppLocalizations.supportedLocales` começa por pt. Os três ARBs têm as mesmas
 chaves.
 
+Os textos do `next_widgets_service` (`S`, usados na folha de acessibilidade) só
+vêm em en e es no pacote. O `NextWidgetsFallbackDelegate`
+(`lib/core/localization/`) cobre o que o pacote não cobre: em pt entrega uma
+subclasse de `S` com os textos em pt, sem passar por `S.load` — que alteraria o
+`Intl.defaultLocale` global; qualquer outro idioma não coberto cai em `en`.
+
 ## Tema e design system
 
 O app renderiza **só o tema claro**: o `MaterialApp` recebe `themeMode:
