@@ -159,6 +159,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsAccessibilitySubtitle => 'Appearance and display settings';
 
   @override
+  String get settingsLanguageTitle => 'LANGUAGE';
+
+  @override
+  String get settingsLanguageSemantics => 'Select the app language';
+
+  @override
   String get settingsThemeLabel => 'Theme';
 
   @override

@@ -57,6 +57,8 @@
   "settingsTitle": "CONFIGURAÇÕES",
   "settingsAccessibilityTitle": "ACESSIBILIDADE",
   "settingsAccessibilitySubtitle": "Aparência e configurações de exibição",
+  "settingsLanguageTitle": "IDIOMA",
+  "settingsLanguageSemantics": "Selecionar o idioma do app",
   "settingsThemeLabel": "Tema",
   "settingsThemeSemantics": "Selecionar o modo de tema",
   "themeModeSystem": "Sistema",

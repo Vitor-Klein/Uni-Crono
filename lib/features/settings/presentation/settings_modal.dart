@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:next_core_service/next_core_service.dart';
+// Both packages export a `LanguageOption`; the sheet's is next_widgets'.
+import 'package:next_core_service/next_core_service.dart' hide LanguageOption;
 import 'package:next_widgets_service/next_widgets_service.dart';
 
 import '../../../core/widgets/app_modal.dart';
@@ -28,12 +29,57 @@ void showSettingsModal(
         onTap: onNotificationsTap,
       ),
       AppModalItem(
+        title: l10n.settingsLanguageTitle,
+        subtitle: _languageName(Localizations.localeOf(context)),
+        icon: const Icon(Icons.language_outlined, size: 22),
+        onTap: () => _openLanguageSheet(context),
+      ),
+      AppModalItem(
         title: l10n.settingsAccessibilityTitle,
         subtitle: l10n.settingsAccessibilitySubtitle,
         icon: const Icon(Icons.accessibility_new, size: 22),
         onTap: () => _openAccessibilitySheet(context),
         showDivider: false,
       ),
+    ],
+  );
+}
+
+/// The app languages, each named in itself — never translated, so whoever
+/// can't read the current language still recognizes their own.
+const _languages = [
+  (code: 'pt', name: 'Português', flag: '🇧🇷'),
+  (code: 'en', name: 'English', flag: '🇺🇸'),
+  (code: 'es', name: 'Español', flag: '🇪🇸'),
+];
+
+String _languageName(Locale locale) => _languages
+    .firstWhere(
+      (l) => l.code == locale.languageCode,
+      orElse: () => _languages.first,
+    )
+    .name;
+
+/// No "system" option: with no saved choice the app is pt, whatever the
+/// device language.
+void _openLanguageSheet(BuildContext context) {
+  final l10n = AppLocalizations.of(context)!;
+  final localeCubit = context.read<LocaleCubit>();
+  final current = Localizations.localeOf(context).languageCode;
+  showLanguageSheet(
+    context: context,
+    semanticsLabel: l10n.settingsLanguageSemantics,
+    options: [
+      for (final language in _languages)
+        LanguageOption(
+          label: language.name,
+          emoji: language.flag,
+          selected: language.code == current,
+          onTap: () {
+            Navigator.of(context).pop();
+            localeCubit.setLocale(Locale(language.code));
+          },
+        ),
     ],
   );
 }

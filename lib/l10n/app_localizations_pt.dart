@@ -160,6 +160,12 @@ class AppLocalizationsPt extends AppLocalizations {
       'Aparência e configurações de exibição';
 
   @override
+  String get settingsLanguageTitle => 'IDIOMA';
+
+  @override
+  String get settingsLanguageSemantics => 'Selecionar o idioma do app';
+
+  @override
   String get settingsThemeLabel => 'Tema';
 
   @override

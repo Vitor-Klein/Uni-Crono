@@ -161,6 +161,12 @@ class AppLocalizationsEs extends AppLocalizations {
       'Apariencia y configuración de pantalla';
 
   @override
+  String get settingsLanguageTitle => 'IDIOMA';
+
+  @override
+  String get settingsLanguageSemantics => 'Seleccionar el idioma de la app';
+
+  @override
   String get settingsThemeLabel => 'Tema';
 
   @override

@@ -394,6 +394,18 @@ abstract class AppLocalizations {
   /// **'Aparência e configurações de exibição'**
   String get settingsAccessibilitySubtitle;
 
+  /// No description provided for @settingsLanguageTitle.
+  ///
+  /// In pt, this message translates to:
+  /// **'IDIOMA'**
+  String get settingsLanguageTitle;
+
+  /// No description provided for @settingsLanguageSemantics.
+  ///
+  /// In pt, this message translates to:
+  /// **'Selecionar o idioma do app'**
+  String get settingsLanguageSemantics;
+
   /// No description provided for @settingsThemeLabel.
   ///
   /// In pt, this message translates to:
