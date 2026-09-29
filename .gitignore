@@ -12,6 +12,9 @@
 .swiftpm/
 migrate_working_dir/
 
+# Export local do Figma — a fonte do design é o arquivo no Figma
+*.fig
+
 # IntelliJ related
 *.iml
 *.ipr

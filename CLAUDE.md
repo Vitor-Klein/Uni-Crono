@@ -96,8 +96,11 @@ está lá.
 
 <quality_gates>
 <!-- Comandos literais, copiáveis. Um por linha, com o que cada um cobre. -->
-- `…`  — …
-- `…`  — …
+- `flutter analyze`  — erros, avisos e lints do analyzer.
+- `dart run custom_lint`  — lints do `lints_service` (o `analyze` de CLI não roda
+  plugins).
+- `flutter test`  — a suíte inteira.
+- `dart format --output=none --set-exit-if-changed lib test`  — formatação.
 
 Definição de pronto: todos os CAs da spec com teste verde + os gates acima
 passando + nenhum TODO novo no código + os **artefatos que andam juntos**
