@@ -154,7 +154,7 @@ class _MyAppState extends State<MyApp> {
         return BlocBuilder<LocaleCubit, Locale?>(
           builder: (context, locale) {
             return MaterialApp.router(
-              title: 'uni_cronos',
+              title: 'Uni Cronos',
               debugShowCheckedModeBanner: false,
               scaffoldMessengerKey: AppRouter.scaffoldMessengerKey,
               // The app only has a light theme: the theme choice in the
@@ -162,7 +162,10 @@ class _MyAppState extends State<MyApp> {
               // what is rendered.
               theme: themeState.lightTheme,
               themeMode: ThemeMode.light,
-              locale: locale,
+              // pt is the official language: with no saved choice the app
+              // opens in pt whatever the device language; en/es are
+              // translations, only by the user's saved choice.
+              locale: locale ?? const Locale('pt'),
               localizationsDelegates: const [
                 AppLocalizations.delegate,
                 ...NextLocalizations.localizationsDelegates,

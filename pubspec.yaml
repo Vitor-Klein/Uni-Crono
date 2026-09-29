@@ -129,7 +129,7 @@ flutter_launcher_icons:
 # The following section is specific to Flutter packages.
 flutter:
 
-  # Gera AppLocalizations a partir de l10n.yaml + lib/l10n/app_en.arb.
+  # Gera AppLocalizations a partir de l10n.yaml + lib/l10n/app_pt.arb.
   generate: true
 
   # The following line ensures that the Material Icons font is

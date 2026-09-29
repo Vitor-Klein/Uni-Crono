@@ -405,11 +405,11 @@ void main() {
 
         await tester.tap(find.text('open settings'));
         await tester.pumpAndSettle();
-        await tester.tap(find.text('ACCESSIBILITY'));
+        await tester.tap(find.text('ACESSIBILIDADE'));
         await tester.pumpAndSettle();
-        await tester.tap(find.text('Theme'));
+        await tester.tap(find.text('Tema'));
         await tester.pumpAndSettle();
-        await tester.tap(find.text('Dark'));
+        await tester.tap(find.text('Escuro'));
         await tester.pumpAndSettle();
 
         final prefs = await SharedPreferences.getInstance();

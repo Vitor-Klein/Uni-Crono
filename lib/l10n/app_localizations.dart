@@ -95,399 +95,399 @@ abstract class AppLocalizations {
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
+    Locale('pt'),
     Locale('en'),
     Locale('es'),
-    Locale('pt'),
   ];
 
   /// No description provided for @webViewDeviceDisclaimer.
   ///
-  /// In en, this message translates to:
-  /// **'The display may vary depending on your device.'**
+  /// In pt, this message translates to:
+  /// **'A exibição pode variar conforme o seu dispositivo.'**
   String get webViewDeviceDisclaimer;
 
   /// No description provided for @webViewDismiss.
   ///
-  /// In en, this message translates to:
-  /// **'Dismiss'**
+  /// In pt, this message translates to:
+  /// **'Fechar'**
   String get webViewDismiss;
 
   /// No description provided for @webViewErrorTitle.
   ///
-  /// In en, this message translates to:
-  /// **'Could not load page'**
+  /// In pt, this message translates to:
+  /// **'Não foi possível carregar a página'**
   String get webViewErrorTitle;
 
   /// No description provided for @webViewErrorMessage.
   ///
-  /// In en, this message translates to:
-  /// **'Check your connection and try again.'**
+  /// In pt, this message translates to:
+  /// **'Verifique sua conexão e tente novamente.'**
   String get webViewErrorMessage;
 
   /// No description provided for @webViewRetry.
   ///
-  /// In en, this message translates to:
-  /// **'Retry'**
+  /// In pt, this message translates to:
+  /// **'Tentar novamente'**
   String get webViewRetry;
 
   /// No description provided for @notificationsEnabledMessage.
   ///
-  /// In en, this message translates to:
-  /// **'Notifications enabled.'**
+  /// In pt, this message translates to:
+  /// **'Notificações ativadas.'**
   String get notificationsEnabledMessage;
 
   /// No description provided for @notificationsDisabledMessage.
   ///
-  /// In en, this message translates to:
-  /// **'Notifications disabled.'**
+  /// In pt, this message translates to:
+  /// **'Notificações desativadas.'**
   String get notificationsDisabledMessage;
 
   /// No description provided for @notificationsUpdateError.
   ///
-  /// In en, this message translates to:
-  /// **'Could not update notification settings.'**
+  /// In pt, this message translates to:
+  /// **'Não foi possível atualizar as configurações de notificação.'**
   String get notificationsUpdateError;
 
   /// No description provided for @homeMoreButton.
   ///
-  /// In en, this message translates to:
-  /// **'MORE'**
+  /// In pt, this message translates to:
+  /// **'MAIS'**
   String get homeMoreButton;
 
   /// No description provided for @notificationsSheetTitle.
   ///
-  /// In en, this message translates to:
-  /// **'NOTIFICATIONS'**
+  /// In pt, this message translates to:
+  /// **'NOTIFICAÇÕES'**
   String get notificationsSheetTitle;
 
   /// No description provided for @pushNotificationsLabel.
   ///
-  /// In en, this message translates to:
-  /// **'PUSH NOTIFICATIONS'**
+  /// In pt, this message translates to:
+  /// **'NOTIFICAÇÕES PUSH'**
   String get pushNotificationsLabel;
 
   /// No description provided for @enabledLabel.
   ///
-  /// In en, this message translates to:
-  /// **'Enabled'**
+  /// In pt, this message translates to:
+  /// **'Ativado'**
   String get enabledLabel;
 
   /// No description provided for @disabledLabel.
   ///
-  /// In en, this message translates to:
-  /// **'Disabled'**
+  /// In pt, this message translates to:
+  /// **'Desativado'**
   String get disabledLabel;
 
   /// No description provided for @notificationChannelName.
   ///
-  /// In en, this message translates to:
-  /// **'General'**
+  /// In pt, this message translates to:
+  /// **'Geral'**
   String get notificationChannelName;
 
   /// No description provided for @notificationChannelDescription.
   ///
-  /// In en, this message translates to:
-  /// **'General notifications'**
+  /// In pt, this message translates to:
+  /// **'Notificações gerais'**
   String get notificationChannelDescription;
 
   /// No description provided for @notificationOpenLinkAction.
   ///
-  /// In en, this message translates to:
-  /// **'Open link'**
+  /// In pt, this message translates to:
+  /// **'Abrir link'**
   String get notificationOpenLinkAction;
 
   /// No description provided for @notificationFallbackTitle.
   ///
-  /// In en, this message translates to:
-  /// **'Notification'**
+  /// In pt, this message translates to:
+  /// **'Notificação'**
   String get notificationFallbackTitle;
 
   /// No description provided for @messagesTitle.
   ///
-  /// In en, this message translates to:
-  /// **'Messages'**
+  /// In pt, this message translates to:
+  /// **'Mensagens'**
   String get messagesTitle;
 
   /// No description provided for @messagesClearAllTooltip.
   ///
-  /// In en, this message translates to:
-  /// **'Clear all'**
+  /// In pt, this message translates to:
+  /// **'Limpar tudo'**
   String get messagesClearAllTooltip;
 
   /// No description provided for @messagesCloseTooltip.
   ///
-  /// In en, this message translates to:
-  /// **'Close'**
+  /// In pt, this message translates to:
+  /// **'Fechar'**
   String get messagesCloseTooltip;
 
   /// No description provided for @messageNoTitle.
   ///
-  /// In en, this message translates to:
-  /// **'(No title)'**
+  /// In pt, this message translates to:
+  /// **'(Sem título)'**
   String get messageNoTitle;
 
   /// No description provided for @messagesDeleteTooltip.
   ///
-  /// In en, this message translates to:
-  /// **'Delete'**
+  /// In pt, this message translates to:
+  /// **'Excluir'**
   String get messagesDeleteTooltip;
 
   /// No description provided for @messagesEmptyTitle.
   ///
-  /// In en, this message translates to:
-  /// **'No messages yet'**
+  /// In pt, this message translates to:
+  /// **'Nenhuma mensagem ainda'**
   String get messagesEmptyTitle;
 
   /// No description provided for @messagesEmptyMessage.
   ///
-  /// In en, this message translates to:
-  /// **'Push notifications will appear here.'**
+  /// In pt, this message translates to:
+  /// **'As notificações push aparecerão aqui.'**
   String get messagesEmptyMessage;
 
   /// No description provided for @messagesFilterAll.
   ///
-  /// In en, this message translates to:
-  /// **'All'**
+  /// In pt, this message translates to:
+  /// **'Todas'**
   String get messagesFilterAll;
 
   /// No description provided for @messagesFilterUnread.
   ///
-  /// In en, this message translates to:
-  /// **'Unread'**
+  /// In pt, this message translates to:
+  /// **'Não lidas'**
   String get messagesFilterUnread;
 
   /// No description provided for @messagesMarkAllReadTooltip.
   ///
-  /// In en, this message translates to:
-  /// **'Mark all as read'**
+  /// In pt, this message translates to:
+  /// **'Marcar todas como lidas'**
   String get messagesMarkAllReadTooltip;
 
   /// No description provided for @messagesGroupToday.
   ///
-  /// In en, this message translates to:
-  /// **'Today'**
+  /// In pt, this message translates to:
+  /// **'Hoje'**
   String get messagesGroupToday;
 
   /// No description provided for @messagesGroupYesterday.
   ///
-  /// In en, this message translates to:
-  /// **'Yesterday'**
+  /// In pt, this message translates to:
+  /// **'Ontem'**
   String get messagesGroupYesterday;
 
   /// No description provided for @messagesEmptyUnreadTitle.
   ///
-  /// In en, this message translates to:
-  /// **'No unread messages'**
+  /// In pt, this message translates to:
+  /// **'Nenhuma mensagem não lida'**
   String get messagesEmptyUnreadTitle;
 
   /// No description provided for @messagesEmptyUnreadMessage.
   ///
-  /// In en, this message translates to:
-  /// **'You\'re all caught up.'**
+  /// In pt, this message translates to:
+  /// **'Você já viu tudo.'**
   String get messagesEmptyUnreadMessage;
 
   /// No description provided for @upgradeRequiredTitle.
   ///
-  /// In en, this message translates to:
-  /// **'Update Required'**
+  /// In pt, this message translates to:
+  /// **'Atualização necessária'**
   String get upgradeRequiredTitle;
 
   /// No description provided for @upgradeRequiredBody.
   ///
-  /// In en, this message translates to:
-  /// **'A new version is required to keep using the app.'**
+  /// In pt, this message translates to:
+  /// **'Uma nova versão é necessária para continuar usando o app.'**
   String get upgradeRequiredBody;
 
   /// No description provided for @upgradeNowButton.
   ///
-  /// In en, this message translates to:
-  /// **'Update Now'**
+  /// In pt, this message translates to:
+  /// **'Atualizar agora'**
   String get upgradeNowButton;
 
   /// No description provided for @moreMessagesTitle.
   ///
-  /// In en, this message translates to:
-  /// **'MESSAGES'**
+  /// In pt, this message translates to:
+  /// **'MENSAGENS'**
   String get moreMessagesTitle;
 
   /// No description provided for @moreMessagesSubtitle.
   ///
-  /// In en, this message translates to:
-  /// **'Latest updates and news'**
+  /// In pt, this message translates to:
+  /// **'Últimas novidades e notícias'**
   String get moreMessagesSubtitle;
 
   /// No description provided for @moreSettingsTitle.
   ///
-  /// In en, this message translates to:
-  /// **'SETTINGS'**
+  /// In pt, this message translates to:
+  /// **'CONFIGURAÇÕES'**
   String get moreSettingsTitle;
 
   /// No description provided for @moreSettingsSubtitle.
   ///
-  /// In en, this message translates to:
-  /// **'App settings and preferences'**
+  /// In pt, this message translates to:
+  /// **'Ajustes e preferências do app'**
   String get moreSettingsSubtitle;
 
   /// No description provided for @moreShareTitle.
   ///
-  /// In en, this message translates to:
-  /// **'SHARE APP'**
+  /// In pt, this message translates to:
+  /// **'COMPARTILHAR APP'**
   String get moreShareTitle;
 
   /// No description provided for @moreShareSubtitle.
   ///
-  /// In en, this message translates to:
-  /// **'Invite friends to the app'**
+  /// In pt, this message translates to:
+  /// **'Convide amigos para o app'**
   String get moreShareSubtitle;
 
   /// No description provided for @morePrivacyTitle.
   ///
-  /// In en, this message translates to:
-  /// **'PRIVACY POLICY'**
+  /// In pt, this message translates to:
+  /// **'POLÍTICA DE PRIVACIDADE'**
   String get morePrivacyTitle;
 
   /// No description provided for @morePrivacySubtitle.
   ///
-  /// In en, this message translates to:
-  /// **'Read our privacy policy'**
+  /// In pt, this message translates to:
+  /// **'Leia nossa política de privacidade'**
   String get morePrivacySubtitle;
 
   /// No description provided for @moreTermsTitle.
   ///
-  /// In en, this message translates to:
-  /// **'TERMS OF USE'**
+  /// In pt, this message translates to:
+  /// **'TERMOS DE USO'**
   String get moreTermsTitle;
 
   /// No description provided for @moreTermsSubtitle.
   ///
-  /// In en, this message translates to:
-  /// **'Read our terms of use'**
+  /// In pt, this message translates to:
+  /// **'Leia nossos termos de uso'**
   String get moreTermsSubtitle;
 
   /// No description provided for @legalPrivacyPageTitle.
   ///
-  /// In en, this message translates to:
-  /// **'Privacy Policy'**
+  /// In pt, this message translates to:
+  /// **'Política de Privacidade'**
   String get legalPrivacyPageTitle;
 
   /// No description provided for @legalTermsPageTitle.
   ///
-  /// In en, this message translates to:
-  /// **'Terms of Use'**
+  /// In pt, this message translates to:
+  /// **'Termos de Uso'**
   String get legalTermsPageTitle;
 
   /// No description provided for @settingsTitle.
   ///
-  /// In en, this message translates to:
-  /// **'SETTINGS'**
+  /// In pt, this message translates to:
+  /// **'CONFIGURAÇÕES'**
   String get settingsTitle;
 
   /// No description provided for @settingsAccessibilityTitle.
   ///
-  /// In en, this message translates to:
-  /// **'ACCESSIBILITY'**
+  /// In pt, this message translates to:
+  /// **'ACESSIBILIDADE'**
   String get settingsAccessibilityTitle;
 
   /// No description provided for @settingsAccessibilitySubtitle.
   ///
-  /// In en, this message translates to:
-  /// **'Appearance and display settings'**
+  /// In pt, this message translates to:
+  /// **'Aparência e configurações de exibição'**
   String get settingsAccessibilitySubtitle;
 
   /// No description provided for @settingsThemeLabel.
   ///
-  /// In en, this message translates to:
-  /// **'Theme'**
+  /// In pt, this message translates to:
+  /// **'Tema'**
   String get settingsThemeLabel;
 
   /// No description provided for @settingsThemeSemantics.
   ///
-  /// In en, this message translates to:
-  /// **'Select theme mode'**
+  /// In pt, this message translates to:
+  /// **'Selecionar o modo de tema'**
   String get settingsThemeSemantics;
 
   /// No description provided for @themeModeSystem.
   ///
-  /// In en, this message translates to:
-  /// **'System'**
+  /// In pt, this message translates to:
+  /// **'Sistema'**
   String get themeModeSystem;
 
   /// No description provided for @themeModeLight.
   ///
-  /// In en, this message translates to:
-  /// **'Light'**
+  /// In pt, this message translates to:
+  /// **'Claro'**
   String get themeModeLight;
 
   /// No description provided for @themeModeDark.
   ///
-  /// In en, this message translates to:
-  /// **'Dark'**
+  /// In pt, this message translates to:
+  /// **'Escuro'**
   String get themeModeDark;
 
   /// No description provided for @settingsTextSizeLabel.
   ///
-  /// In en, this message translates to:
-  /// **'Text size'**
+  /// In pt, this message translates to:
+  /// **'Tamanho do texto'**
   String get settingsTextSizeLabel;
 
   /// No description provided for @settingsTextSizeSemantics.
   ///
-  /// In en, this message translates to:
-  /// **'Select text size'**
+  /// In pt, this message translates to:
+  /// **'Selecionar o tamanho do texto'**
   String get settingsTextSizeSemantics;
 
   /// No description provided for @textScaleDevice.
   ///
-  /// In en, this message translates to:
-  /// **'Device setting'**
+  /// In pt, this message translates to:
+  /// **'Configuração do dispositivo'**
   String get textScaleDevice;
 
   /// No description provided for @textScaleSmall.
   ///
-  /// In en, this message translates to:
-  /// **'Small'**
+  /// In pt, this message translates to:
+  /// **'Pequeno'**
   String get textScaleSmall;
 
   /// No description provided for @textScaleMedium.
   ///
-  /// In en, this message translates to:
-  /// **'Medium'**
+  /// In pt, this message translates to:
+  /// **'Médio'**
   String get textScaleMedium;
 
   /// No description provided for @textScaleLarge.
   ///
-  /// In en, this message translates to:
-  /// **'Large'**
+  /// In pt, this message translates to:
+  /// **'Grande'**
   String get textScaleLarge;
 
   /// No description provided for @settingsEffectsLabel.
   ///
-  /// In en, this message translates to:
-  /// **'Effects'**
+  /// In pt, this message translates to:
+  /// **'Efeitos'**
   String get settingsEffectsLabel;
 
   /// No description provided for @settingsEffectsSemantics.
   ///
-  /// In en, this message translates to:
-  /// **'Select animation preference'**
+  /// In pt, this message translates to:
+  /// **'Selecionar a preferência de animação'**
   String get settingsEffectsSemantics;
 
   /// No description provided for @animationPreferenceSystem.
   ///
-  /// In en, this message translates to:
-  /// **'System'**
+  /// In pt, this message translates to:
+  /// **'Sistema'**
   String get animationPreferenceSystem;
 
   /// No description provided for @animationPreferenceNormal.
   ///
-  /// In en, this message translates to:
+  /// In pt, this message translates to:
   /// **'Normal'**
   String get animationPreferenceNormal;
 
   /// No description provided for @animationPreferenceReduced.
   ///
-  /// In en, this message translates to:
-  /// **'Reduced'**
+  /// In pt, this message translates to:
+  /// **'Reduzido'**
   String get animationPreferenceReduced;
 }
 
