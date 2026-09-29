@@ -10,7 +10,7 @@ import 'package:next_widgets_service/next_widgets_service.dart';
 import '../l10n/app_localizations.dart';
 import '../core/localization/next_widgets_fallback_delegate.dart';
 import '../core/navigation/app_routes.dart';
-import '../core/theme/template_theme_provider.dart';
+import '../core/theme/app_tokens.dart';
 import '../features/notifications/data/push_service.dart';
 import '../features/upgrade/domain/upgrade_gate_controller.dart';
 import 'app_router.dart';
@@ -157,9 +157,11 @@ class _MyAppState extends State<MyApp> {
               title: 'uni_cronos',
               debugShowCheckedModeBanner: false,
               scaffoldMessengerKey: AppRouter.scaffoldMessengerKey,
+              // The app only has a light theme: the theme choice in the
+              // accessibility menu is still saved, but it does not change
+              // what is rendered.
               theme: themeState.lightTheme,
-              darkTheme: themeState.darkTheme,
-              themeMode: themeState.themeMode,
+              themeMode: ThemeMode.light,
               locale: locale,
               localizationsDelegates: const [
                 AppLocalizations.delegate,
@@ -173,14 +175,24 @@ class _MyAppState extends State<MyApp> {
               supportedLocales: AppLocalizations.supportedLocales,
               builder: (context, child) {
                 final baseTheme = Theme.of(context);
-                final cta = TemplateCtaColors.of(baseTheme.brightness);
                 Color f(Color c) => AppColorBlindUtils.applyColorBlindFilter(
                   c,
                   themeState.colorBlindProfile,
                 );
+                // Roles the factory does not assemble come from literals, so
+                // they need the local `f()` to be filtered at all.
+                final scheme = AppColorRoles.applyTo(
+                  baseTheme.colorScheme,
+                  filter: f,
+                );
+                // Filled buttons (CTA): the yellow container of the design.
                 final ctaStyle = ButtonStyle(
-                  backgroundColor: WidgetStatePropertyAll(f(cta.background)),
-                  foregroundColor: WidgetStatePropertyAll(f(cta.foreground)),
+                  backgroundColor: WidgetStatePropertyAll(
+                    scheme.primaryContainer,
+                  ),
+                  foregroundColor: WidgetStatePropertyAll(
+                    scheme.onPrimaryContainer,
+                  ),
                 );
                 // Accent for interactive elements: text
                 // buttons, switch, progress indicator and text selection.
@@ -189,16 +201,17 @@ class _MyAppState extends State<MyApp> {
                 // the color-blindness filter when it builds AppColorsExtra
                 // (`accent1: f(config.accent1Color)`), so filtering again here
                 // would apply the matrix twice and over-correct the accent
-                // against the rest of the theme. The CTA above is the opposite
-                // case — it comes from a literal that never passes through the
-                // factory, so it needs the local `f()` to be filtered at all.
+                // against the rest of the theme.
                 final accent = baseTheme.extension<AppColorsExtra>()!.accent1;
+                final textTheme = AppTypography.applyTo(baseTheme.textTheme);
                 return Theme(
                   data: baseTheme.copyWith(
+                    colorScheme: scheme,
+                    textTheme: textTheme,
                     textButtonTheme: TextButtonThemeData(
                       style: TextButton.styleFrom(
                         foregroundColor: accent,
-                        textStyle: baseTheme.textTheme.labelLarge?.copyWith(
+                        textStyle: textTheme.labelLarge?.copyWith(
                           fontWeight: FontWeight.w700,
                         ),
                       ),

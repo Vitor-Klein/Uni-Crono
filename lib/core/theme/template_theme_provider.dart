@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:next_core_service/next_core_service.dart';
 
+import 'app_tokens.dart';
+
 /// Custom theme config provider for this app.
 ///
 /// NextAppBar (next_widgets_service 4.2.1) is transparent and paints the
 /// title, the icons and the status bar with `colorScheme.primary`, which comes
 /// from [primaryColor]. So `primaryColor` is a **foreground** color for
-/// navigation, and it is the token to change when fixing contrast — never
-/// `textPrimaryColor`, which stays without any override. The pairs
-/// `primaryColor` × `primaryBackgroundColor` and `primaryColor` ×
-/// `surfaceColor` (the NextSnack backdrop) are locked at >= 4.5:1 by
-/// `hooks/test/contrast_gate_test.dart`.
+/// navigation, and it is the token to change when fixing the navigation's
+/// contrast — not `textPrimaryColor`, which only paints the text theme. Every
+/// text/background
+/// pair of the scheme — `primaryColor` × `surfaceColor` (the screen and the
+/// NextSnack backdrop) among them — is locked at >= 4.5:1 by the contrast test
+/// in `test/app_theme_test.dart`.
 ///
 /// Register before runApp:
 /// ```dart
@@ -85,51 +88,70 @@ class _DarkConfig extends DefaultAppThemeDarkConfig {
   Color get infoColor => const Color(0xFF64B5F6);
 }
 
-/// Light mode: dark navigation over the light Scaffold background. Same
-/// contract as dark, inverted: `primaryColor` is the foreground painted by the
-/// transparent NextAppBar, so it must contrast against
-/// `primaryBackgroundColor`.
-/// Filled buttons (FilledButton/ElevatedButton) use the pair declared in
-/// [TemplateCtaColors], applied globally by the `*ButtonTheme` entries in
-/// `app/app.dart` — not `primaryColor`.
+/// Light mode — the only one the app renders (see `app/app.dart`). The gold
+/// `primaryColor` is the foreground painted by the transparent NextAppBar, so
+/// it must contrast against `primaryBackgroundColor`.
+/// Filled buttons (FilledButton/ElevatedButton) use the yellow
+/// `primaryContainer` pair (see `app_tokens.dart`), applied globally by the
+/// `*ButtonTheme` entries in `app/app.dart` — not `primaryColor`.
 class _LightConfig extends DefaultAppThemeLightConfig {
+  /// Base family of every text style; the headings switch to Montserrat in
+  /// `AppTypography` (`app_tokens.dart`).
+  @override
+  String get fontFamily => AppTypography.body;
+
   /// Navigation **foreground**: NextAppBar title/icons/back button (the bar
   /// itself is transparent), NextSnack text and status bar. It is not the
   /// backdrop of the bar — that one comes from the Scaffold/surface.
   @override
-  Color get primaryColor => const Color(0xFF111111);
+  Color get primaryColor => const Color(0xFF755B00);
 
   /// Icons and text over the primary background (filled primary surfaces).
   @override
-  Color get onPrimaryColor => const Color(0xFF111111);
+  Color get onPrimaryColor => const Color(0xFFFFFFFF);
+
+  @override
+  Color get secondaryColor => const Color(0xFF5B5F61);
+
+  @override
+  Color get onSecondaryColor => const Color(0xFFFFFFFF);
 
   /// Accent color for interactive elements: TextButton foreground, Switch,
   /// ProgressIndicator and text selection (`app/app.dart`'s `builder`, wired
-  /// through the color-blindness filter `f()`). Indigo — the one hue not
-  /// already used by error/warning/success/info, so it never reads as a
-  /// severity state.
+  /// through the color-blindness filter `f()`). Same gold as [primaryColor]:
+  /// the design has a single accent.
   @override
-  Color get accent1Color => const Color(0xFF4F39C7);
+  Color get accent1Color => const Color(0xFF755B00);
 
   /// Main Scaffold background (the screen behind every widget).
   @override
-  Color get primaryBackgroundColor => const Color(0xFFF2F2F4);
+  Color get primaryBackgroundColor => const Color(0xFFF9F9F9);
 
   /// Background of secondary containers (drawers, side panels, alt sections).
   @override
-  Color get secondaryBackgroundColor => const Color(0xFFE4E4E9);
+  Color get secondaryBackgroundColor => const Color(0xFFF3F3F4);
 
-  /// Background of cards, chips, dialogs and bottom sheets.
+  /// Becomes colorScheme.surface — the screen tone. Cards and sheets sit on
+  /// the `surfaceContainer*` roles (see `app_tokens.dart`).
   @override
-  Color get surfaceColor => const Color(0xFFFFFFFF);
+  Color get surfaceColor => const Color(0xFFF9F9F9);
 
   /// Text and icons over surfaces (cards, chips, dialogs).
   @override
-  Color get onSurfaceColor => const Color(0xFF111111);
+  Color get onSurfaceColor => const Color(0xFF1A1C1C);
+
+  /// Main text (titleLarge, titleMedium). Opaque, same as [onSurfaceColor].
+  @override
+  Color get textPrimaryColor => const Color(0xFF1A1C1C);
+
+  /// Secondary text (bodyMedium, bodySmall). Opaque, same as
+  /// `AppColorRoles.onSurfaceVariant`.
+  @override
+  Color get textSecondaryColor => const Color(0xFF4E4633);
 
   /// Severity: error (destructive, failure). Becomes colorScheme.error.
   @override
-  Color get errorColor => const Color(0xFFC62828);
+  Color get errorColor => const Color(0xFFBA1A1A);
 
   /// Text and icons over the error background. Becomes colorScheme.onError.
   @override
@@ -146,40 +168,6 @@ class _LightConfig extends DefaultAppThemeLightConfig {
   /// Severity: info (neutral). Becomes AppColorsExtra.info.
   @override
   Color get infoColor => const Color(0xFF1565C0);
-}
-
-/// Color pair for filled buttons (CTA): `FilledButton` and `ElevatedButton`.
-///
-/// The `ColorScheme` assembled by `AppThemeFactory` does not carry
-/// `inverseSurface`/`onInverseSurface`, so this pair would not come out of the
-/// app theme. It is declared here and applied globally by the `*ButtonTheme`
-/// entries in `app/app.dart` — this is the only place to edit to change the
-/// color of any filled button.
-///
-/// Do not use `primaryColor` here: it is the navigation foreground color
-/// (NextAppBar title/icons), so as a button fill it would vanish against the
-/// screen behind it.
-class TemplateCtaColors {
-  const TemplateCtaColors({required this.background, required this.foreground});
-
-  /// Button fill.
-  final Color background;
-
-  /// Text and icon over the button fill.
-  final Color foreground;
-
-  static const dark = TemplateCtaColors(
-    background: Color(0xFFFFFFFF),
-    foreground: Color(0xFF121214),
-  );
-
-  static const light = TemplateCtaColors(
-    background: Color(0xFF111111),
-    foreground: Color(0xFFFFFFFF),
-  );
-
-  static TemplateCtaColors of(Brightness brightness) =>
-      brightness == Brightness.dark ? dark : light;
 }
 
 /// Brand identity colors (not theme colors).
