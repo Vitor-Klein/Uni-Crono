@@ -39,7 +39,16 @@ class RemoteConfigService {
     await _rc.fetchAndActivate();
   }
 
-  static String get(String key) => _rc.getString(key).trim();
+  /// Without a Firebase app (init failed, or tests) there is no remote value:
+  /// fall back to the defaults instead of throwing inside the UI.
+  static String get(String key) {
+    try {
+      return _rc.getString(key).trim();
+    } catch (_) {
+      return (defaults[key] as String?) ?? '';
+    }
+  }
+
   static bool getBool(String key) => _rc.getBool(key);
   static int getInt(String key) => _rc.getInt(key);
   static double getDouble(String key) => _rc.getDouble(key);
