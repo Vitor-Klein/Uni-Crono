@@ -45,8 +45,10 @@ o código sozinho não conta:
 pt é o idioma oficial. Sem preferência salva, o `MaterialApp` recebe
 `locale: const Locale('pt')` — o app abre em pt qualquer que seja o idioma do
 aparelho. en e es são traduções: valem quando há uma preferência salva
-(`LocaleCubit`, chave `preferred_locale`). O app ainda não tem seletor de idioma
-na interface.
+(`LocaleCubit`, chave `preferred_locale`). A escolha fica no modal de
+configurações (item "Idioma"), que abre a `showLanguageSheet` do
+`next_widgets_service` com Português, English e Español — cada um no próprio
+idioma, sem opção "Sistema".
 
 A geração de l10n usa `lib/l10n/app_pt.arb` como referência (`l10n.yaml`), e
 `AppLocalizations.supportedLocales` começa por pt. Os três ARBs têm as mesmas
