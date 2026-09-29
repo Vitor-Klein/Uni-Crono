@@ -26,6 +26,14 @@ Localização e nomeação dos arquivos de teste: …
 O nome de cada teste carrega o ID do critério de aceite (`CA-NN: …`). É isso que
 faz `grep -r "CA-03"` responder "isto está implementado?" em um segundo.
 
+Teste de tema lê o tema **que a tela vê**: monta `MyApp` com `debugHome` dentro de
+`AppProviders` e lê `Theme.of(context)` — nunca o `ThemeData` do
+`AppThemeFactory` isolado, que não tem o que o `builder` do `MaterialApp`
+acrescenta. Preferências salvas entram por
+`SharedPreferences.setMockInitialValues`. Contraste é calculado com
+`Color.computeLuminance()`. O helper `pumpApp` de `test/app_theme_test.dart` já
+faz isso.
+
 ## Commits
 
 - **Conventional Commits.** Tipos: `feat`, `fix`, `refactor`, `test`, `docs`,
