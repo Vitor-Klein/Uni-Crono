@@ -106,7 +106,11 @@ texto do tema é opaco: `onSurface` no principal, `onSurfaceVariant` em
 ### Tipografia
 
 Montserrat nos títulos, Inter no resto — ambas empacotadas em `assets/fonts/`
-(TTF estáticos, licença OFL ao lado), sem download em runtime.
+(TTF estáticos, licença OFL ao lado), sem download em runtime. A licença de cada
+família é registrada no `LicenseRegistry` na inicialização
+(`FontLicenses.register()` em `AppBootstrap.initialize()`), lida de
+`assets/fonts/<Família>-OFL.txt` só quando a tela de licenças pede. Uma família
+nova em `AppTypography` precisa do seu `*-OFL.txt` declarado como asset.
 
 | Estilo | Família | Peso | Tamanho / altura | Letter-spacing |
 |---|---|---|---|---|
