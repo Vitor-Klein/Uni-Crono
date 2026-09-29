@@ -67,29 +67,35 @@ void showAppModal(
         child: Container(
           decoration: _modalDecoration(ctx, backgroundColor),
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                _buildHandle(ctx),
-                _buildModalTitle(ctx, title),
-                const SizedBox(height: 25),
-                ...items.map((item) => _buildItem(ctx, item)),
-                if (footerBuilder != null) ...[
-                  const SizedBox(height: 12),
-                  Divider(
-                    color: Theme.of(
-                      ctx,
-                    ).colorScheme.outlineVariant.withValues(alpha: 0.5),
-                    height: 1,
-                    indent: 40,
-                    endIndent: 40,
-                  ),
-                  const SizedBox(height: 10),
-                  footerBuilder(ctx),
+          // The items' ink (ListTile splash) paints on the nearest Material.
+          // Without this one, that is the sheet's own Material, below the
+          // decoration above — so every tap feedback would be hidden by it.
+          child: Material(
+            type: MaterialType.transparency,
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _buildHandle(ctx),
+                  _buildModalTitle(ctx, title),
+                  const SizedBox(height: 25),
+                  ...items.map((item) => _buildItem(ctx, item)),
+                  if (footerBuilder != null) ...[
+                    const SizedBox(height: 12),
+                    Divider(
+                      color: Theme.of(
+                        ctx,
+                      ).colorScheme.outlineVariant.withValues(alpha: 0.5),
+                      height: 1,
+                      indent: 40,
+                      endIndent: 40,
+                    ),
+                    const SizedBox(height: 10),
+                    footerBuilder(ctx),
+                  ],
+                  const SizedBox(height: 48),
                 ],
-                const SizedBox(height: 48),
-              ],
+              ),
             ),
           ),
         ),
