@@ -52,6 +52,30 @@ void main() {
     expect(currentPath(), AppRoutes.dashboard);
   });
 
+  testWidgets('CA-03: leaving a tab keeps its page alive offstage', (
+    tester,
+  ) async {
+    await pumpRoutedApp(tester);
+    await tester.tap(navLabel('Atividades'));
+    await tester.pumpAndSettle();
+    final activitiesState = tester.state(
+      find.descendant(
+        of: find.byKey(const ValueKey(AppRoutes.activities)),
+        matching: find.byType(Scrollable),
+      ),
+    );
+
+    await tester.tap(navLabel('Dashboard'));
+    await tester.pumpAndSettle();
+
+    final offstage = find.descendant(
+      of: find.byKey(const ValueKey(AppRoutes.activities), skipOffstage: false),
+      matching: find.byType(Scrollable, skipOffstage: false),
+    );
+    expect(offstage, findsOneWidget);
+    expect(identical(tester.state(offstage), activitiesState), isTrue);
+  });
+
   testWidgets('CA-02: opening a tab path directly selects that tab', (
     tester,
   ) async {
