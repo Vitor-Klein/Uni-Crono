@@ -1129,3 +1129,19 @@ flutter analyze && dart run custom_lint && flutter test && dart format --output=
 git add docs/specs/006-casca-de-navegacao.md docs/architecture.md
 git commit -m "docs: fecha a spec da casca de navegação e descreve a navegação"
 ```
+
+---
+
+## Pendências levadas para as próximas specs
+
+Da revisão final (itens adiados, sem bloqueio para esta spec):
+
+- **009:** testar o reset da aba ao tocar de novo — empilhar `/upload/review`,
+  tocar em "Enviar" e esperar `/upload` (o `goBranch(initialLocation: true)`
+  ainda não tem teste, porque não havia rota aninhada).
+- **010:** ao reutilizar `openNotificationsSheet` no Perfil, passar um contexto
+  que sobreviva ao modal/folha, e fazer a folha e as linhas de preferência
+  escutarem o `NotificationsCubit` (`BlocBuilder`) em vez de receber uma cópia do
+  valor ao abrir. O teste de rolagem real do CA-03 entra com o Hub.
+- **Quando houver caller:** `RemoteConfigService.getBool/getInt/getDouble`
+  ainda lançam exceção sem Firebase, ao contrário de `get`.
