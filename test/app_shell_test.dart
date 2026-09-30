@@ -110,4 +110,31 @@ void main() {
     expect(find.text('MENSAGENS'), findsOneWidget);
     expect(find.text('CONFIGURAÇÕES'), findsOneWidget);
   });
+
+  testWidgets('CA-04: the shell app bar has no back button', (tester) async {
+    await pumpRoutedApp(tester);
+
+    expect(
+      find.descendant(
+        of: find.byType(AppBar),
+        matching: find.byType(IconButton),
+      ),
+      findsNothing,
+    );
+  });
+
+  testWidgets('CA-05: the More modal shows the saved notifications choice on '
+      'first open', (tester) async {
+    await pumpRoutedApp(
+      tester,
+      notifications: FakeNotificationsPreference(enabled: false),
+    );
+
+    await tester.tap(find.text('AS'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('CONFIGURAÇÕES'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Desativado'), findsOneWidget);
+  });
 }

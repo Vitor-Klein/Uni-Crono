@@ -59,6 +59,7 @@ class _ShellAppBarState extends State<ShellAppBar> {
     final cs = theme.colorScheme;
     return NextAppBar(
       title: kAppName,
+      showLeading: false,
       actions: [
         Padding(
           padding: const EdgeInsets.only(right: AppSpacing.lg),

@@ -58,7 +58,10 @@ class AppProviders extends StatelessWidget {
             service: SharedPrefsAnimationPreferenceService(),
           ),
         ),
+        // Eager: the saved choice loads at startup, so the More modal never
+        // opens with the optimistic default.
         BlocProvider(
+          lazy: false,
           create: (_) => NotificationsCubit(
             notificationsPreference ?? const PushNotificationsPreference(),
           ),
