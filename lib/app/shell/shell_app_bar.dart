@@ -67,17 +67,23 @@ class _ShellAppBarState extends State<ShellAppBar> {
           child: Semantics(
             button: true,
             label: AppLocalizations.of(context)!.shellMenuSemantics,
+            excludeSemantics: true,
             child: InkWell(
               customBorder: const CircleBorder(),
               onTap: _openMore,
-              child: CircleAvatar(
-                radius: 18,
-                backgroundColor: cs.primaryContainer,
-                child: Text(
-                  DemoStudent.initials,
-                  style: theme.textTheme.labelLarge?.copyWith(
-                    fontWeight: FontWeight.w700,
-                    color: cs.onPrimaryContainer,
+              child: SizedBox.square(
+                dimension: kMinInteractiveDimension,
+                child: Center(
+                  child: CircleAvatar(
+                    radius: 18,
+                    backgroundColor: cs.primaryContainer,
+                    child: Text(
+                      DemoStudent.initials,
+                      style: theme.textTheme.labelLarge?.copyWith(
+                        fontWeight: FontWeight.w700,
+                        color: cs.onPrimaryContainer,
+                      ),
+                    ),
                   ),
                 ),
               ),

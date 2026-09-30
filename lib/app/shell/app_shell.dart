@@ -17,32 +17,50 @@ class AppShell extends StatelessWidget {
     return Scaffold(
       appBar: const ShellAppBar(),
       body: navigationShell,
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: navigationShell.currentIndex,
-        backgroundColor: cs.surfaceContainerLowest,
-        indicatorColor: cs.primaryContainer,
-        onDestinationSelected: (index) => navigationShell.goBranch(
-          index,
-          initialLocation: index == navigationShell.currentIndex,
+      bottomNavigationBar: NavigationBarTheme(
+        data: NavigationBarTheme.of(context).copyWith(
+          iconTheme: WidgetStateProperty.resolveWith(
+            (states) => IconThemeData(
+              color: states.contains(WidgetState.selected)
+                  ? cs.onPrimaryContainer
+                  : cs.onSurfaceVariant,
+            ),
+          ),
         ),
-        destinations: [
-          NavigationDestination(
-            icon: const Icon(Icons.dashboard_outlined),
-            label: l10n.navDashboard,
+        child: NavigationBar(
+          selectedIndex: navigationShell.currentIndex,
+          backgroundColor: cs.surfaceContainerLowest,
+          indicatorColor: cs.primaryContainer,
+          labelTextStyle: WidgetStateProperty.resolveWith(
+            (states) => Theme.of(context).textTheme.labelMedium?.copyWith(
+              color: states.contains(WidgetState.selected)
+                  ? cs.primary
+                  : cs.onSurfaceVariant,
+            ),
           ),
-          NavigationDestination(
-            icon: const Icon(Icons.upload_file_outlined),
-            label: l10n.navUpload,
+          onDestinationSelected: (index) => navigationShell.goBranch(
+            index,
+            initialLocation: index == navigationShell.currentIndex,
           ),
-          NavigationDestination(
-            icon: const Icon(Icons.explore_outlined),
-            label: l10n.navActivities,
-          ),
-          NavigationDestination(
-            icon: const Icon(Icons.person_outline),
-            label: l10n.navProfile,
-          ),
-        ],
+          destinations: [
+            NavigationDestination(
+              icon: const Icon(Icons.dashboard_outlined),
+              label: l10n.navDashboard,
+            ),
+            NavigationDestination(
+              icon: const Icon(Icons.upload_file_outlined),
+              label: l10n.navUpload,
+            ),
+            NavigationDestination(
+              icon: const Icon(Icons.explore_outlined),
+              label: l10n.navActivities,
+            ),
+            NavigationDestination(
+              icon: const Icon(Icons.person_outline),
+              label: l10n.navProfile,
+            ),
+          ],
+        ),
       ),
     );
   }

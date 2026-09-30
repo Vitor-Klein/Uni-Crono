@@ -43,8 +43,11 @@ class AppRouter {
           ),
         ),
         StatefulShellRoute.indexedStack(
-          builder: (context, state, navigationShell) =>
-              AppShell(navigationShell: navigationShell),
+          pageBuilder: (context, state, navigationShell) => AppTransitions.fade(
+            context: context,
+            state: state,
+            child: AppShell(navigationShell: navigationShell),
+          ),
           branches: [
             for (final (path, title)
                 in <(String, String Function(AppLocalizations))>[

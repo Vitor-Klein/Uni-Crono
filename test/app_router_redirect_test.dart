@@ -35,4 +35,26 @@ void main() {
       isNull,
     );
   });
+
+  test('CA-06: without a blocking gate, or with the gate off, a tab path '
+      'stays where it is', () {
+    for (final enforce in [true, false]) {
+      expect(
+        AppRouter.resolveRedirect(
+          location: AppRoutes.dashboard,
+          enforceUpgradeGate: enforce,
+          shouldBlock: false,
+        ),
+        isNull,
+      );
+    }
+    expect(
+      AppRouter.resolveRedirect(
+        location: AppRoutes.upgradeRequired,
+        enforceUpgradeGate: true,
+        shouldBlock: true,
+      ),
+      isNull,
+    );
+  });
 }

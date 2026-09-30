@@ -37,13 +37,13 @@ void main() {
     expect(cubit.state, isTrue);
   });
 
-  test('CA-05: setting the current value writes nothing', () async {
+  test('CA-05: a quick double tap to the same value writes once', () async {
     final preference = FakeNotificationsPreference();
     final cubit = NotificationsCubit(preference);
     await Future<void>.delayed(Duration.zero);
 
-    await Future.wait([cubit.setEnabled(true), cubit.setEnabled(true)]);
+    await Future.wait([cubit.setEnabled(false), cubit.setEnabled(false)]);
 
-    expect(preference.writes, isEmpty);
+    expect(preference.writes, [false]);
   });
 }

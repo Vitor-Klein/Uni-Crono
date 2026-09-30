@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:uni_cronos/app/app_router.dart';
+import 'package:uni_cronos/app/shell/app_shell.dart';
 import 'package:uni_cronos/core/navigation/app_routes.dart';
 
 import 'app_harness.dart';
@@ -174,5 +175,52 @@ void main() {
       find.text('Não foi possível atualizar as configurações de notificação.'),
       findsOneWidget,
     );
+  });
+
+  testWidgets('CA-01: the shell opens with the app fade transition, which '
+      'honours reduced animations', (tester) async {
+    await pumpRoutedApp(tester);
+
+    final route = ModalRoute.of(tester.element(find.byType(AppShell)))!;
+    expect(route.settings, isA<CustomTransitionPage<dynamic>>());
+  });
+
+  for (final (code, label) in [('en', 'Upload'), ('es', 'Subir')]) {
+    testWidgets('CA-01: in $code the second destination reads $label', (
+      tester,
+    ) async {
+      await pumpRoutedApp(tester, prefs: {'preferred_locale': code});
+
+      expect(navLabel(label), findsOneWidget);
+      expect(
+        tester.widget<NavigationBar>(find.byType(NavigationBar)).selectedIndex,
+        0,
+      );
+    });
+  }
+
+  testWidgets('CA-02: the selected destination label is primary, the others '
+      'onSurfaceVariant', (tester) async {
+    await pumpRoutedApp(tester);
+
+    final cs = Theme.of(tester.element(find.byType(AppShell))).colorScheme;
+    final labelStyle = tester
+        .widget<NavigationBar>(find.byType(NavigationBar))
+        .labelTextStyle!;
+    expect(labelStyle.resolve({WidgetState.selected})!.color, cs.primary);
+    expect(labelStyle.resolve({})!.color, cs.onSurfaceVariant);
+  });
+
+  testWidgets('CA-04: the avatar is a 48dp target announced only as the menu '
+      'button', (tester) async {
+    final semantics = tester.ensureSemantics();
+    await pumpRoutedApp(tester);
+
+    final avatar = find.bySemanticsLabel('Abrir menu');
+    expect(avatar, findsOneWidget);
+    final size = tester.getSize(avatar);
+    expect(size.width, greaterThanOrEqualTo(kMinInteractiveDimension));
+    expect(size.height, greaterThanOrEqualTo(kMinInteractiveDimension));
+    semantics.dispose();
   });
 }
