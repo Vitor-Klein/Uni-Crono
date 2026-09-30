@@ -6,6 +6,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import '../../core/theme/app_tokens.dart';
 import '../../features/home/presentation/home_more_modal.dart';
 import '../../features/notifications/presentation/notifications_cubit.dart';
+import '../../features/notifications/presentation/open_notifications_sheet.dart';
 import '../../features/profile/domain/demo_student.dart';
 import '../../l10n/app_localizations.dart';
 import '../app_info.dart';
@@ -47,7 +48,7 @@ class _ShellAppBarState extends State<ShellAppBar> {
     showHomeMoreModal(
       context,
       notificationsEnabled: context.read<NotificationsCubit>().state,
-      onNotificationsTap: () {},
+      onNotificationsTap: () => openNotificationsSheet(context),
       appNameLabel: kAppName,
       appVersionLabel: _versionLabel,
     );

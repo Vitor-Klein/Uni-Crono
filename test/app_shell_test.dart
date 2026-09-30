@@ -137,4 +137,42 @@ void main() {
 
     expect(find.text('Desativado'), findsOneWidget);
   });
+
+  Future<void> openNotifications(WidgetTester tester) async {
+    await tester.tap(find.text('AS'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('CONFIGURAÇÕES'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('NOTIFICAÇÕES'));
+    await tester.pumpAndSettle();
+  }
+
+  testWidgets('CA-05: turning notifications off from the More modal saves '
+      'false and shows Desativado', (tester) async {
+    final preference = FakeNotificationsPreference();
+    await pumpRoutedApp(tester, notifications: preference);
+    await openNotifications(tester);
+
+    await tester.tap(find.byType(Switch));
+    await tester.pumpAndSettle();
+
+    expect(preference.writes, [false]);
+    expect(find.text('Desativado'), findsOneWidget);
+  });
+
+  testWidgets('CA-05: when saving fails, the value goes back and the error '
+      'is shown', (tester) async {
+    final preference = FakeNotificationsPreference(failWrites: true);
+    await pumpRoutedApp(tester, notifications: preference);
+    await openNotifications(tester);
+
+    await tester.tap(find.byType(Switch));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Ativado'), findsOneWidget);
+    expect(
+      find.text('Não foi possível atualizar as configurações de notificação.'),
+      findsOneWidget,
+    );
+  });
 }
