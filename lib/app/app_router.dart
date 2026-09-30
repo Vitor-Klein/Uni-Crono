@@ -5,10 +5,12 @@ import '../core/navigation/app_routes.dart';
 import '../core/navigation/app_transitions.dart';
 import '../core/webview/web_view_page.dart';
 import '../core/webview/webview_args.dart';
-import '../features/home/presentation/home_page.dart';
 import '../features/splash/presentation/splash_screen.dart';
 import '../features/upgrade/domain/upgrade_gate_controller.dart';
 import '../features/upgrade/presentation/upgrade_required_page.dart';
+import '../l10n/app_localizations.dart';
+import 'shell/app_shell.dart';
+import 'shell/tab_placeholder_page.dart';
 
 class AppRouter {
   AppRouter._();
@@ -19,6 +21,7 @@ class AppRouter {
   static GoRouter build({
     required bool enforceUpgradeGate,
     required UpgradeGateController upgradeGate,
+    Duration splashDuration = const Duration(seconds: 3),
   }) {
     return GoRouter(
       navigatorKey: navigatorKey,
@@ -36,16 +39,32 @@ class AppRouter {
             context: context,
             state: state,
             hideNavBar: true,
-            child: const SplashScreen(),
+            child: SplashScreen(duration: splashDuration),
           ),
         ),
-        GoRoute(
-          path: AppRoutes.home,
-          pageBuilder: (context, state) => AppTransitions.fade(
-            context: context,
-            state: state,
-            child: const HomePage(),
-          ),
+        StatefulShellRoute.indexedStack(
+          builder: (context, state, navigationShell) =>
+              AppShell(navigationShell: navigationShell),
+          branches: [
+            for (final (path, title)
+                in <(String, String Function(AppLocalizations))>[
+                  (AppRoutes.dashboard, (l) => l.navDashboard),
+                  (AppRoutes.upload, (l) => l.navUpload),
+                  (AppRoutes.activities, (l) => l.navActivities),
+                  (AppRoutes.profile, (l) => l.navProfile),
+                ])
+              StatefulShellBranch(
+                routes: [
+                  GoRoute(
+                    path: path,
+                    builder: (context, state) => TabPlaceholderPage(
+                      key: ValueKey(path),
+                      title: title(AppLocalizations.of(context)!),
+                    ),
+                  ),
+                ],
+              ),
+          ],
         ),
         GoRoute(
           path: AppRoutes.upgradeRequired,

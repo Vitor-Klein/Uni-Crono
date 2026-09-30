@@ -165,6 +165,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsLanguageSemantics => 'Select the app language';
 
   @override
+  String get navDashboard => 'Dashboard';
+
+  @override
+  String get navUpload => 'Upload';
+
+  @override
+  String get navActivities => 'Activities';
+
+  @override
+  String get navProfile => 'Profile';
+
+  @override
   String get settingsThemeLabel => 'Theme';
 
   @override

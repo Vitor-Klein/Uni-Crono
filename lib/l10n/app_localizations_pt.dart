@@ -166,6 +166,18 @@ class AppLocalizationsPt extends AppLocalizations {
   String get settingsLanguageSemantics => 'Selecionar o idioma do app';
 
   @override
+  String get navDashboard => 'Dashboard';
+
+  @override
+  String get navUpload => 'Enviar';
+
+  @override
+  String get navActivities => 'Atividades';
+
+  @override
+  String get navProfile => 'Perfil';
+
+  @override
   String get settingsThemeLabel => 'Tema';
 
   @override

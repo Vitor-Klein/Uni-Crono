@@ -6,7 +6,10 @@ import '../../../core/navigation/app_routes.dart';
 import '../../../core/theme/template_theme_provider.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({super.key});
+  const SplashScreen({this.duration = const Duration(seconds: 3), super.key});
+
+  /// How long the splash stays before opening the app.
+  final Duration duration;
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -20,11 +23,11 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
 
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      await Future.delayed(const Duration(seconds: 3));
+      await Future.delayed(widget.duration);
 
       if (!mounted) return;
 
-      context.go(AppRoutes.home);
+      context.go(AppRoutes.dashboard);
     });
   }
 

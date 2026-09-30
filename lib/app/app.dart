@@ -20,12 +20,16 @@ class MyApp extends StatefulWidget {
     this.firebaseWarningMessage,
     this.debugHome,
     this.enforceUpgradeGate = true,
+    this.splashDuration = const Duration(seconds: 3),
     super.key,
   });
 
   final String? firebaseWarningMessage;
   final Widget? debugHome;
   final bool enforceUpgradeGate;
+
+  /// How long the splash stays before opening the app.
+  final Duration splashDuration;
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -40,8 +44,10 @@ class _MyAppState extends State<MyApp> {
     final debugHome = widget.debugHome;
     if (debugHome != null) {
       return GoRouter(
-        initialLocation: AppRoutes.home,
-        routes: [GoRoute(path: AppRoutes.home, builder: (_, __) => debugHome)],
+        initialLocation: AppRoutes.dashboard,
+        routes: [
+          GoRoute(path: AppRoutes.dashboard, builder: (_, __) => debugHome),
+        ],
       );
     }
 
@@ -52,6 +58,7 @@ class _MyAppState extends State<MyApp> {
     return AppRouter.build(
       enforceUpgradeGate: widget.enforceUpgradeGate,
       upgradeGate: upgradeGate,
+      splashDuration: widget.splashDuration,
     );
   }
 

@@ -406,6 +406,30 @@ abstract class AppLocalizations {
   /// **'Selecionar o idioma do app'**
   String get settingsLanguageSemantics;
 
+  /// No description provided for @navDashboard.
+  ///
+  /// In pt, this message translates to:
+  /// **'Dashboard'**
+  String get navDashboard;
+
+  /// No description provided for @navUpload.
+  ///
+  /// In pt, this message translates to:
+  /// **'Enviar'**
+  String get navUpload;
+
+  /// No description provided for @navActivities.
+  ///
+  /// In pt, this message translates to:
+  /// **'Atividades'**
+  String get navActivities;
+
+  /// No description provided for @navProfile.
+  ///
+  /// In pt, this message translates to:
+  /// **'Perfil'**
+  String get navProfile;
+
   /// No description provided for @settingsThemeLabel.
   ///
   /// In pt, this message translates to:
