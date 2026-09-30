@@ -19,6 +19,10 @@ class AppShell extends StatelessWidget {
         selectedIndex: navigationShell.currentIndex,
         backgroundColor: cs.surfaceContainerLowest,
         indicatorColor: cs.primaryContainer,
+        onDestinationSelected: (index) => navigationShell.goBranch(
+          index,
+          initialLocation: index == navigationShell.currentIndex,
+        ),
         destinations: [
           NavigationDestination(
             icon: const Icon(Icons.dashboard_outlined),
