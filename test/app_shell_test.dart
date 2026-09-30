@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 
@@ -221,6 +222,27 @@ void main() {
     final size = tester.getSize(avatar);
     expect(size.width, greaterThanOrEqualTo(kMinInteractiveDimension));
     expect(size.height, greaterThanOrEqualTo(kMinInteractiveDimension));
+    semantics.dispose();
+  });
+
+  testWidgets('CA-04: screen readers can open the More modal from the avatar', (
+    tester,
+  ) async {
+    final semantics = tester.ensureSemantics();
+    await pumpRoutedApp(tester);
+
+    final avatar = find.bySemanticsLabel('Abrir menu');
+    expect(
+      tester
+          .getSemantics(avatar)
+          .getSemanticsData()
+          .hasAction(SemanticsAction.tap),
+      isTrue,
+    );
+    tester.semantics.tap(find.semantics.byLabel('Abrir menu'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('MENSAGENS'), findsOneWidget);
     semantics.dispose();
   });
 }

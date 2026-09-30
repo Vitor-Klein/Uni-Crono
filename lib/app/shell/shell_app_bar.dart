@@ -68,6 +68,7 @@ class _ShellAppBarState extends State<ShellAppBar> {
             button: true,
             label: AppLocalizations.of(context)!.shellMenuSemantics,
             excludeSemantics: true,
+            onTap: _openMore,
             child: InkWell(
               customBorder: const CircleBorder(),
               onTap: _openMore,
