@@ -63,6 +63,7 @@
   "navUpload": "Upload",
   "navActivities": "Activities",
   "navProfile": "Profile",
+  "shellMenuSemantics": "Open menu",
   "settingsThemeLabel": "Theme",
   "settingsThemeSemantics": "Select theme mode",
   "themeModeSystem": "System",

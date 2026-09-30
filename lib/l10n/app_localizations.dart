@@ -430,6 +430,12 @@ abstract class AppLocalizations {
   /// **'Perfil'**
   String get navProfile;
 
+  /// No description provided for @shellMenuSemantics.
+  ///
+  /// In pt, this message translates to:
+  /// **'Abrir menu'**
+  String get shellMenuSemantics;
+
   /// No description provided for @settingsThemeLabel.
   ///
   /// In pt, this message translates to:

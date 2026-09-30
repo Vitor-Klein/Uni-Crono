@@ -91,4 +91,23 @@ void main() {
       2,
     );
   });
+
+  testWidgets('CA-04: the app bar shows the brand, and the avatar opens the '
+      'More modal', (tester) async {
+    await pumpRoutedApp(tester);
+
+    expect(
+      find.descendant(
+        of: find.byType(AppBar),
+        matching: find.text('Uni Cronos'),
+      ),
+      findsOneWidget,
+    );
+
+    await tester.tap(find.text('AS'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('MENSAGENS'), findsOneWidget);
+    expect(find.text('CONFIGURAÇÕES'), findsOneWidget);
+  });
 }

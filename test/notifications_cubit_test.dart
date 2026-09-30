@@ -1,25 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:uni_cronos/features/notifications/data/notifications_preference.dart';
 import 'package:uni_cronos/features/notifications/presentation/notifications_cubit.dart';
 
-class FakeNotificationsPreference implements NotificationsPreference {
-  FakeNotificationsPreference({this.enabled = true, this.failWrites = false});
-
-  bool enabled;
-  bool failWrites;
-  final writes = <bool>[];
-
-  @override
-  Future<bool> isEnabled() async => enabled;
-
-  @override
-  Future<void> setEnabled(bool value) async {
-    writes.add(value);
-    if (failWrites) throw Exception('write failed');
-    enabled = value;
-  }
-}
+import 'app_harness.dart';
 
 void main() {
   test('CA-05: starts from the saved preference', () async {

@@ -63,6 +63,7 @@
   "navUpload": "Subir",
   "navActivities": "Actividades",
   "navProfile": "Perfil",
+  "shellMenuSemantics": "Abrir menú",
   "settingsThemeLabel": "Tema",
   "settingsThemeSemantics": "Seleccionar el modo de tema",
   "themeModeSystem": "Sistema",

@@ -177,6 +177,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get navProfile => 'Profile';
 
   @override
+  String get shellMenuSemantics => 'Open menu';
+
+  @override
   String get settingsThemeLabel => 'Theme';
 
   @override

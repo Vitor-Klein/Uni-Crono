@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../l10n/app_localizations.dart';
+import 'shell_app_bar.dart';
 
 /// Frame of the signed-in app: the current tab and the bottom navigation.
 class AppShell extends StatelessWidget {
@@ -14,6 +15,7 @@ class AppShell extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final cs = Theme.of(context).colorScheme;
     return Scaffold(
+      appBar: const ShellAppBar(),
       body: navigationShell,
       bottomNavigationBar: NavigationBar(
         selectedIndex: navigationShell.currentIndex,

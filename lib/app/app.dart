@@ -13,6 +13,7 @@ import '../core/navigation/app_routes.dart';
 import '../core/theme/app_tokens.dart';
 import '../features/notifications/data/push_service.dart';
 import '../features/upgrade/domain/upgrade_gate_controller.dart';
+import 'app_info.dart';
 import 'app_router.dart';
 
 class MyApp extends StatefulWidget {
@@ -161,7 +162,7 @@ class _MyAppState extends State<MyApp> {
         return BlocBuilder<LocaleCubit, Locale?>(
           builder: (context, locale) {
             return MaterialApp.router(
-              title: 'Uni Cronos',
+              title: kAppName,
               debugShowCheckedModeBanner: false,
               scaffoldMessengerKey: AppRouter.scaffoldMessengerKey,
               // The app only has a light theme: the theme choice in the

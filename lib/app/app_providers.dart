@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:next_core_service/next_core_service.dart';
 
 import '../core/theme/template_theme_provider.dart';
+import '../features/notifications/data/notifications_preference.dart';
+import '../features/notifications/presentation/notifications_cubit.dart';
 
 class AppThemeBootstrap {
   AppThemeBootstrap._();
@@ -17,9 +19,17 @@ class AppThemeBootstrap {
 }
 
 class AppProviders extends StatelessWidget {
-  const AppProviders({required this.child, super.key});
+  const AppProviders({
+    required this.child,
+    this.notificationsPreference,
+    super.key,
+  });
 
   final Widget child;
+
+  /// Where the notifications switch is read from and written to; the real push
+  /// service when omitted.
+  final NotificationsPreference? notificationsPreference;
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +56,11 @@ class AppProviders extends StatelessWidget {
         BlocProvider(
           create: (_) => AccessibilityCubit(
             service: SharedPrefsAnimationPreferenceService(),
+          ),
+        ),
+        BlocProvider(
+          create: (_) => NotificationsCubit(
+            notificationsPreference ?? const PushNotificationsPreference(),
           ),
         ),
       ],
