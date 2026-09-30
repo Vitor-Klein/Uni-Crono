@@ -24,21 +24,11 @@ class AppRouter {
       navigatorKey: navigatorKey,
       initialLocation: AppRoutes.splash,
       refreshListenable: upgradeGate,
-      redirect: (context, state) {
-        if (!enforceUpgradeGate) return null;
-        // The splash always completes its 3s, with or without a pending
-        // gate — explicit decision, validated in device QA.
-        if (state.matchedLocation == AppRoutes.splash) return null;
-
-        if (upgradeGate.shouldBlock) {
-          return state.matchedLocation == AppRoutes.upgradeRequired
-              ? null
-              : AppRoutes.upgradeRequired;
-        }
-        return state.matchedLocation == AppRoutes.upgradeRequired
-            ? AppRoutes.home
-            : null;
-      },
+      redirect: (context, state) => resolveRedirect(
+        location: state.matchedLocation,
+        enforceUpgradeGate: enforceUpgradeGate,
+        shouldBlock: upgradeGate.shouldBlock,
+      ),
       routes: [
         GoRoute(
           path: AppRoutes.splash,
@@ -80,5 +70,24 @@ class AppRouter {
         ),
       ],
     );
+  }
+
+  /// Where to send [location], or null to stay. The splash always completes
+  /// its run, with or without a pending gate — explicit decision, validated
+  /// in device QA.
+  static String? resolveRedirect({
+    required String location,
+    required bool enforceUpgradeGate,
+    required bool shouldBlock,
+  }) {
+    if (!enforceUpgradeGate) return null;
+    if (location == AppRoutes.splash) return null;
+
+    if (shouldBlock) {
+      return location == AppRoutes.upgradeRequired
+          ? null
+          : AppRoutes.upgradeRequired;
+    }
+    return location == AppRoutes.upgradeRequired ? AppRoutes.dashboard : null;
   }
 }
