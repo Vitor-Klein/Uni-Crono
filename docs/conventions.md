@@ -34,6 +34,14 @@ acrescenta. Preferências salvas entram por
 `Color.computeLuminance()`. O helper `pumpApp` de `test/app_theme_test.dart` já
 faz isso.
 
+Teste de navegação e de tela dentro da casca passa pelo app real — splash,
+router e casca — com `pumpRoutedApp` de `test/app_harness.dart`: sem
+`debugHome`, splash com `Duration.zero`, preferências salvas por `prefs` e
+notificações por um `FakeNotificationsPreference` (que registra as gravações e
+pode falhar sob comando). O caminho atual sai de `currentPath()`; os rótulos da
+barra inferior, de `navLabel()`. Nada de Firebase em teste: o que depende dele
+entra por uma interface com versão falsa.
+
 ## Commits
 
 - **Conventional Commits.** Tipos: `feat`, `fix`, `refactor`, `test`, `docs`,

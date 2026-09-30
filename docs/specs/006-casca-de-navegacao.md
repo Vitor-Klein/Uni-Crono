@@ -1,6 +1,6 @@
 ---
 id: 006
-status: aprovada
+status: implementada
 depende_de: [001, 005]
 ---
 
@@ -114,7 +114,46 @@ que os testes passem pela splash real sem esperar 3 s.
 
 ## Decisões durante a implementação
 
-- …
+- **App bar é o `NextAppBar`, não um `AppBar`:** o `custom_lint` do projeto
+  (`no_app_bar_widget`) proíbe o `AppBar` do Flutter e manda usar o
+  `NextAppBar`; silenciar o lint está fora de questão. Consequência visual: a
+  marca fica **centralizada numa barra transparente**, e não alinhada à
+  esquerda como no Figma. A cor segue o contrato (`primary`). Alinhar à
+  esquerda exigiria suporte no `next_widgets_service` ou uma exceção ao lint
+  aprovada. `showLeading: false` explícito — a casca nunca mostra "voltar".
+- **Indicador da aba ativa em `primaryContainer`** (amarelo), com ícone
+  `onPrimaryContainer`; rótulo ativo em `primary` e inativos em
+  `onSurfaceVariant`, como o contrato pede. A cor dos ícones vai por um
+  `NavigationBarTheme`, porque o `NavigationBar` não recebe `iconTheme`.
+- **A casca usa `pageBuilder` com `AppTransitions.fade`:** com `builder` o
+  go_router aplicava a transição da plataforma e ignorava a preferência de
+  "reduzir animações". Achado da revisão final.
+- **`NotificationsCubit` criado na inicialização (`lazy: false`):** preguiçoso,
+  ele só nascia no primeiro toque no avatar e o modal recebia o `true`
+  otimista antes do valor salvo. Achado da revisão da tarefa.
+- **Remote Config sem Firebase cai nos padrões:** `RemoteConfigService.get`
+  lançava exceção sem Firebase (testes, web com inicialização falha), o que
+  quebraria o modal "Mais". Correção prévia, fora da lista de impacto.
+- **CA-03 verificado por proxy:** as abas ainda só mostram o título, sem
+  rolagem; o teste prova que a página da aba deixada continua montada fora do
+  palco (mesmo `ScrollableState`), validado por mutação. O teste de rolagem
+  real entra com o Hub (spec 010).
+- **Testes que nasceram verdes (guardas):** CA-02 "aba já selecionada" e "aba
+  aberta pela URL"; CA-01 en/es; CA-06 "fica onde está". O reset da aba ao
+  tocar de novo (`initialLocation`) só é testável com rota aninhada — entra na
+  spec 009 (`/upload/review`).
+- **Teste reescrito:** "setting the current value writes nothing" não podia
+  falhar (partia do valor atual); virou "a quick double tap to the same value
+  writes once".
+- **`kAppName`** (`lib/app/app_info.dart`) e **`DemoStudent`**
+  (`lib/features/profile/domain/demo_student.dart`, iniciais do avatar) criados
+  aqui; a spec 010 constrói o perfil sobre eles.
+- **Avatar com alvo de 48dp** e anunciado só como "Abrir menu".
+- **Verificação manual (web, 390×844):** splash → Dashboard, título da aba
+  "Uni Cronos", quatro abas, troca de aba, avatar → Mais → Configurações →
+  Notificações → "Desativado". No web, em debug, aparece o aviso vermelho
+  "Push/Firebase (dev)" ao trocar: o FCM não suporta tópicos no web — comportamento
+  que já existia no `PushService`.
 
 ## Perguntas em aberto
 

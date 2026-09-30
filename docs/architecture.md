@@ -40,6 +40,55 @@ o código sozinho não conta:
 - … depende de …
 - … **não** depende de … — porque …
 
+## Navegação
+
+Rotas em `lib/core/navigation/app_routes.dart` (`AppRoutes`), montadas pelo
+`AppRouter` (`lib/app/app_router.dart`), todas com `AppTransitions.fade` — que
+respeita a preferência de "reduzir animações":
+
+- **Fora da casca** (sem barra inferior): `/splash`, `/upgrade-required`,
+  `/webview`.
+- **Casca** (`StatefulShellRoute.indexedStack`, widget `AppShell` em
+  `lib/app/shell/`): quatro abas, cada uma um branch — `/dashboard` (inicial),
+  `/upload`, `/activities`, `/profile`. Cada aba guarda seu estado ao trocar:
+  as páginas das outras abas ficam montadas fora do palco. Tocar na aba já
+  selecionada volta para a raiz dela (`goBranch(initialLocation: true)`).
+
+A splash (`SplashScreen(duration:)`, 3 s por padrão) leva a `/dashboard`. O
+`redirect` é a função pura `AppRouter.resolveRedirect`: a splash sempre passa;
+com a trava de atualização bloqueando, tudo vai para `/upgrade-required`; ao
+liberar, `/upgrade-required` vai para `/dashboard`.
+
+A casca tem:
+
+- **App bar** (`ShellAppBar`): um `NextAppBar` (o lint do projeto proíbe o
+  `AppBar` do Flutter) com a marca `kAppName` (`lib/app/app_info.dart`)
+  centralizada, sem botão de voltar, e o avatar com as iniciais do aluno
+  (`DemoStudent`, `lib/features/profile/domain/`). O avatar é um alvo de 48dp,
+  anunciado como "Abrir menu", e abre o modal "Mais" (`showHomeMoreModal`):
+  Mensagens, Configurações, Compartilhar/Privacidade/Termos quando o Remote
+  Config tem a URL, nome e versão do app.
+- **Barra inferior** (`NavigationBar`): ícones `*_outlined`; indicador da aba
+  ativa em `primaryContainer` com ícone `onPrimaryContainer`; rótulo ativo em
+  `primary`, inativos em `onSurfaceVariant`.
+
+As telas das abas ainda são provisórias (`TabPlaceholderPage`, só o título).
+
+### Estado de notificações
+
+"Notificações ativadas" tem um único dono: o `NotificationsCubit`
+(`lib/features/notifications/presentation/`), criado na inicialização
+(`lazy: false`) no `AppProviders`, sobre a interface `NotificationsPreference`
+— em produção `PushNotificationsPreference`, que delega ao `PushService`. A
+troca é otimista; se a gravação falha, o valor anterior volta e `setEnabled`
+devolve `false`. `openNotificationsSheet(context)` abre a folha de notificações,
+grava pelo Cubit e mostra o aviso de sucesso ou erro. A folha e o modal de
+configurações recebem o valor atual ao abrir; não escutam o Cubit enquanto estão
+abertos.
+
+O `RemoteConfigService.get` devolve o valor padrão quando o Firebase não está
+disponível, em vez de lançar exceção.
+
 ## Idioma
 
 pt é o idioma oficial. Sem preferência salva, o `MaterialApp` recebe
