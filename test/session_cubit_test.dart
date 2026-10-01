@@ -17,10 +17,12 @@ class _MemorySessionRepository implements SessionRepository {
   Future<void> clear() async => stored = null;
 }
 
+/// Fails the way blocked browser storage does: a thrown value that is not a
+/// Dart [Exception] (a JS DOMException on web).
 class _FailingSaveRepository extends _MemorySessionRepository {
   @override
   Future<void> save(Session session) async =>
-      throw Exception('storage blocked');
+      throw StateError('storage blocked');
 }
 
 void main() {

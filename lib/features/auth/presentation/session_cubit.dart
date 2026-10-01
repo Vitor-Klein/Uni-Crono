@@ -21,7 +21,8 @@ class SessionCubit extends Cubit<Session?> {
     final session = Session(email: email, institutionId: institutionId);
     try {
       await _repository.save(session);
-    } on Exception catch (e) {
+    } catch (e) {
+      // Broad catch: on web, blocked storage throws a JS error that is not a Dart Exception.
       debugPrint('Session save failed: ${e.runtimeType}');
     }
     emit(session);

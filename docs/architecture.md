@@ -88,6 +88,9 @@ no teclado) chama `SessionCubit.signIn` com o e-mail sem espaços nas pontas.
   inicial do `SessionCubit` (`Cubit<Session?>`): o `redirect` nunca confunde
   "carregando" com "sem sessão". Falha na leitura vira "sem sessão" e só o tipo
   do erro vai para o log.
+- Se o aparelho não deixa salvar a sessão ao entrar (armazenamento bloqueado,
+  por exemplo), `SessionCubit.signIn` entra mesmo assim, só nesta execução: ao
+  reabrir o app, volta ao login. Só o tipo do erro vai para o log.
 - `SessionCubit.signOut()` apaga a sessão.
 - "Esqueci?" e "Solicitar acesso" mostram "Disponível em breve".
 - Os rótulos visíveis ficam fora da árvore de acessibilidade; cada campo carrega
