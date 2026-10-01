@@ -1,5 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../domain/email_format.dart';
+import '../domain/institution.dart';
 import '../domain/session.dart';
 
 /// Where the session of this device is kept.
@@ -10,7 +12,8 @@ abstract class SessionRepository {
 }
 
 /// Keeps the session in the device preferences. Only the e-mail and the
-/// institution are stored; a session missing either one is no session.
+/// institution are stored. What is read back is external data: a session whose
+/// e-mail is malformed or whose institution is unknown is no session.
 class SharedPrefsSessionRepository implements SessionRepository {
   const SharedPrefsSessionRepository();
 
@@ -22,10 +25,15 @@ class SharedPrefsSessionRepository implements SessionRepository {
     final prefs = await SharedPreferences.getInstance();
     final email = prefs.getString(emailKey);
     final institutionId = prefs.getString(institutionKey);
-    if (email == null || email.isEmpty) return null;
-    if (institutionId == null || institutionId.isEmpty) return null;
+    if (email == null || !isValidEmail(email)) return null;
+    if (institutionId == null || !_isKnownInstitution(institutionId)) {
+      return null;
+    }
     return Session(email: email, institutionId: institutionId);
   }
+
+  static bool _isKnownInstitution(String id) =>
+      Institutions.all.any((institution) => institution.id == id);
 
   @override
   Future<void> save(Session session) async {

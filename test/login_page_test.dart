@@ -132,4 +132,39 @@ void main() {
       expect(find.text('Disponível em breve'), findsOneWidget);
     });
   }
+
+  for (final (width, scale) in [(320.0, 1.0), (360.0, 1.5)]) {
+    testWidgets('CA-02: the login form fits a ${width.toInt()}dp screen at '
+        '${scale}x text without overflowing', (tester) async {
+      tester.view.physicalSize = Size(width, 760);
+      tester.view.devicePixelRatio = 1;
+      tester.platformDispatcher.textScaleFactorTestValue = scale;
+      addTearDown(tester.view.reset);
+      addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
+
+      await pumpRoutedApp(tester, signedIn: false);
+      await tester.ensureVisible(find.text('Entrar'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Entrar'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Informe sua senha'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    });
+  }
+
+  testWidgets('CA-02: a corrected field clears its error', (tester) async {
+    await pumpRoutedApp(tester, signedIn: false);
+    await tester.tap(find.text('Entrar'));
+    await tester.pumpAndSettle();
+    expect(find.text('Informe seu e-mail acadêmico'), findsOneWidget);
+
+    await tester.enterText(
+      find.byWidgetPredicate((w) => w is EditableText && !w.obscureText),
+      'ana.souza@alunos.utfpr.edu.br',
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('Informe seu e-mail acadêmico'), findsNothing);
+  });
 }

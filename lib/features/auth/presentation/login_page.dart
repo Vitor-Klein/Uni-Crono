@@ -99,6 +99,8 @@ class _LoginPageState extends State<LoginPage> {
                   label: l10n.loginInstitutionLabel,
                   child: DropdownButtonFormField<String>(
                     initialValue: _institutionId,
+                    isExpanded: true,
+                    autovalidateMode: AutovalidateMode.onUserInteractionIfError,
                     hint: Text(l10n.loginInstitutionHint),
                     decoration: _decoration(),
                     items: [
@@ -119,6 +121,7 @@ class _LoginPageState extends State<LoginPage> {
                   label: l10n.loginEmailLabel,
                   child: TextFormField(
                     controller: _email,
+                    autovalidateMode: AutovalidateMode.onUserInteractionIfError,
                     keyboardType: TextInputType.emailAddress,
                     autofillHints: const [AutofillHints.email],
                     textInputAction: TextInputAction.next,
@@ -145,6 +148,7 @@ class _LoginPageState extends State<LoginPage> {
                   label: l10n.loginPasswordLabel,
                   child: TextFormField(
                     controller: _password,
+                    autovalidateMode: AutovalidateMode.onUserInteractionIfError,
                     obscureText: _obscurePassword,
                     autofillHints: const [AutofillHints.password],
                     textInputAction: TextInputAction.done,
@@ -172,8 +176,9 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(height: AppSpacing.xl),
                 FilledButton(onPressed: _submit, child: Text(l10n.loginSubmit)),
                 const SizedBox(height: AppSpacing.lg),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                Wrap(
+                  alignment: WrapAlignment.center,
+                  crossAxisAlignment: WrapCrossAlignment.center,
                   children: [
                     Text(l10n.loginNewHere, style: theme.textTheme.bodyMedium),
                     TextButton(

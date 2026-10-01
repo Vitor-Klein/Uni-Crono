@@ -58,4 +58,16 @@ void main() {
       ],
     );
   });
+
+  test('CA-05: a saved session with an unknown institution, a malformed or an '
+      'empty e-mail counts as no session', () async {
+    for (final saved in <Map<String, Object>>[
+      {'session_email': session.email, 'session_institution': 'foo'},
+      {'session_email': 'not-an-email', 'session_institution': 'utfpr'},
+      {'session_email': '', 'session_institution': 'utfpr'},
+    ]) {
+      SharedPreferences.setMockInitialValues(saved);
+      expect(await repository.load(), isNull, reason: '$saved');
+    }
+  });
 }
