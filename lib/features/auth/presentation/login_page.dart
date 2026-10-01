@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:next_widgets_service/next_widgets_service.dart';
 
 import '../../../app/app_info.dart';
 import '../../../core/theme/app_tokens.dart';
@@ -36,6 +37,13 @@ class _LoginPageState extends State<LoginPage> {
     await context.read<SessionCubit>().signIn(
       institutionId: _institutionId!,
       email: _email.text.trim(),
+    );
+  }
+
+  void _comingSoon() {
+    NextSnack.showNextSnack(
+      context,
+      message: AppLocalizations.of(context)!.comingSoon,
     );
   }
 
@@ -128,7 +136,7 @@ class _LoginPageState extends State<LoginPage> {
                   children: [
                     Expanded(child: _FieldLabel(l10n.loginPasswordLabel)),
                     TextButton(
-                      onPressed: () {},
+                      onPressed: _comingSoon,
                       child: Text(l10n.loginForgotPassword),
                     ),
                   ],
@@ -169,7 +177,7 @@ class _LoginPageState extends State<LoginPage> {
                   children: [
                     Text(l10n.loginNewHere, style: theme.textTheme.bodyMedium),
                     TextButton(
-                      onPressed: () {},
+                      onPressed: _comingSoon,
                       child: Text(l10n.loginRequestAccess),
                     ),
                   ],

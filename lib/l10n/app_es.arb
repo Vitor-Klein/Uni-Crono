@@ -80,6 +80,7 @@
   "loginEmailRequired": "Ingresa tu correo académico",
   "loginEmailInvalid": "Correo inválido",
   "loginPasswordRequired": "Ingresa tu contraseña",
+  "comingSoon": "Disponible pronto",
   "settingsThemeLabel": "Tema",
   "settingsThemeSemantics": "Seleccionar el modo de tema",
   "themeModeSystem": "Sistema",

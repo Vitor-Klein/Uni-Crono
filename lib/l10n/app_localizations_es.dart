@@ -230,6 +230,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get loginPasswordRequired => 'Ingresa tu contraseña';
 
   @override
+  String get comingSoon => 'Disponible pronto';
+
+  @override
   String get settingsThemeLabel => 'Tema';
 
   @override

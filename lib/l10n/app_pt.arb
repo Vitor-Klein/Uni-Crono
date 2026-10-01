@@ -80,6 +80,7 @@
   "loginEmailRequired": "Informe seu e-mail acadêmico",
   "loginEmailInvalid": "E-mail inválido",
   "loginPasswordRequired": "Informe sua senha",
+  "comingSoon": "Disponível em breve",
   "settingsThemeLabel": "Tema",
   "settingsThemeSemantics": "Selecionar o modo de tema",
   "themeModeSystem": "Sistema",

@@ -229,6 +229,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get loginPasswordRequired => 'Informe sua senha';
 
   @override
+  String get comingSoon => 'Disponível em breve';
+
+  @override
   String get settingsThemeLabel => 'Tema';
 
   @override

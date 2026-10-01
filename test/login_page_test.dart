@@ -59,7 +59,7 @@ void main() {
     WidgetTester tester, {
     String email = 'ana.souza@alunos.utfpr.edu.br',
   }) async {
-    await tester.tap(find.text('Selecione sua universidade…'));
+    await tester.tap(find.byType(DropdownButtonFormField<String>));
     await tester.pumpAndSettle();
     await tester.tap(find.text('UTFPR').last);
     await tester.pumpAndSettle();
@@ -119,4 +119,17 @@ void main() {
 
     expect(currentPath(), AppRoutes.dashboard);
   });
+
+  for (final link in ['Esqueci?', 'Solicitar acesso']) {
+    testWidgets('CA-08: $link says Disponível em breve', (tester) async {
+      await pumpRoutedApp(tester, signedIn: false);
+
+      await tester.ensureVisible(find.text(link));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text(link));
+      await tester.pump();
+
+      expect(find.text('Disponível em breve'), findsOneWidget);
+    });
+  }
 }

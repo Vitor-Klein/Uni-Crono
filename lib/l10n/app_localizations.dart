@@ -532,6 +532,12 @@ abstract class AppLocalizations {
   /// **'Informe sua senha'**
   String get loginPasswordRequired;
 
+  /// No description provided for @comingSoon.
+  ///
+  /// In pt, this message translates to:
+  /// **'Disponível em breve'**
+  String get comingSoon;
+
   /// No description provided for @settingsThemeLabel.
   ///
   /// In pt, this message translates to:
