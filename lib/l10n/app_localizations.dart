@@ -580,6 +580,30 @@ abstract class AppLocalizations {
   /// **'{goal} no total'**
   String hoursGoalTotal(int goal);
 
+  /// No description provided for @dashboardRecentTitle.
+  ///
+  /// In pt, this message translates to:
+  /// **'Aprovados recentemente'**
+  String get dashboardRecentTitle;
+
+  /// No description provided for @dashboardSeeAll.
+  ///
+  /// In pt, this message translates to:
+  /// **'Ver todos'**
+  String get dashboardSeeAll;
+
+  /// No description provided for @certificateHours.
+  ///
+  /// In pt, this message translates to:
+  /// **'+{hours} h'**
+  String certificateHours(int hours);
+
+  /// No description provided for @certificateApproved.
+  ///
+  /// In pt, this message translates to:
+  /// **'Aprovado'**
+  String get certificateApproved;
+
   /// No description provided for @settingsThemeLabel.
   ///
   /// In pt, this message translates to:

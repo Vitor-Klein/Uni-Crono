@@ -94,6 +94,13 @@
   "@hoursGoalTotal": {
     "placeholders": { "goal": { "type": "int" } }
   },
+  "dashboardRecentTitle": "Aprovados recentemente",
+  "dashboardSeeAll": "Ver todos",
+  "certificateHours": "+{hours} h",
+  "@certificateHours": {
+    "placeholders": { "hours": { "type": "int" } }
+  },
+  "certificateApproved": "Aprovado",
   "settingsThemeLabel": "Tema",
   "hoursProgressSemantics": "{hours} de {goal} horas",
   "@hoursProgressSemantics": {

@@ -41,6 +41,23 @@ class _DashboardView extends StatelessWidget {
             _ProgressCard(progress: progress),
             const SizedBox(height: AppSpacing.lg),
           ],
+          const SizedBox(height: AppSpacing.sm),
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  l10n.dashboardRecentTitle,
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+              ),
+              TextButton(onPressed: () {}, child: Text(l10n.dashboardSeeAll)),
+            ],
+          ),
+          const SizedBox(height: AppSpacing.sm),
+          for (final certificate in snapshot.recent) ...[
+            _CertificateTile(certificate: certificate),
+            const SizedBox(height: AppSpacing.md),
+          ],
         ],
       ],
     );
@@ -125,6 +142,71 @@ class _ProgressCard extends StatelessWidget {
                   ),
                 ],
               ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _CertificateTile extends StatelessWidget {
+  const _CertificateTile({required this.certificate});
+
+  final ApprovedCertificate certificate;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+    final cs = theme.colorScheme;
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: cs.surfaceContainerLowest,
+        borderRadius: BorderRadius.circular(AppRadii.md),
+        boxShadow: AppShadows.sm,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(AppSpacing.lg),
+        child: Row(
+          children: [
+            CircleAvatar(
+              backgroundColor: cs.surfaceContainer,
+              child: Icon(certificate.category.icon, color: cs.primary),
+            ),
+            const SizedBox(width: AppSpacing.md),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(certificate.title, style: theme.textTheme.titleMedium),
+                  Text(
+                    certificate.category.title(l10n),
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: cs.onSurfaceVariant,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: AppSpacing.sm),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  l10n.certificateHours(certificate.hours),
+                  style: theme.textTheme.labelLarge?.copyWith(
+                    fontWeight: FontWeight.w700,
+                    color: cs.primary,
+                  ),
+                ),
+                Text(
+                  l10n.certificateApproved,
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: cs.onSurfaceVariant,
+                  ),
+                ),
+              ],
             ),
           ],
         ),

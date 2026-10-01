@@ -258,6 +258,20 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
+  String get dashboardRecentTitle => 'Aprobados recientemente';
+
+  @override
+  String get dashboardSeeAll => 'Ver todos';
+
+  @override
+  String certificateHours(int hours) {
+    return '+$hours h';
+  }
+
+  @override
+  String get certificateApproved => 'Aprobado';
+
+  @override
   String get settingsThemeLabel => 'Tema';
 
   @override
