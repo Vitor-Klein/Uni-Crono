@@ -180,6 +180,54 @@ class AppLocalizationsEn extends AppLocalizations {
   String get shellMenuSemantics => 'Open menu';
 
   @override
+  String get loginSubtitle => 'Access your academic resources.';
+
+  @override
+  String get loginInstitutionLabel => 'Institution';
+
+  @override
+  String get loginInstitutionHint => 'Select your university…';
+
+  @override
+  String get loginEmailLabel => 'Academic e-mail';
+
+  @override
+  String get loginEmailHint => 'student@university.edu';
+
+  @override
+  String get loginPasswordLabel => 'Password';
+
+  @override
+  String get loginForgotPassword => 'Forgot?';
+
+  @override
+  String get loginShowPassword => 'Show password';
+
+  @override
+  String get loginHidePassword => 'Hide password';
+
+  @override
+  String get loginSubmit => 'Sign in';
+
+  @override
+  String get loginNewHere => 'New here?';
+
+  @override
+  String get loginRequestAccess => 'Request access';
+
+  @override
+  String get loginInstitutionRequired => 'Choose your institution';
+
+  @override
+  String get loginEmailRequired => 'Enter your academic e-mail';
+
+  @override
+  String get loginEmailInvalid => 'Invalid e-mail';
+
+  @override
+  String get loginPasswordRequired => 'Enter your password';
+
+  @override
   String get settingsThemeLabel => 'Theme';
 
   @override

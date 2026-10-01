@@ -436,6 +436,102 @@ abstract class AppLocalizations {
   /// **'Abrir menu'**
   String get shellMenuSemantics;
 
+  /// No description provided for @loginSubtitle.
+  ///
+  /// In pt, this message translates to:
+  /// **'Acesse seus recursos acadêmicos.'**
+  String get loginSubtitle;
+
+  /// No description provided for @loginInstitutionLabel.
+  ///
+  /// In pt, this message translates to:
+  /// **'Instituição'**
+  String get loginInstitutionLabel;
+
+  /// No description provided for @loginInstitutionHint.
+  ///
+  /// In pt, this message translates to:
+  /// **'Selecione sua universidade…'**
+  String get loginInstitutionHint;
+
+  /// No description provided for @loginEmailLabel.
+  ///
+  /// In pt, this message translates to:
+  /// **'E-mail acadêmico'**
+  String get loginEmailLabel;
+
+  /// No description provided for @loginEmailHint.
+  ///
+  /// In pt, this message translates to:
+  /// **'aluno@universidade.edu.br'**
+  String get loginEmailHint;
+
+  /// No description provided for @loginPasswordLabel.
+  ///
+  /// In pt, this message translates to:
+  /// **'Senha'**
+  String get loginPasswordLabel;
+
+  /// No description provided for @loginForgotPassword.
+  ///
+  /// In pt, this message translates to:
+  /// **'Esqueci?'**
+  String get loginForgotPassword;
+
+  /// No description provided for @loginShowPassword.
+  ///
+  /// In pt, this message translates to:
+  /// **'Mostrar senha'**
+  String get loginShowPassword;
+
+  /// No description provided for @loginHidePassword.
+  ///
+  /// In pt, this message translates to:
+  /// **'Ocultar senha'**
+  String get loginHidePassword;
+
+  /// No description provided for @loginSubmit.
+  ///
+  /// In pt, this message translates to:
+  /// **'Entrar'**
+  String get loginSubmit;
+
+  /// No description provided for @loginNewHere.
+  ///
+  /// In pt, this message translates to:
+  /// **'Novo por aqui?'**
+  String get loginNewHere;
+
+  /// No description provided for @loginRequestAccess.
+  ///
+  /// In pt, this message translates to:
+  /// **'Solicitar acesso'**
+  String get loginRequestAccess;
+
+  /// No description provided for @loginInstitutionRequired.
+  ///
+  /// In pt, this message translates to:
+  /// **'Escolha sua instituição'**
+  String get loginInstitutionRequired;
+
+  /// No description provided for @loginEmailRequired.
+  ///
+  /// In pt, this message translates to:
+  /// **'Informe seu e-mail acadêmico'**
+  String get loginEmailRequired;
+
+  /// No description provided for @loginEmailInvalid.
+  ///
+  /// In pt, this message translates to:
+  /// **'E-mail inválido'**
+  String get loginEmailInvalid;
+
+  /// No description provided for @loginPasswordRequired.
+  ///
+  /// In pt, this message translates to:
+  /// **'Informe sua senha'**
+  String get loginPasswordRequired;
+
   /// No description provided for @settingsThemeLabel.
   ///
   /// In pt, this message translates to:
