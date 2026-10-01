@@ -233,6 +233,31 @@ class AppLocalizationsEs extends AppLocalizations {
   String get comingSoon => 'Disponible pronto';
 
   @override
+  String get dashboardTitle => 'Progreso académico';
+
+  @override
+  String get hoursComplementaryTitle => 'Horas Complementarias';
+
+  @override
+  String get hoursComplementarySubtitle => 'Actividades extracurriculares';
+
+  @override
+  String get hoursExtensionTitle => 'Horas de Extensión';
+
+  @override
+  String get hoursExtensionSubtitle => 'Participación comunitaria';
+
+  @override
+  String hoursAccumulated(int hours) {
+    return '$hours horas';
+  }
+
+  @override
+  String hoursGoalTotal(int goal) {
+    return '$goal en total';
+  }
+
+  @override
   String get settingsThemeLabel => 'Tema';
 
   @override

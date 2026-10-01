@@ -9,6 +9,7 @@ import 'package:uni_cronos/app/app_providers.dart';
 import 'package:uni_cronos/app/app_router.dart';
 import 'package:uni_cronos/features/auth/data/session_repository.dart';
 import 'package:uni_cronos/features/auth/domain/session.dart';
+import 'package:uni_cronos/features/hours/data/hours_repository.dart';
 import 'package:uni_cronos/features/notifications/data/notifications_preference.dart';
 
 /// An in-memory notifications preference that records every write and can be
@@ -58,6 +59,7 @@ Future<void> pumpRoutedApp(
   NotificationsPreference? notifications,
   bool signedIn = true,
   SessionRepository? sessionRepository,
+  HoursRepository? hoursRepository,
 }) async {
   SharedPreferences.setMockInitialValues({
     if (signedIn) ...demoSessionPrefs,
@@ -75,6 +77,7 @@ Future<void> pumpRoutedApp(
     AppProviders(
       initialSession: session,
       sessionRepository: sessionRepository,
+      hoursRepository: hoursRepository,
       notificationsPreference: notifications ?? FakeNotificationsPreference(),
       child: const MyApp(
         enforceUpgradeGate: false,

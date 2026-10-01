@@ -8,6 +8,7 @@ import '../core/webview/web_view_page.dart';
 import '../core/webview/webview_args.dart';
 import '../features/auth/presentation/login_page.dart';
 import '../features/auth/presentation/session_cubit.dart';
+import '../features/hours/presentation/dashboard_page.dart';
 import '../features/splash/presentation/splash_screen.dart';
 import '../features/upgrade/domain/upgrade_gate_controller.dart';
 import '../features/upgrade/presentation/upgrade_required_page.dart';
@@ -65,9 +66,16 @@ class AppRouter {
             child: AppShell(navigationShell: navigationShell),
           ),
           branches: [
+            StatefulShellBranch(
+              routes: [
+                GoRoute(
+                  path: AppRoutes.dashboard,
+                  builder: (context, state) => const DashboardPage(),
+                ),
+              ],
+            ),
             for (final (path, title)
                 in <(String, String Function(AppLocalizations))>[
-                  (AppRoutes.dashboard, (l) => l.navDashboard),
                   (AppRoutes.upload, (l) => l.navUpload),
                   (AppRoutes.activities, (l) => l.navActivities),
                   (AppRoutes.profile, (l) => l.navProfile),

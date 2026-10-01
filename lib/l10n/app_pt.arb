@@ -81,6 +81,19 @@
   "loginEmailInvalid": "E-mail inválido",
   "loginPasswordRequired": "Informe sua senha",
   "comingSoon": "Disponível em breve",
+  "dashboardTitle": "Progresso acadêmico",
+  "hoursComplementaryTitle": "Horas Complementares",
+  "hoursComplementarySubtitle": "Atividades extracurriculares",
+  "hoursExtensionTitle": "Horas de Extensão",
+  "hoursExtensionSubtitle": "Envolvimento com a comunidade",
+  "hoursAccumulated": "{hours} horas",
+  "@hoursAccumulated": {
+    "placeholders": { "hours": { "type": "int" } }
+  },
+  "hoursGoalTotal": "{goal} no total",
+  "@hoursGoalTotal": {
+    "placeholders": { "goal": { "type": "int" } }
+  },
   "settingsThemeLabel": "Tema",
   "settingsThemeSemantics": "Selecionar o modo de tema",
   "themeModeSystem": "Sistema",

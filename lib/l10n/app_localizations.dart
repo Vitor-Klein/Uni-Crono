@@ -538,6 +538,48 @@ abstract class AppLocalizations {
   /// **'Disponível em breve'**
   String get comingSoon;
 
+  /// No description provided for @dashboardTitle.
+  ///
+  /// In pt, this message translates to:
+  /// **'Progresso acadêmico'**
+  String get dashboardTitle;
+
+  /// No description provided for @hoursComplementaryTitle.
+  ///
+  /// In pt, this message translates to:
+  /// **'Horas Complementares'**
+  String get hoursComplementaryTitle;
+
+  /// No description provided for @hoursComplementarySubtitle.
+  ///
+  /// In pt, this message translates to:
+  /// **'Atividades extracurriculares'**
+  String get hoursComplementarySubtitle;
+
+  /// No description provided for @hoursExtensionTitle.
+  ///
+  /// In pt, this message translates to:
+  /// **'Horas de Extensão'**
+  String get hoursExtensionTitle;
+
+  /// No description provided for @hoursExtensionSubtitle.
+  ///
+  /// In pt, this message translates to:
+  /// **'Envolvimento com a comunidade'**
+  String get hoursExtensionSubtitle;
+
+  /// No description provided for @hoursAccumulated.
+  ///
+  /// In pt, this message translates to:
+  /// **'{hours} horas'**
+  String hoursAccumulated(int hours);
+
+  /// No description provided for @hoursGoalTotal.
+  ///
+  /// In pt, this message translates to:
+  /// **'{goal} no total'**
+  String hoursGoalTotal(int goal);
+
   /// No description provided for @settingsThemeLabel.
   ///
   /// In pt, this message translates to:

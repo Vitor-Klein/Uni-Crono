@@ -6,6 +6,7 @@ import '../core/theme/template_theme_provider.dart';
 import '../features/auth/data/session_repository.dart';
 import '../features/auth/domain/session.dart';
 import '../features/auth/presentation/session_cubit.dart';
+import '../features/hours/data/hours_repository.dart';
 import '../features/notifications/data/notifications_preference.dart';
 import '../features/notifications/presentation/notifications_cubit.dart';
 
@@ -27,6 +28,7 @@ class AppProviders extends StatelessWidget {
     this.notificationsPreference,
     this.sessionRepository,
     this.initialSession,
+    this.hoursRepository,
     super.key,
   });
 
@@ -42,49 +44,57 @@ class AppProviders extends StatelessWidget {
   /// The session read before the app ran; null when nobody is signed in.
   final Session? initialSession;
 
+  /// Where the student's hours are kept; an in-memory one when omitted.
+  final HoursRepository? hoursRepository;
+
   @override
   Widget build(BuildContext context) {
     AppThemeBootstrap.ensureConfigured();
 
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (_) => AppThemeCubit(
-            preferenceService: SharedPrefsThemePreferenceService(),
+    return RepositoryProvider<HoursRepository>(
+      create: (_) => hoursRepository ?? InMemoryHoursRepository(),
+      dispose: (repository) => repository.dispose(),
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (_) => AppThemeCubit(
+              preferenceService: SharedPrefsThemePreferenceService(),
+            ),
           ),
-        ),
-        BlocProvider(
-          create: (_) => TextScaleCubit(service: SharedPrefsTextScaleService()),
-        ),
-        BlocProvider(
-          create: (_) => LocaleCubit(
-            service: SharedPrefsLocaleService(),
-            // pt first: it is the official language and the gen-l10n
-            // template-arb-file. en/es are translations.
-            supported: const [Locale('pt'), Locale('en'), Locale('es')],
+          BlocProvider(
+            create: (_) =>
+                TextScaleCubit(service: SharedPrefsTextScaleService()),
           ),
-        ),
-        BlocProvider(
-          create: (_) => AccessibilityCubit(
-            service: SharedPrefsAnimationPreferenceService(),
+          BlocProvider(
+            create: (_) => LocaleCubit(
+              service: SharedPrefsLocaleService(),
+              // pt first: it is the official language and the gen-l10n
+              // template-arb-file. en/es are translations.
+              supported: const [Locale('pt'), Locale('en'), Locale('es')],
+            ),
           ),
-        ),
-        BlocProvider(
-          create: (_) => SessionCubit(
-            sessionRepository ?? const SharedPrefsSessionRepository(),
-            initial: initialSession,
+          BlocProvider(
+            create: (_) => AccessibilityCubit(
+              service: SharedPrefsAnimationPreferenceService(),
+            ),
           ),
-        ),
-        // Eager: the saved choice loads at startup, so the More modal never
-        // opens with the optimistic default.
-        BlocProvider(
-          lazy: false,
-          create: (_) => NotificationsCubit(
-            notificationsPreference ?? const PushNotificationsPreference(),
+          BlocProvider(
+            create: (_) => SessionCubit(
+              sessionRepository ?? const SharedPrefsSessionRepository(),
+              initial: initialSession,
+            ),
           ),
-        ),
-      ],
-      child: child,
+          // Eager: the saved choice loads at startup, so the More modal never
+          // opens with the optimistic default.
+          BlocProvider(
+            lazy: false,
+            create: (_) => NotificationsCubit(
+              notificationsPreference ?? const PushNotificationsPreference(),
+            ),
+          ),
+        ],
+        child: child,
+      ),
     );
   }
 }
