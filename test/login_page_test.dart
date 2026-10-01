@@ -32,4 +32,25 @@ void main() {
 
     expect(find.text('E-mail inválido'), findsOneWidget);
   });
+
+  testWidgets('CA-02: screen readers announce each field with its label', (
+    tester,
+  ) async {
+    final semantics = tester.ensureSemantics();
+    await pumpRoutedApp(tester, signedIn: false);
+
+    final fields = <String, Finder>{
+      'Instituição': find.byType(DropdownButtonFormField<String>),
+      'E-mail acadêmico': find.byWidgetPredicate(
+        (w) => w is EditableText && !w.obscureText,
+      ),
+      'Senha': find.byWidgetPredicate(
+        (w) => w is EditableText && w.obscureText,
+      ),
+    };
+    for (final MapEntry(key: label, value: field) in fields.entries) {
+      expect(tester.getSemantics(field).label, contains(label), reason: label);
+    }
+    semantics.dispose();
+  });
 }

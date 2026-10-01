@@ -81,35 +81,41 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 const SizedBox(height: AppSpacing.xxl),
                 _FieldLabel(l10n.loginInstitutionLabel),
-                DropdownButtonFormField<String>(
-                  initialValue: _institutionId,
-                  hint: Text(l10n.loginInstitutionHint),
-                  decoration: _decoration(),
-                  items: [
-                    for (final institution in Institutions.all)
-                      DropdownMenuItem(
-                        value: institution.id,
-                        child: Text(institution.name),
-                      ),
-                  ],
-                  onChanged: (id) => setState(() => _institutionId = id),
-                  validator: (id) =>
-                      id == null ? l10n.loginInstitutionRequired : null,
+                _NamedField(
+                  label: l10n.loginInstitutionLabel,
+                  child: DropdownButtonFormField<String>(
+                    initialValue: _institutionId,
+                    hint: Text(l10n.loginInstitutionHint),
+                    decoration: _decoration(),
+                    items: [
+                      for (final institution in Institutions.all)
+                        DropdownMenuItem(
+                          value: institution.id,
+                          child: Text(institution.name),
+                        ),
+                    ],
+                    onChanged: (id) => setState(() => _institutionId = id),
+                    validator: (id) =>
+                        id == null ? l10n.loginInstitutionRequired : null,
+                  ),
                 ),
                 const SizedBox(height: AppSpacing.lg),
                 _FieldLabel(l10n.loginEmailLabel),
-                TextFormField(
-                  controller: _email,
-                  keyboardType: TextInputType.emailAddress,
-                  autofillHints: const [AutofillHints.email],
-                  textInputAction: TextInputAction.next,
-                  decoration: _decoration(hint: l10n.loginEmailHint),
-                  validator: (value) {
-                    final email = value?.trim() ?? '';
-                    if (email.isEmpty) return l10n.loginEmailRequired;
-                    if (!isValidEmail(email)) return l10n.loginEmailInvalid;
-                    return null;
-                  },
+                _NamedField(
+                  label: l10n.loginEmailLabel,
+                  child: TextFormField(
+                    controller: _email,
+                    keyboardType: TextInputType.emailAddress,
+                    autofillHints: const [AutofillHints.email],
+                    textInputAction: TextInputAction.next,
+                    decoration: _decoration(hint: l10n.loginEmailHint),
+                    validator: (value) {
+                      final email = value?.trim() ?? '';
+                      if (email.isEmpty) return l10n.loginEmailRequired;
+                      if (!isValidEmail(email)) return l10n.loginEmailInvalid;
+                      return null;
+                    },
+                  ),
                 ),
                 const SizedBox(height: AppSpacing.lg),
                 Row(
@@ -121,27 +127,32 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ],
                 ),
-                TextFormField(
-                  controller: _password,
-                  obscureText: _obscurePassword,
-                  autofillHints: const [AutofillHints.password],
-                  textInputAction: TextInputAction.done,
-                  decoration: _decoration().copyWith(
-                    suffixIcon: IconButton(
-                      tooltip: _obscurePassword
-                          ? l10n.loginShowPassword
-                          : l10n.loginHidePassword,
-                      icon: Icon(
-                        _obscurePassword
-                            ? Icons.visibility_outlined
-                            : Icons.visibility_off_outlined,
+                _NamedField(
+                  label: l10n.loginPasswordLabel,
+                  child: TextFormField(
+                    controller: _password,
+                    obscureText: _obscurePassword,
+                    autofillHints: const [AutofillHints.password],
+                    textInputAction: TextInputAction.done,
+                    decoration: _decoration().copyWith(
+                      suffixIcon: IconButton(
+                        tooltip: _obscurePassword
+                            ? l10n.loginShowPassword
+                            : l10n.loginHidePassword,
+                        icon: Icon(
+                          _obscurePassword
+                              ? Icons.visibility_outlined
+                              : Icons.visibility_off_outlined,
+                        ),
+                        onPressed: () => setState(
+                          () => _obscurePassword = !_obscurePassword,
+                        ),
                       ),
-                      onPressed: () =>
-                          setState(() => _obscurePassword = !_obscurePassword),
                     ),
+                    validator: (value) => (value ?? '').isEmpty
+                        ? l10n.loginPasswordRequired
+                        : null,
                   ),
-                  validator: (value) =>
-                      (value ?? '').isEmpty ? l10n.loginPasswordRequired : null,
                 ),
                 const SizedBox(height: AppSpacing.xl),
                 FilledButton(onPressed: _submit, child: Text(l10n.loginSubmit)),
@@ -174,7 +185,23 @@ class _FieldLabel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: AppSpacing.xs),
-      child: Text(text, style: Theme.of(context).textTheme.labelLarge),
+      child: ExcludeSemantics(
+        child: Text(text, style: Theme.of(context).textTheme.labelLarge),
+      ),
     );
+  }
+}
+
+/// Gives [child] the accessible name [label]. The visible label above the
+/// field is hidden from screen readers so it is announced once, with the field.
+class _NamedField extends StatelessWidget {
+  const _NamedField({required this.label, required this.child});
+
+  final String label;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(label: label, child: child);
   }
 }
