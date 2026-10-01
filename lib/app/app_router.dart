@@ -31,6 +31,7 @@ class AppRouter {
         location: state.matchedLocation,
         enforceUpgradeGate: enforceUpgradeGate,
         shouldBlock: upgradeGate.shouldBlock,
+        signedIn: true,
       ),
       routes: [
         GoRoute(
@@ -94,22 +95,32 @@ class AppRouter {
     );
   }
 
-  /// Where to send [location], or null to stay. The splash always completes
-  /// its run, with or without a pending gate — explicit decision, validated
-  /// in device QA.
+  /// Where to send [location], or null to stay. Order: the splash always
+  /// completes its run; a blocking upgrade gate wins over everything; without
+  /// a session only /login is reachable; with one, /login goes to the
+  /// dashboard.
   static String? resolveRedirect({
     required String location,
     required bool enforceUpgradeGate,
     required bool shouldBlock,
+    required bool signedIn,
   }) {
-    if (!enforceUpgradeGate) return null;
     if (location == AppRoutes.splash) return null;
 
-    if (shouldBlock) {
-      return location == AppRoutes.upgradeRequired
-          ? null
-          : AppRoutes.upgradeRequired;
+    if (enforceUpgradeGate) {
+      if (shouldBlock) {
+        return location == AppRoutes.upgradeRequired
+            ? null
+            : AppRoutes.upgradeRequired;
+      }
+      if (location == AppRoutes.upgradeRequired) {
+        return signedIn ? AppRoutes.dashboard : AppRoutes.login;
+      }
     }
-    return location == AppRoutes.upgradeRequired ? AppRoutes.dashboard : null;
+
+    if (!signedIn) {
+      return location == AppRoutes.login ? null : AppRoutes.login;
+    }
+    return location == AppRoutes.login ? AppRoutes.dashboard : null;
   }
 }
