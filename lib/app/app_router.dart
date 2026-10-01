@@ -3,8 +3,11 @@ import 'package:go_router/go_router.dart';
 
 import '../core/navigation/app_routes.dart';
 import '../core/navigation/app_transitions.dart';
+import '../core/navigation/stream_listenable.dart';
 import '../core/webview/web_view_page.dart';
 import '../core/webview/webview_args.dart';
+import '../features/auth/presentation/login_page.dart';
+import '../features/auth/presentation/session_cubit.dart';
 import '../features/splash/presentation/splash_screen.dart';
 import '../features/upgrade/domain/upgrade_gate_controller.dart';
 import '../features/upgrade/presentation/upgrade_required_page.dart';
@@ -21,17 +24,21 @@ class AppRouter {
   static GoRouter build({
     required bool enforceUpgradeGate,
     required UpgradeGateController upgradeGate,
+    required SessionCubit session,
     Duration splashDuration = const Duration(seconds: 3),
   }) {
     return GoRouter(
       navigatorKey: navigatorKey,
       initialLocation: AppRoutes.splash,
-      refreshListenable: upgradeGate,
+      refreshListenable: Listenable.merge([
+        upgradeGate,
+        StreamListenable(session.stream),
+      ]),
       redirect: (context, state) => resolveRedirect(
         location: state.matchedLocation,
         enforceUpgradeGate: enforceUpgradeGate,
         shouldBlock: upgradeGate.shouldBlock,
-        signedIn: true,
+        signedIn: session.state != null,
       ),
       routes: [
         GoRoute(
@@ -41,6 +48,14 @@ class AppRouter {
             state: state,
             hideNavBar: true,
             child: SplashScreen(duration: splashDuration),
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.login,
+          pageBuilder: (context, state) => AppTransitions.fade(
+            context: context,
+            state: state,
+            child: const LoginPage(),
           ),
         ),
         StatefulShellRoute.indexedStack(

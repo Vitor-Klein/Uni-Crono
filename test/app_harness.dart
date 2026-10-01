@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uni_cronos/app/app.dart';
 import 'package:uni_cronos/app/app_providers.dart';
 import 'package:uni_cronos/app/app_router.dart';
+import 'package:uni_cronos/features/auth/data/session_repository.dart';
 import 'package:uni_cronos/features/notifications/data/notifications_preference.dart';
 
 /// An in-memory notifications preference that records every write and can be
@@ -29,14 +30,25 @@ class FakeNotificationsPreference implements NotificationsPreference {
   }
 }
 
+/// Saved session of the fictitious student, so tests start signed in.
+const demoSessionPrefs = <String, Object>{
+  SharedPrefsSessionRepository.emailKey: 'ana.souza@alunos.utfpr.edu.br',
+  SharedPrefsSessionRepository.institutionKey: 'utfpr',
+};
+
 /// Pumps the real app — splash, router and shell — with [prefs] stored and
 /// no splash wait, and settles on the first screen after the splash.
 Future<void> pumpRoutedApp(
   WidgetTester tester, {
   Map<String, Object> prefs = const {},
   NotificationsPreference? notifications,
+  bool signedIn = true,
 }) async {
-  SharedPreferences.setMockInitialValues(prefs);
+  SharedPreferences.setMockInitialValues({
+    if (signedIn) ...demoSessionPrefs,
+    ...prefs,
+  });
+  final session = await const SharedPrefsSessionRepository().load();
   PackageInfo.setMockInitialValues(
     appName: 'Uni Cronos',
     packageName: 'uni_cronos',
@@ -46,6 +58,7 @@ Future<void> pumpRoutedApp(
   );
   await tester.pumpWidget(
     AppProviders(
+      initialSession: session,
       notificationsPreference: notifications ?? FakeNotificationsPreference(),
       child: const MyApp(
         enforceUpgradeGate: false,

@@ -11,6 +11,7 @@ import '../l10n/app_localizations.dart';
 import '../core/localization/next_widgets_fallback_delegate.dart';
 import '../core/navigation/app_routes.dart';
 import '../core/theme/app_tokens.dart';
+import '../features/auth/presentation/session_cubit.dart';
 import '../features/notifications/data/push_service.dart';
 import '../features/upgrade/domain/upgrade_gate_controller.dart';
 import 'app_info.dart';
@@ -59,6 +60,7 @@ class _MyAppState extends State<MyApp> {
     return AppRouter.build(
       enforceUpgradeGate: widget.enforceUpgradeGate,
       upgradeGate: upgradeGate,
+      session: context.read<SessionCubit>(),
       splashDuration: widget.splashDuration,
     );
   }

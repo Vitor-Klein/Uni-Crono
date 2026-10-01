@@ -13,6 +13,7 @@ void main() async {
 
   runApp(
     AppProviders(
+      initialSession: bootstrap.session,
       child: MyApp(firebaseWarningMessage: bootstrap.firebaseWarningMessage),
     ),
   );
