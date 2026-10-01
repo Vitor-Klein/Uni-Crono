@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:next_widgets_service/next_widgets_service.dart';
 
 import '../../../core/theme/app_tokens.dart';
 import '../../../l10n/app_localizations.dart';
@@ -50,7 +51,11 @@ class _DashboardView extends StatelessWidget {
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
               ),
-              TextButton(onPressed: () {}, child: Text(l10n.dashboardSeeAll)),
+              TextButton(
+                onPressed: () =>
+                    NextSnack.showNextSnack(context, message: l10n.comingSoon),
+                child: Text(l10n.dashboardSeeAll),
+              ),
             ],
           ),
           const SizedBox(height: AppSpacing.sm),

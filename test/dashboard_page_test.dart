@@ -117,4 +117,38 @@ void main() {
       ),
     );
   });
+
+  testWidgets('CA-06: Ver todos says Disponível em breve', (tester) async {
+    await pumpRoutedApp(tester);
+
+    await tester.ensureVisible(find.text('Ver todos'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Ver todos'));
+    await tester.pump();
+
+    expect(find.text('Disponível em breve'), findsOneWidget);
+  });
+
+  for (final (width, scale) in [(320.0, 1.0), (360.0, 1.5)]) {
+    testWidgets('CA-02: the dashboard fits a ${width.toInt()}dp screen at '
+        '${scale}x text without overflowing', (tester) async {
+      tester.view.physicalSize = Size(width, 760);
+      tester.view.devicePixelRatio = 1;
+      tester.platformDispatcher.textScaleFactorTestValue = scale;
+      addTearDown(tester.view.reset);
+      addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
+
+      await pumpRoutedApp(tester);
+      await tester.scrollUntilVisible(
+        find.text('University Game Jam 2024'),
+        200,
+        scrollable: find.descendant(
+          of: find.byType(DashboardPage),
+          matching: find.byType(Scrollable),
+        ),
+      );
+
+      expect(tester.takeException(), isNull);
+    });
+  }
 }
