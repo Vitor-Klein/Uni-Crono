@@ -38,9 +38,21 @@ Teste de navegação e de tela dentro da casca passa pelo app real — splash,
 router e casca — com `pumpRoutedApp` de `test/app_harness.dart`: sem
 `debugHome`, splash com `Duration.zero`, preferências salvas por `prefs` e
 notificações por um `FakeNotificationsPreference` (que registra as gravações e
-pode falhar sob comando). O caminho atual sai de `currentPath()`; os rótulos da
+pode falhar sob comando). O app entra **com sessão** por padrão
+(`demoSessionPrefs`, lida como no `AppBootstrap`); teste do login passa
+`signedIn: false`. O caminho atual sai de `currentPath()`; os rótulos da
 barra inferior, de `navLabel()`. Nada de Firebase em teste: o que depende dele
 entra por uma interface com versão falsa.
+
+Toque em widget que pode estar fora da tela padrão do teste (800×600) — ou de
+uma tela reduzida no próprio teste — vem depois de `tester.ensureVisible`: um
+toque que não acerta só gera aviso e deixa o teste passar sem testar nada. A
+saída do `flutter test` não pode ter linhas `Warning:`.
+
+Tela nova ganha teste de layout em tela estreita e texto grande (ex.: 320dp a
+1,0× e 360dp a 1,5×, com `tester.view.physicalSize` e
+`textScaleFactorTestValue`), afirmando `tester.takeException()` nulo — a
+verificação manual em 390dp com texto normal não pega estouro de layout.
 
 ## Commits
 

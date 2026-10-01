@@ -46,8 +46,8 @@ Rotas em `lib/core/navigation/app_routes.dart` (`AppRoutes`), montadas pelo
 `AppRouter` (`lib/app/app_router.dart`), todas com `AppTransitions.fade` — que
 respeita a preferência de "reduzir animações":
 
-- **Fora da casca** (sem barra inferior): `/splash`, `/upgrade-required`,
-  `/webview`.
+- **Fora da casca** (sem barra inferior): `/splash`, `/login`,
+  `/upgrade-required`, `/webview`.
 - **Casca** (`StatefulShellRoute.indexedStack`, widget `AppShell` em
   `lib/app/shell/`): quatro abas, cada uma um branch — `/dashboard` (inicial),
   `/upload`, `/activities`, `/profile`. Cada aba guarda seu estado ao trocar:
@@ -55,9 +55,45 @@ respeita a preferência de "reduzir animações":
   selecionada volta para a raiz dela (`goBranch(initialLocation: true)`).
 
 A splash (`SplashScreen(duration:)`, 3 s por padrão) leva a `/dashboard`. O
-`redirect` é a função pura `AppRouter.resolveRedirect`: a splash sempre passa;
-com a trava de atualização bloqueando, tudo vai para `/upgrade-required`; ao
-liberar, `/upgrade-required` vai para `/dashboard`.
+`redirect` é a função pura `AppRouter.resolveRedirect`, nesta ordem:
+
+1. a splash sempre passa;
+2. com a trava de atualização bloqueando, tudo vai para `/upgrade-required`; ao
+   liberar, `/upgrade-required` vai para `/dashboard` (ou `/login`, sem sessão);
+3. sem sessão, toda rota que não é `/login` vai para `/login` — inclusive a
+   casca e o `/webview`;
+4. com sessão, `/login` vai para `/dashboard`.
+
+O router roda o `redirect` de novo quando a trava muda **ou** quando a sessão
+muda (`refreshListenable` = `Listenable.merge` da trava com um
+`StreamListenable` do `SessionCubit`): entrar leva ao Dashboard e sair leva ao
+login sem navegação manual.
+
+### Sessão (login simulado)
+
+O login não consulta servidor: a tela `/login` (`LoginPage`,
+`lib/features/auth/`) valida só o formato — instituição escolhida em
+`Institutions.all` (UTFPR, UFPR, PUCPR, UEL), e-mail no formato
+`^[^@\s]+@[^@\s]+\.[^@\s]+$` (`isValidEmail`), senha não vazia — e mostra o erro
+de cada campo, que some quando o campo é corrigido. Entrar (botão ou "concluído"
+no teclado) chama `SessionCubit.signIn` com o e-mail sem espaços nas pontas.
+
+- `Session` guarda só **e-mail e instituição**; a senha nunca sai do campo — não
+  é salva, passada adiante nem registrada em log.
+- `SharedPrefsSessionRepository` grava em `session_email` e
+  `session_institution` (no web, `localStorage`, em texto). Ao carregar, só vale
+  sessão com e-mail em formato válido e instituição da lista; qualquer outra
+  coisa conta como "sem sessão".
+- A sessão é lida no `AppBootstrap`, **antes do `runApp`**, e entra como estado
+  inicial do `SessionCubit` (`Cubit<Session?>`): o `redirect` nunca confunde
+  "carregando" com "sem sessão". Falha na leitura vira "sem sessão" e só o tipo
+  do erro vai para o log.
+- `SessionCubit.signOut()` apaga a sessão.
+- "Esqueci?" e "Solicitar acesso" mostram "Disponível em breve".
+- Os rótulos visíveis ficam fora da árvore de acessibilidade; cada campo carrega
+  o seu rótulo (`_NamedField`), anunciado uma vez, com o campo.
+- A validação é só de interface: com autenticação real, ela precisa existir no
+  servidor.
 
 A casca tem:
 

@@ -1,6 +1,6 @@
 ---
 id: 007
-status: aprovada
+status: implementada
 depende_de: [006]
 ---
 
@@ -100,6 +100,42 @@ pela casca real (006).
 
 ## Decisões durante a implementação
 
-- …
+- **Sessão lida antes do `runApp`:** o contrato `Cubit<Session?>` não distingue
+  "ainda carregando" de "sem sessão"; se o `redirect` rodasse antes da leitura,
+  um aluno logado iria para o login. O `AppBootstrap` lê a sessão e ela entra
+  como estado inicial do `SessionCubit`. Falha na leitura conta como "sem sessão"
+  e só o tipo do erro vai para o log.
+- **Sessão salva é validada ao carregar** (SECURITY.md, Zero Trust): só vale com
+  e-mail em formato válido e instituição da lista; senão, "sem sessão". Achado da
+  revisão final.
+- **`resolveRedirect` ganhou `signedIn`:** os testes antigos receberam
+  `signedIn: true` (o que verificam não mudou). O router escuta a trava de
+  atualização e o `SessionCubit` (`Listenable.merge` + `StreamListenable`).
+- **Harness entra com sessão por padrão** (`demoSessionPrefs`); os testes do
+  login usam `signedIn: false`.
+- **Rótulos ligados aos campos:** os rótulos visíveis eram textos soltos e o
+  leitor de tela anunciava a senha sem nome. Cada campo carrega o seu rótulo
+  (`_NamedField`) e o texto visível fica fora da árvore de acessibilidade.
+  Achado da revisão da tarefa.
+- **Layout em telas estreitas e texto grande:** o seletor de instituição e o
+  rodapé estouravam em 360dp com texto "Grande" e a 1,5×; o seletor ocupa a
+  largura e o rodapé quebra linha. Achado da revisão final — a verificação
+  manual em 390dp com texto normal não pegava.
+- **Erro some quando o campo é corrigido** (`onUserInteractionIfError`): antes os
+  erros ficavam até o próximo "Entrar". Achado da verificação manual.
+- **Validação só no cliente** é UX de protótipo, não segurança; com autenticação
+  real a validação tem de existir no servidor (SECURITY.md).
+- **E-mail em texto nas preferências do aparelho** (`localStorage` no web):
+  aceitável no protótipo; rever com autenticação real.
+- **Testes que nasceram verdes (guardas):** "a senha não fica salva em lugar
+  nenhum". O olho da senha não tem teste próprio.
+- **RF-06 (proposto), aguardando decisão:** se a gravação da sessão falhar ao
+  entrar (armazenamento bloqueado no navegador, por exemplo), hoje o botão
+  simplesmente não faz nada — o erro não é tratado. Opções: mostrar um erro e
+  ficar no login, ou deixar entrar só nesta execução sem salvar.
+- **Verificação manual (web, 390×844, armazenamento limpo):** splash → login;
+  layout conforme o Figma; "Entrar" vazio → três erros; UTFPR + e-mail + senha →
+  Dashboard; recarregar mantém no Dashboard; o `localStorage` só guarda
+  `session_email` e `session_institution`.
 
 ## Perguntas em aberto
