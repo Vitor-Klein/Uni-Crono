@@ -1164,3 +1164,17 @@ git commit -m "feat: avisa que recuperar senha e solicitar acesso chegam em brev
 git add docs/specs/007-login-e-sessao.md docs/architecture.md docs/conventions.md
 git commit -m "docs: fecha a spec do login e descreve a sessão"
 ```
+
+---
+
+## Pendências levadas adiante
+
+- **RF-06 (proposto), aguarda decisão:** falha ao salvar a sessão ao entrar hoje
+  deixa o botão sem efeito; escolher entre mostrar erro e ficar no login, ou
+  entrar só nesta execução sem salvar.
+- **010:** o Perfil mostra a instituição pelo id — `Institutions.all` já é a
+  fonte; o botão "Sair" chama `SessionCubit.signOut()`.
+- **Se houver links legais na tela de login:** `/webview` precisa virar rota
+  pública no `resolveRedirect` (hoje, sem sessão, ele leva ao login).
+- **Testes de rota pela casca real** para CA-06 e CA-09 (hoje só pela função
+  pura) — baratos de acrescentar quando a casca ganhar telas reais.
