@@ -111,7 +111,8 @@ A casca tem:
   ativa em `primaryContainer` com ícone `onPrimaryContainer`; rótulo ativo em
   `primary`, inativos em `onSurfaceVariant`.
 
-As telas das abas ainda são provisórias (`TabPlaceholderPage`, só o título).
+A aba Dashboard mostra as horas do aluno (ver **Horas**). As outras três ainda
+são provisórias (`TabPlaceholderPage`, só o título).
 
 ### Estado de notificações
 
@@ -127,6 +128,47 @@ abertos.
 
 O `RemoteConfigService.get` devolve o valor padrão quando o Firebase não está
 disponível, em vez de lançar exceção.
+
+## Horas
+
+As horas do aluno vêm do `HoursRepository` (`lib/features/hours/data/`), provido
+no `AppProviders` como `RepositoryProvider<HoursRepository>`, acima de todos os
+`BlocProvider`. O `dispose` do provider fecha o repositório.
+
+- **Contrato:**
+  - `watch()` entrega o estado atual a quem assina e depois cada mudança;
+  - `add(ApprovedCertificate)` aprova um certificado;
+  - `dispose()` fecha o stream.
+- **O que `watch()` entrega:** cada `HoursSnapshot` traz o `progress` por
+  `HourCategory` (`complementary`, `extension`), os certificados em `recent`
+  (todos, do mais novo ao mais antigo) e um `HoursSummary` (horas totais,
+  número de certificados, percentual da meta).
+- **Em produção é o `InMemoryHoursRepository`:** um `BehaviorSubject` do
+  `rxdart` guarda o snapshot atual. Cada instância, e portanto cada abertura do
+  app, começa dos mesmos dados: horas-base de 98 h complementares e 30 h de
+  extensão, mais três certificados fictícios. Os títulos deles ficam em pt em
+  qualquer idioma, porque são dados. O total inicial dá 130 h e 45 h.
+- **Regras:**
+  - horas de uma categoria = horas-base + soma dos certificados dela;
+  - metas: 200 h complementares e 100 h de extensão;
+  - o percentual do resumo é a soma das horas sobre a soma das metas,
+    arredondado para baixo;
+  - a barra de progresso (`CategoryProgress.ratio`) para em 1,0, mesmo com as
+    horas acima da meta.
+- **`DashboardPage`:** assina o repositório por um `DashboardCubit`
+  (`Cubit<HoursSnapshot?>`, `null` até o primeiro snapshot). Como a casca
+  mantém as abas montadas, um certificado acrescentado com o Dashboard fora da
+  tela já aparece ao voltar.
+- **A página é um `ListView` preguiçoso** com:
+  - um card por categoria. O ícone fica num círculo **acima** do título, e não
+    ao lado como no Figma, para o título ter a largura toda e não quebrar no
+    meio da palavra em telas estreitas com texto grande. Depois vêm o subtítulo
+    e a barra, e embaixo as horas e a meta, nas duas pontas;
+  - a seção "Aprovados recentemente", com "Ver todos" ("Disponível em breve").
+- **Leitor de tela:** cada barra é anunciada com a categoria e "N de M horas",
+  em `Semantics(label, value)` com a barra dentro de `ExcludeSemantics`. Por
+  isso ela não tem o papel de barra de progresso, que só aceita um número como
+  valor.
 
 ## Idioma
 

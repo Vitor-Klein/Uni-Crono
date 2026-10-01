@@ -943,3 +943,33 @@ git commit -m "feat: avisa que a lista completa de certificados chega em breve"
 git add docs/specs/008-dashboard-de-horas.md docs/architecture.md docs/conventions.md
 git commit -m "docs: fecha a spec do Dashboard de Horas e descreve as horas"
 ```
+
+---
+
+## Pendências levadas adiante
+
+- **009 (upload):**
+  - **Limite da lista "Aprovados recentemente":** hoje ela mostra todos os
+    certificados, e o "Ver todos" sugere uma prévia. Decidir o limite (3 a 5)
+    e criar um CA para ele.
+  - **Datas iguais:** desempatar pela ordem de inserção.
+  - **Ids repetidos:** decidir o que `add()` faz com um id que já existe.
+  - **`add()` depois de `dispose()`:** hoje altera a lista antes de lançar.
+    Proteger esse caso.
+  - **Listas do snapshot:** passar a entregá-las com `List.unmodifiable`.
+- **Erro no stream:** o `DashboardCubit` assina `watch()` sem `onError`.
+  Acrescentar `onError: addError` quando houver uma fonte que possa falhar
+  (009/010).
+- **Leitor de tela:**
+  - **Card:** a barra já anuncia "130 de 200 horas", e "130 horas" e "200 no
+    total" são lidos de novo. Excluí-los da semântica.
+  - **Item da lista:** são quatro paradas. Juntá-las num só nó com
+    `MergeSemantics`.
+- **Título do card com texto muito grande:** em 320dp com "Grande", ou a 1,5×,
+  "Complementares" ainda quebra no meio da palavra. Nenhum leiaute com
+  `titleLarge` evita isso, porque o Flutter não hifeniza.
+- **Testes (opcional):**
+  - **Títulos dos cards:** os testes os procuram com `findsWidgets`, que também
+    acha o texto da categoria na lista. Prender os títulos aos cards.
+  - **Fonte do teste de quebra de linha:** é carregada por caminho relativo.
+    Usar `rootBundle`.

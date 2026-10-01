@@ -1,6 +1,6 @@
 ---
 id: 008
-status: aprovada
+status: implementada
 depende_de: [006]
 ---
 
@@ -102,7 +102,32 @@ abstract class HoursRepository {
 
 ## Decisões durante a implementação
 
-- …
+- **`BehaviorSubject` do `rxdart`** (dependência que já existia) entrega o
+  estado atual a quem assina o `watch()`, sem esperar a próxima mudança.
+- **`HoursRepository.dispose()` entrou no contrato:** o `RepositoryProvider`
+  fecha o stream quando a árvore sai.
+- **Datas fictícias dos certificados iniciais** (20/09, 12/09 e 30/08/2026)
+  fixam a ordem da lista. Os títulos ficam em pt nos três idiomas: são dados,
+  não interface.
+- **CA-03 no widget nasceu verde:** o Cubit já assinava o stream desde o card de
+  progresso. O comportamento está travado pelo teste de unidade do repositório
+  e pelo teste de widget.
+- **Barras anunciadas com categoria e horas** ("Horas Complementares", "130 de
+  200 horas"): no Flutter 3.47 o papel "progressBar" só aceita número como
+  valor, então a barra fica sob `Semantics(label, value)` + `ExcludeSemantics` e
+  perde esse papel. Achado da revisão da tarefa, junto com horas e meta, que
+  ficavam juntas à esquerda em vez de nas pontas do card.
+- **Testes da lista com tela alta (800×2000):** o `ListView` é preguiçoso e,
+  na tela padrão de teste, os itens nem eram construídos. Telas estreitas com
+  rolagem ficam com os testes de 320dp e 360dp a 1,5×.
+- **Ícone do card acima do título, num círculo** (como o dos itens da lista),
+  em vez de ao lado dele como no Figma: em 360dp com texto "Grande", o título
+  dividia a linha com o ícone e quebrava no meio da palavra
+  ("Complementare/s", es "Complementaria/s"). Sem o ícone na linha, o título tem
+  a largura toda. Achado da verificação manual; o teste de telas estreitas não
+  pegava porque não há estouro. O teste carrega a Montserrat real para medir.
+  Limite conhecido: em 320dp com "Grande", ou a 1,5×, uma palavra de 14 letras
+  não cabe em `titleLarge` e ainda quebra; o Flutter não hifeniza.
 
 ## Perguntas em aberto
 

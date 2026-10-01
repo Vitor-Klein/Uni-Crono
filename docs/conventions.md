@@ -46,13 +46,22 @@ entra por uma interface com versão falsa.
 
 Toque em widget que pode estar fora da tela padrão do teste (800×600) — ou de
 uma tela reduzida no próprio teste — vem depois de `tester.ensureVisible`: um
-toque que não acerta só gera aviso e deixa o teste passar sem testar nada. A
-saída do `flutter test` não pode ter linhas `Warning:`.
+toque que não acerta só gera aviso e deixa o teste passar sem testar nada. Numa
+lista preguiçosa (`ListView`), o item longe da tela nem é construído e o
+`ensureVisible` não o encontra. Nesse caso, role como o usuário faria, com
+`tester.scrollUntilVisible(..., scrollable: <o Scrollable da página>)`. A saída
+do `flutter test` não pode ter linhas `Warning:`.
 
 Tela nova ganha teste de layout em tela estreita e texto grande (ex.: 320dp a
 1,0× e 360dp a 1,5×, com `tester.view.physicalSize` e
 `textScaleFactorTestValue`), afirmando `tester.takeException()` nulo — a
 verificação manual em 390dp com texto normal não pega estouro de layout.
+O `takeException()` também não pega palavra quebrada no meio, porque isso não
+é estouro. Teste que mede largura de texto carrega a fonte real do estilo
+(`FontLoader` com o TTF de `assets/fonts/`): com a fonte padrão dos testes, as
+larguras não têm relação com as do app. Para afirmar que uma palavra ficou numa
+linha só, todas as caixas de `RenderParagraph.getBoxesForSelection` sobre ela
+têm o mesmo `top`.
 
 ## Commits
 
