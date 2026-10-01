@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../app/app_info.dart';
 import '../../../core/theme/app_tokens.dart';
 import '../../../l10n/app_localizations.dart';
 import '../domain/email_format.dart';
 import '../domain/institution.dart';
+import 'session_cubit.dart';
 
 /// Sign-in screen of the prototype: it checks the format of what is typed and
 /// keeps the session on this device. No server is consulted.
@@ -31,6 +33,10 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<void> _submit() async {
     if (!(_formKey.currentState?.validate() ?? false)) return;
+    await context.read<SessionCubit>().signIn(
+      institutionId: _institutionId!,
+      email: _email.text.trim(),
+    );
   }
 
   InputDecoration _decoration({String? hint}) => InputDecoration(
@@ -134,6 +140,7 @@ class _LoginPageState extends State<LoginPage> {
                     obscureText: _obscurePassword,
                     autofillHints: const [AutofillHints.password],
                     textInputAction: TextInputAction.done,
+                    onFieldSubmitted: (_) => _submit(),
                     decoration: _decoration().copyWith(
                       suffixIcon: IconButton(
                         tooltip: _obscurePassword
