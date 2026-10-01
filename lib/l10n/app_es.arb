@@ -88,6 +88,7 @@
   "hoursExtensionSubtitle": "Participación comunitaria",
   "hoursAccumulated": "{hours} horas",
   "hoursGoalTotal": "{goal} en total",
+  "hoursProgressSemantics": "{hours} de {goal} horas",
   "settingsThemeLabel": "Tema",
   "settingsThemeSemantics": "Seleccionar el modo de tema",
   "themeModeSystem": "Sistema",

@@ -259,6 +259,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsThemeLabel => 'Theme';
 
   @override
+  String hoursProgressSemantics(int hours, int goal) {
+    return '$hours of $goal hours';
+  }
+
+  @override
   String get settingsThemeSemantics => 'Select theme mode';
 
   @override

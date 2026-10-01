@@ -89,30 +89,42 @@ class _ProgressCard extends StatelessWidget {
               ),
             ),
             const SizedBox(height: AppSpacing.lg),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(AppRadii.pill),
-              child: LinearProgressIndicator(
-                value: progress.ratio,
-                minHeight: AppSpacing.sm,
-                backgroundColor: cs.surfaceContainer,
+            // The framework's progress-bar role only accepts a bare number as
+            // value, so the bar announces the category and the hours itself.
+            Semantics(
+              label: category.title(l10n),
+              value: l10n.hoursProgressSemantics(progress.hours, progress.goal),
+              child: ExcludeSemantics(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(AppRadii.pill),
+                  child: LinearProgressIndicator(
+                    value: progress.ratio,
+                    color: cs.primary,
+                    minHeight: AppSpacing.sm,
+                    backgroundColor: cs.surfaceContainer,
+                  ),
+                ),
               ),
             ),
             const SizedBox(height: AppSpacing.md),
-            Wrap(
-              alignment: WrapAlignment.spaceBetween,
-              spacing: AppSpacing.sm,
-              children: [
-                Text(
-                  l10n.hoursAccumulated(progress.hours),
-                  style: theme.textTheme.labelLarge?.copyWith(
-                    fontWeight: FontWeight.w700,
+            SizedBox(
+              width: double.infinity,
+              child: Wrap(
+                alignment: WrapAlignment.spaceBetween,
+                spacing: AppSpacing.sm,
+                children: [
+                  Text(
+                    l10n.hoursAccumulated(progress.hours),
+                    style: theme.textTheme.labelLarge?.copyWith(
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
-                ),
-                Text(
-                  l10n.hoursGoalTotal(progress.goal),
-                  style: theme.textTheme.labelLarge,
-                ),
-              ],
+                  Text(
+                    l10n.hoursGoalTotal(progress.goal),
+                    style: theme.textTheme.labelLarge,
+                  ),
+                ],
+              ),
             ),
           ],
         ),

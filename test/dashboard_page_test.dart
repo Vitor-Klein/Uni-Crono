@@ -28,4 +28,36 @@ void main() {
     expect(bars[0], closeTo(0.65, 1e-9));
     expect(bars[1], closeTo(0.45, 1e-9));
   });
+
+  testWidgets('CA-01: the hours sit at the left and the goal at the right end '
+      'of each card', (tester) async {
+    await pumpRoutedApp(tester);
+
+    final barRight = tester
+        .getTopRight(find.byType(LinearProgressIndicator).first)
+        .dx;
+    final barLeft = tester
+        .getTopLeft(find.byType(LinearProgressIndicator).first)
+        .dx;
+    expect(
+      tester.getTopRight(find.text('200 no total')).dx,
+      closeTo(barRight, 1),
+    );
+    expect(tester.getTopLeft(find.text('130 horas')).dx, closeTo(barLeft, 1));
+  });
+
+  testWidgets('CA-01: screen readers announce each bar with its category and '
+      'its hours', (tester) async {
+    final semantics = tester.ensureSemantics();
+    await pumpRoutedApp(tester);
+
+    final bars = find.byType(LinearProgressIndicator);
+    final complementary = tester.getSemantics(bars.at(0));
+    final extension = tester.getSemantics(bars.at(1));
+    expect(complementary.label, contains('Horas Complementares'));
+    expect(complementary.value, '130 de 200 horas');
+    expect(extension.label, contains('Horas de Extensão'));
+    expect(extension.value, '45 de 100 horas');
+    semantics.dispose();
+  });
 }

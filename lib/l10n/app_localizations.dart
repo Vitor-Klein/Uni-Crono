@@ -586,6 +586,12 @@ abstract class AppLocalizations {
   /// **'Tema'**
   String get settingsThemeLabel;
 
+  /// No description provided for @hoursProgressSemantics.
+  ///
+  /// In pt, this message translates to:
+  /// **'{hours} de {goal} horas'**
+  String hoursProgressSemantics(int hours, int goal);
+
   /// No description provided for @settingsThemeSemantics.
   ///
   /// In pt, this message translates to:

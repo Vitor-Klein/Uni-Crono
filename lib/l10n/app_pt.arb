@@ -95,6 +95,13 @@
     "placeholders": { "goal": { "type": "int" } }
   },
   "settingsThemeLabel": "Tema",
+  "hoursProgressSemantics": "{hours} de {goal} horas",
+  "@hoursProgressSemantics": {
+    "placeholders": {
+      "hours": { "type": "int" },
+      "goal": { "type": "int" }
+    }
+  },
   "settingsThemeSemantics": "Selecionar o modo de tema",
   "themeModeSystem": "Sistema",
   "themeModeLight": "Claro",
