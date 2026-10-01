@@ -46,6 +46,7 @@ void main() {
 
   test('CA-03: adding a certificate adds its hours and puts it first, for '
       'current and later listeners', () async {
+    final current = repository.watch().skip(1).first;
     await repository.add(
       ApprovedCertificate(
         id: 'new',
@@ -56,10 +57,11 @@ void main() {
       ),
     );
 
-    final snapshot = await repository.watch().first;
-    expect(snapshot.of(HourCategory.complementary).hours, 140);
-    expect(snapshot.recent.first.title, 'Certificado Game Jam');
-    expect(snapshot.summary.certificates, 4);
+    for (final snapshot in [await current, await repository.watch().first]) {
+      expect(snapshot.of(HourCategory.complementary).hours, 140);
+      expect(snapshot.recent.first.title, 'Certificado Game Jam');
+      expect(snapshot.summary.certificates, 4);
+    }
   });
 
   test('CA-05: the progress ratio never goes past 1.0', () {
