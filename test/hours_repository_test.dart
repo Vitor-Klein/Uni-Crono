@@ -64,6 +64,22 @@ void main() {
     }
   });
 
+  test('CA-04: the goal percent rounds down, so 176 of 300 hours is '
+      '58%', () async {
+    await repository.add(
+      ApprovedCertificate(
+        id: 'one-hour',
+        title: 'Palestra',
+        category: HourCategory.extension,
+        hours: 1,
+        approvedAt: DateTime(2026, 10, 1),
+      ),
+    );
+
+    final summary = (await repository.watch().first).summary;
+    expect((summary.totalHours, summary.goalPercent), (176, 58));
+  });
+
   test('CA-05: the progress ratio never goes past 1.0', () {
     const over = CategoryProgress(
       category: HourCategory.complementary,

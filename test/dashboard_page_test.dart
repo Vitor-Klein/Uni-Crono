@@ -94,10 +94,22 @@ void main() {
       for (final title in titles) tester.getTopLeft(find.text(title)).dy,
     ];
     expect(tops, orderedEquals([...tops]..sort()));
-    for (final hours in ['+15 h', '+8 h', '+24 h']) {
-      expect(find.text(hours), findsOneWidget, reason: hours);
+    for (final (title, hours, category) in [
+      ('Workshop de Tecnologia Comunitária', '+15 h', 'Horas de Extensão'),
+      ('Seminário Avançado de Python', '+8 h', 'Horas Complementares'),
+      ('University Game Jam 2024', '+24 h', 'Horas Complementares'),
+    ]) {
+      final tile = find
+          .ancestor(of: find.text(title), matching: find.byType(DecoratedBox))
+          .first;
+      for (final text in [hours, category, 'Aprovado']) {
+        expect(
+          find.descendant(of: tile, matching: find.text(text)),
+          findsOneWidget,
+          reason: '$title: $text',
+        );
+      }
     }
-    expect(find.text('Aprovado'), findsNWidgets(3));
   });
 
   testWidgets('CA-03: a certificate added to the repository shows up at once, '
