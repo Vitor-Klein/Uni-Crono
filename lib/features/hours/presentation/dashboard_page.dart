@@ -91,18 +91,12 @@ class _ProgressCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: Text(
-                    category.title(l10n),
-                    style: theme.textTheme.titleLarge,
-                  ),
-                ),
-                Icon(category.icon, color: cs.primary),
-              ],
+            CircleAvatar(
+              backgroundColor: cs.surfaceContainer,
+              child: Icon(category.icon, color: cs.primary),
             ),
+            const SizedBox(height: AppSpacing.md),
+            Text(category.title(l10n), style: theme.textTheme.titleLarge),
             const SizedBox(height: AppSpacing.xs),
             Text(
               category.subtitle(l10n),

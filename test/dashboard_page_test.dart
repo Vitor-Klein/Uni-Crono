@@ -1,4 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:uni_cronos/features/hours/data/hours_repository.dart';
@@ -8,6 +12,14 @@ import 'package:uni_cronos/features/hours/presentation/dashboard_page.dart';
 import 'app_harness.dart';
 
 void main() {
+  // The title font, so line breaks follow real glyph widths.
+  setUpAll(() async {
+    final bytes = File('assets/fonts/Montserrat-Medium.ttf').readAsBytesSync();
+    await (FontLoader(
+      'Montserrat',
+    )..addFont(Future.value(ByteData.sublistView(bytes)))).load();
+  });
+
   testWidgets('CA-01: the dashboard shows 130 of 200 complementary hours and '
       '45 of 100 extension hours, with bars at 0.65 and 0.45', (tester) async {
     await pumpRoutedApp(tester);
@@ -121,7 +133,14 @@ void main() {
   testWidgets('CA-06: Ver todos says Disponível em breve', (tester) async {
     await pumpRoutedApp(tester);
 
-    await tester.ensureVisible(find.text('Ver todos'));
+    await tester.scrollUntilVisible(
+      find.text('Ver todos'),
+      200,
+      scrollable: find.descendant(
+        of: find.byType(DashboardPage),
+        matching: find.byType(Scrollable),
+      ),
+    );
     await tester.pumpAndSettle();
     await tester.tap(find.text('Ver todos'));
     await tester.pump();
@@ -149,6 +168,32 @@ void main() {
       );
 
       expect(tester.takeException(), isNull);
+    });
+  }
+
+  for (final (code, word) in [
+    ('pt', 'Complementares'),
+    ('es', 'Complementarias'),
+  ]) {
+    testWidgets('CA-01: the card title keeps "$word" whole on a 360dp screen '
+        'at 1.15x text', (tester) async {
+      tester.view.physicalSize = const Size(360, 760);
+      tester.view.devicePixelRatio = 1;
+      tester.platformDispatcher.textScaleFactorTestValue = 1.15;
+      addTearDown(tester.view.reset);
+      addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
+
+      await pumpRoutedApp(tester, prefs: {'preferred_locale': code});
+
+      final title = tester.renderObject<RenderParagraph>(
+        find.textContaining(word).first,
+      );
+      final text = title.text.toPlainText();
+      final start = text.indexOf(word);
+      final boxes = title.getBoxesForSelection(
+        TextSelection(baseOffset: start, extentOffset: start + word.length),
+      );
+      expect(boxes.map((box) => box.top).toSet(), hasLength(1));
     });
   }
 }
