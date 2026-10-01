@@ -27,6 +27,10 @@ não consulta servidor. A sessão fica salva no aparelho até o aluno sair.
   breve".
 - **RF-05:** Sair apaga a sessão e volta ao login (o botão fica no Perfil, 010;
   aqui só o método `signOut`).
+- **RF-06:** Se o aparelho não deixar salvar a sessão ao entrar (armazenamento
+  bloqueado, por exemplo), o aluno entra mesmo assim, só nesta execução: ao
+  reabrir o app, volta ao login. *(Acrescentado depois da implementação,
+  aprovado.)*
 
 ## Critérios de aceite
 
@@ -44,6 +48,8 @@ não consulta servidor. A sessão fica salva no aparelho até o aluno sair.
 - **CA-08:** "Esqueci?" e "Solicitar acesso" mostram "Disponível em breve".
 - **CA-09:** A trava de atualização continua tendo prioridade sobre a sessão:
   bloqueado, vai para `/upgrade-required` com ou sem sessão.
+- **CA-10:** Com a gravação da sessão falhando, "Entrar" com dados válidos leva
+  a `/dashboard` e nada fica salvo.
 
 ## Fora de escopo
 
@@ -129,10 +135,9 @@ pela casca real (006).
   aceitável no protótipo; rever com autenticação real.
 - **Testes que nasceram verdes (guardas):** "a senha não fica salva em lugar
   nenhum". O olho da senha não tem teste próprio.
-- **RF-06 (proposto), aguardando decisão:** se a gravação da sessão falhar ao
-  entrar (armazenamento bloqueado no navegador, por exemplo), hoje o botão
-  simplesmente não faz nada — o erro não é tratado. Opções: mostrar um erro e
-  ficar no login, ou deixar entrar só nesta execução sem salvar.
+- **RF-06 / CA-10 acrescentados depois da implementação:** se a gravação da
+  sessão falhava ao entrar, o botão não fazia nada. Decidido: entrar só nesta
+  execução, sem salvar (e não mostrar um erro e ficar no login).
 - **Verificação manual (web, 390×844, armazenamento limpo):** splash → login;
   layout conforme o Figma; "Entrar" vazio → três erros; UTFPR + e-mail + senha →
   Dashboard; recarregar mantém no Dashboard; o `localStorage` só guarda

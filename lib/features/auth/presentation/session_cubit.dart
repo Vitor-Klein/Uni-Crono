@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../data/session_repository.dart';
@@ -10,12 +11,19 @@ class SessionCubit extends Cubit<Session?> {
 
   final SessionRepository _repository;
 
+  /// Signs in with the given credentials. If the device refuses to save the
+  /// session (e.g., storage blocked in the browser), the student is signed in
+  /// for this run only — on reopening the app they will be back at the login.
   Future<void> signIn({
     required String institutionId,
     required String email,
   }) async {
     final session = Session(email: email, institutionId: institutionId);
-    await _repository.save(session);
+    try {
+      await _repository.save(session);
+    } on Exception catch (e) {
+      debugPrint('Session save failed: ${e.runtimeType}');
+    }
     emit(session);
   }
 

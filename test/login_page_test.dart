@@ -167,4 +167,21 @@ void main() {
 
     expect(find.text('Informe seu e-mail acadêmico'), findsNothing);
   });
+
+  testWidgets('CA-10: when the session cannot be saved, signing in still '
+      'opens /dashboard and nothing is saved', (tester) async {
+    await pumpRoutedApp(
+      tester,
+      signedIn: false,
+      sessionRepository: FailingSaveSessionRepository(),
+    );
+    await fillIn(tester);
+
+    await tester.tap(find.text('Entrar'));
+    await tester.pumpAndSettle();
+
+    expect(currentPath(), AppRoutes.dashboard);
+    final prefs = await SharedPreferences.getInstance();
+    expect(prefs.containsKey('session_email'), isFalse);
+  });
 }

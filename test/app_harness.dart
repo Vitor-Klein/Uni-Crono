@@ -8,6 +8,7 @@ import 'package:uni_cronos/app/app.dart';
 import 'package:uni_cronos/app/app_providers.dart';
 import 'package:uni_cronos/app/app_router.dart';
 import 'package:uni_cronos/features/auth/data/session_repository.dart';
+import 'package:uni_cronos/features/auth/domain/session.dart';
 import 'package:uni_cronos/features/notifications/data/notifications_preference.dart';
 
 /// An in-memory notifications preference that records every write and can be
@@ -30,6 +31,19 @@ class FakeNotificationsPreference implements NotificationsPreference {
   }
 }
 
+/// A device that refuses to keep the session: nothing loads, saving throws.
+class FailingSaveSessionRepository implements SessionRepository {
+  @override
+  Future<Session?> load() async => null;
+
+  @override
+  Future<void> save(Session session) async =>
+      throw Exception('storage blocked');
+
+  @override
+  Future<void> clear() async {}
+}
+
 /// Saved session of the fictitious student, so tests start signed in.
 const demoSessionPrefs = <String, Object>{
   SharedPrefsSessionRepository.emailKey: 'ana.souza@alunos.utfpr.edu.br',
@@ -43,6 +57,7 @@ Future<void> pumpRoutedApp(
   Map<String, Object> prefs = const {},
   NotificationsPreference? notifications,
   bool signedIn = true,
+  SessionRepository? sessionRepository,
 }) async {
   SharedPreferences.setMockInitialValues({
     if (signedIn) ...demoSessionPrefs,
@@ -59,6 +74,7 @@ Future<void> pumpRoutedApp(
   await tester.pumpWidget(
     AppProviders(
       initialSession: session,
+      sessionRepository: sessionRepository,
       notificationsPreference: notifications ?? FakeNotificationsPreference(),
       child: const MyApp(
         enforceUpgradeGate: false,

@@ -17,6 +17,12 @@ class _MemorySessionRepository implements SessionRepository {
   Future<void> clear() async => stored = null;
 }
 
+class _FailingSaveRepository extends _MemorySessionRepository {
+  @override
+  Future<void> save(Session session) async =>
+      throw Exception('storage blocked');
+}
+
 void main() {
   const session = Session(
     email: 'ana.souza@alunos.utfpr.edu.br',
@@ -49,6 +55,18 @@ void main() {
     await cubit.signOut();
 
     expect(cubit.state, isNull);
+    expect(repository.stored, isNull);
+  });
+
+  test('CA-10: when the session cannot be saved, signing in still signs in, '
+      'for this run only', () async {
+    final repository = _FailingSaveRepository();
+    final cubit = SessionCubit(repository);
+    addTearDown(cubit.close);
+
+    await cubit.signIn(institutionId: 'utfpr', email: session.email);
+
+    expect(cubit.state, session);
     expect(repository.stored, isNull);
   });
 }
