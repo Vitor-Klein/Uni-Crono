@@ -213,9 +213,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get loginNewHere => 'New here?';
 
   @override
-  String get loginRequestAccess => 'Request access';
-
-  @override
   String get loginInstitutionRequired => 'Choose your institution';
 
   @override
@@ -338,4 +335,49 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get authConfirmationRequired =>
       'Account created. Confirm your e-mail to sign in.';
+
+  @override
+  String get loginCreateAccount => 'Create account';
+
+  @override
+  String get signupTitle => 'Create account';
+
+  @override
+  String get signupSubtitle => 'Start tracking your hours.';
+
+  @override
+  String get signupNameLabel => 'Full name';
+
+  @override
+  String get signupNameRequired => 'Enter your name';
+
+  @override
+  String get signupCourseLabel => 'Program';
+
+  @override
+  String get signupCourseHint => 'E.g.: Software Engineering';
+
+  @override
+  String get signupCourseRequired => 'Enter your program';
+
+  @override
+  String get signupTermLabel => 'Term';
+
+  @override
+  String get signupTermHint => '1 to 12';
+
+  @override
+  String get signupTermInvalid => 'Enter a term from 1 to 12';
+
+  @override
+  String get signupPasswordTooShort => 'Use 8 characters or more';
+
+  @override
+  String get signupSubmit => 'Create account';
+
+  @override
+  String get signupHaveAccount => 'Already have an account?';
+
+  @override
+  String get signupSignIn => 'Sign in';
 }

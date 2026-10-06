@@ -8,6 +8,7 @@ import '../core/webview/web_view_page.dart';
 import '../core/webview/webview_args.dart';
 import '../features/auth/presentation/login_page.dart';
 import '../features/auth/presentation/session_cubit.dart';
+import '../features/auth/presentation/sign_up_page.dart';
 import '../features/hours/presentation/dashboard_page.dart';
 import '../features/splash/presentation/splash_screen.dart';
 import '../features/upgrade/domain/upgrade_gate_controller.dart';
@@ -57,6 +58,14 @@ class AppRouter {
             context: context,
             state: state,
             child: const LoginPage(),
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.signup,
+          pageBuilder: (context, state) => AppTransitions.fade(
+            context: context,
+            state: state,
+            child: const SignUpPage(),
           ),
         ),
         StatefulShellRoute.indexedStack(
@@ -120,8 +129,11 @@ class AppRouter {
 
   /// Where to send [location], or null to stay. Order: the splash always
   /// completes its run; a blocking upgrade gate wins over everything; without
-  /// a session only /login is reachable; with one, /login goes to the
-  /// dashboard.
+  /// a session only /login and /signup are reachable; with one, both go to
+  /// the dashboard.
+  /// The routes only for who is signed out.
+  static const _publicRoutes = {AppRoutes.login, AppRoutes.signup};
+
   static String? resolveRedirect({
     required String location,
     required bool enforceUpgradeGate,
@@ -141,9 +153,8 @@ class AppRouter {
       }
     }
 
-    if (!signedIn) {
-      return location == AppRoutes.login ? null : AppRoutes.login;
-    }
-    return location == AppRoutes.login ? AppRoutes.dashboard : null;
+    final isPublic = _publicRoutes.contains(location);
+    if (!signedIn) return isPublic ? null : AppRoutes.login;
+    return isPublic ? AppRoutes.dashboard : null;
   }
 }

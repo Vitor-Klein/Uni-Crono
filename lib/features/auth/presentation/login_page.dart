@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:next_widgets_service/next_widgets_service.dart';
 
-import '../../../app/app_info.dart';
+import '../../../core/navigation/app_routes.dart';
 import '../../../core/theme/app_tokens.dart';
 import '../../../l10n/app_localizations.dart';
 import '../data/auth_gateway.dart';
 import '../domain/email_format.dart';
-import '../domain/institution.dart';
 import 'auth_failure_message.dart';
+import 'auth_form_fields.dart';
 import 'form_error.dart';
 import 'session_cubit.dart';
 
@@ -26,7 +27,6 @@ class _LoginPageState extends State<LoginPage> {
   final _email = TextEditingController();
   final _password = TextEditingController();
   String? _institutionId;
-  bool _obscurePassword = true;
   bool _submitting = false;
   AuthFailure? _failure;
 
@@ -57,25 +57,10 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  void _comingSoon() {
-    NextSnack.showNextSnack(
-      context,
-      message: AppLocalizations.of(context)!.comingSoon,
-    );
-  }
-
-  InputDecoration _decoration({String? hint}) => InputDecoration(
-    hintText: hint,
-    border: const OutlineInputBorder(
-      borderRadius: BorderRadius.all(Radius.circular(AppRadii.sm)),
-    ),
-  );
-
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
-    final cs = theme.colorScheme;
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -86,55 +71,16 @@ class _LoginPageState extends State<LoginPage> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 const SizedBox(height: AppSpacing.xxl),
-                Center(
-                  child: CircleAvatar(
-                    radius: 28,
-                    backgroundColor: cs.primaryContainer,
-                    child: Icon(
-                      Icons.school_outlined,
-                      color: cs.onPrimaryContainer,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: AppSpacing.lg),
-                Text(
-                  kAppName,
-                  textAlign: TextAlign.center,
-                  style: theme.textTheme.headlineSmall,
-                ),
-                const SizedBox(height: AppSpacing.sm),
-                Text(
-                  l10n.loginSubtitle,
-                  textAlign: TextAlign.center,
-                  style: theme.textTheme.bodyLarge?.copyWith(
-                    color: cs.onSurfaceVariant,
-                  ),
-                ),
+                AuthHeader(subtitle: l10n.loginSubtitle),
                 const SizedBox(height: AppSpacing.xxl),
-                _FieldLabel(l10n.loginInstitutionLabel),
-                _NamedField(
+                LabeledField(
                   label: l10n.loginInstitutionLabel,
-                  child: DropdownButtonFormField<String>(
-                    initialValue: _institutionId,
-                    isExpanded: true,
-                    autovalidateMode: AutovalidateMode.onUserInteractionIfError,
-                    hint: Text(l10n.loginInstitutionHint),
-                    decoration: _decoration(),
-                    items: [
-                      for (final institution in Institutions.all)
-                        DropdownMenuItem(
-                          value: institution.id,
-                          child: Text(institution.name),
-                        ),
-                    ],
+                  child: InstitutionField(
+                    value: _institutionId,
                     onChanged: (id) => setState(() => _institutionId = id),
-                    validator: (id) =>
-                        id == null ? l10n.loginInstitutionRequired : null,
                   ),
                 ),
-                const SizedBox(height: AppSpacing.lg),
-                _FieldLabel(l10n.loginEmailLabel),
-                _NamedField(
+                LabeledField(
                   label: l10n.loginEmailLabel,
                   child: TextFormField(
                     controller: _email,
@@ -142,7 +88,7 @@ class _LoginPageState extends State<LoginPage> {
                     keyboardType: TextInputType.emailAddress,
                     autofillHints: const [AutofillHints.email],
                     textInputAction: TextInputAction.next,
-                    decoration: _decoration(hint: l10n.loginEmailHint),
+                    decoration: authInputDecoration(hint: l10n.loginEmailHint),
                     validator: (value) {
                       final email = value?.trim() ?? '';
                       if (email.isEmpty) return l10n.loginEmailRequired;
@@ -151,40 +97,23 @@ class _LoginPageState extends State<LoginPage> {
                     },
                   ),
                 ),
-                const SizedBox(height: AppSpacing.lg),
                 Row(
                   children: [
-                    Expanded(child: _FieldLabel(l10n.loginPasswordLabel)),
+                    Expanded(child: FieldLabel(l10n.loginPasswordLabel)),
                     TextButton(
-                      onPressed: _comingSoon,
+                      onPressed: () => NextSnack.showNextSnack(
+                        context,
+                        message: l10n.comingSoon,
+                      ),
                       child: Text(l10n.loginForgotPassword),
                     ),
                   ],
                 ),
-                _NamedField(
+                NamedField(
                   label: l10n.loginPasswordLabel,
-                  child: TextFormField(
+                  child: PasswordField(
                     controller: _password,
-                    autovalidateMode: AutovalidateMode.onUserInteractionIfError,
-                    obscureText: _obscurePassword,
-                    autofillHints: const [AutofillHints.password],
-                    textInputAction: TextInputAction.done,
-                    onFieldSubmitted: (_) => _submit(),
-                    decoration: _decoration().copyWith(
-                      suffixIcon: IconButton(
-                        tooltip: _obscurePassword
-                            ? l10n.loginShowPassword
-                            : l10n.loginHidePassword,
-                        icon: Icon(
-                          _obscurePassword
-                              ? Icons.visibility_outlined
-                              : Icons.visibility_off_outlined,
-                        ),
-                        onPressed: () => setState(
-                          () => _obscurePassword = !_obscurePassword,
-                        ),
-                      ),
-                    ),
+                    onSubmitted: _submit,
                     validator: (value) => (value ?? '').isEmpty
                         ? l10n.loginPasswordRequired
                         : null,
@@ -204,8 +133,8 @@ class _LoginPageState extends State<LoginPage> {
                   children: [
                     Text(l10n.loginNewHere, style: theme.textTheme.bodyMedium),
                     TextButton(
-                      onPressed: _comingSoon,
-                      child: Text(l10n.loginRequestAccess),
+                      onPressed: () => context.go(AppRoutes.signup),
+                      child: Text(l10n.loginCreateAccount),
                     ),
                   ],
                 ),
@@ -215,35 +144,5 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
-  }
-}
-
-class _FieldLabel extends StatelessWidget {
-  const _FieldLabel(this.text);
-
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: AppSpacing.xs),
-      child: ExcludeSemantics(
-        child: Text(text, style: Theme.of(context).textTheme.labelLarge),
-      ),
-    );
-  }
-}
-
-/// Gives [child] the accessible name [label]. The visible label above the
-/// field is hidden from screen readers so it is announced once, with the field.
-class _NamedField extends StatelessWidget {
-  const _NamedField({required this.label, required this.child});
-
-  final String label;
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    return Semantics(label: label, child: child);
   }
 }

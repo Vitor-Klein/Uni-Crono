@@ -75,7 +75,6 @@
   "loginHidePassword": "Ocultar senha",
   "loginSubmit": "Entrar",
   "loginNewHere": "Novo por aqui?",
-  "loginRequestAccess": "Solicitar acesso",
   "loginInstitutionRequired": "Escolha sua instituição",
   "loginEmailRequired": "Informe seu e-mail acadêmico",
   "loginEmailInvalid": "E-mail inválido",
@@ -130,5 +129,21 @@
   "authWrongInstitution": "Esta conta é de outra instituição",
 
   "authEmailAlreadyRegistered": "Este e-mail já tem conta",
-  "authConfirmationRequired": "Conta criada. Confirme o e-mail para entrar."
+  "authConfirmationRequired": "Conta criada. Confirme o e-mail para entrar.",
+
+  "loginCreateAccount": "Criar conta",
+  "signupTitle": "Criar conta",
+  "signupSubtitle": "Comece a acompanhar suas horas.",
+  "signupNameLabel": "Nome completo",
+  "signupNameRequired": "Informe seu nome",
+  "signupCourseLabel": "Curso",
+  "signupCourseHint": "Ex.: Engenharia de Software",
+  "signupCourseRequired": "Informe seu curso",
+  "signupTermLabel": "Período",
+  "signupTermHint": "1 a 12",
+  "signupTermInvalid": "Informe um período de 1 a 12",
+  "signupPasswordTooShort": "Use 8 caracteres ou mais",
+  "signupSubmit": "Criar conta",
+  "signupHaveAccount": "Já tem conta?",
+  "signupSignIn": "Entrar"
 }

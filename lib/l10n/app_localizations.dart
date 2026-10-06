@@ -502,12 +502,6 @@ abstract class AppLocalizations {
   /// **'Novo por aqui?'**
   String get loginNewHere;
 
-  /// No description provided for @loginRequestAccess.
-  ///
-  /// In pt, this message translates to:
-  /// **'Solicitar acesso'**
-  String get loginRequestAccess;
-
   /// No description provided for @loginInstitutionRequired.
   ///
   /// In pt, this message translates to:
@@ -735,6 +729,96 @@ abstract class AppLocalizations {
   /// In pt, this message translates to:
   /// **'Conta criada. Confirme o e-mail para entrar.'**
   String get authConfirmationRequired;
+
+  /// No description provided for @loginCreateAccount.
+  ///
+  /// In pt, this message translates to:
+  /// **'Criar conta'**
+  String get loginCreateAccount;
+
+  /// No description provided for @signupTitle.
+  ///
+  /// In pt, this message translates to:
+  /// **'Criar conta'**
+  String get signupTitle;
+
+  /// No description provided for @signupSubtitle.
+  ///
+  /// In pt, this message translates to:
+  /// **'Comece a acompanhar suas horas.'**
+  String get signupSubtitle;
+
+  /// No description provided for @signupNameLabel.
+  ///
+  /// In pt, this message translates to:
+  /// **'Nome completo'**
+  String get signupNameLabel;
+
+  /// No description provided for @signupNameRequired.
+  ///
+  /// In pt, this message translates to:
+  /// **'Informe seu nome'**
+  String get signupNameRequired;
+
+  /// No description provided for @signupCourseLabel.
+  ///
+  /// In pt, this message translates to:
+  /// **'Curso'**
+  String get signupCourseLabel;
+
+  /// No description provided for @signupCourseHint.
+  ///
+  /// In pt, this message translates to:
+  /// **'Ex.: Engenharia de Software'**
+  String get signupCourseHint;
+
+  /// No description provided for @signupCourseRequired.
+  ///
+  /// In pt, this message translates to:
+  /// **'Informe seu curso'**
+  String get signupCourseRequired;
+
+  /// No description provided for @signupTermLabel.
+  ///
+  /// In pt, this message translates to:
+  /// **'Período'**
+  String get signupTermLabel;
+
+  /// No description provided for @signupTermHint.
+  ///
+  /// In pt, this message translates to:
+  /// **'1 a 12'**
+  String get signupTermHint;
+
+  /// No description provided for @signupTermInvalid.
+  ///
+  /// In pt, this message translates to:
+  /// **'Informe um período de 1 a 12'**
+  String get signupTermInvalid;
+
+  /// No description provided for @signupPasswordTooShort.
+  ///
+  /// In pt, this message translates to:
+  /// **'Use 8 caracteres ou mais'**
+  String get signupPasswordTooShort;
+
+  /// No description provided for @signupSubmit.
+  ///
+  /// In pt, this message translates to:
+  /// **'Criar conta'**
+  String get signupSubmit;
+
+  /// No description provided for @signupHaveAccount.
+  ///
+  /// In pt, this message translates to:
+  /// **'Já tem conta?'**
+  String get signupHaveAccount;
+
+  /// No description provided for @signupSignIn.
+  ///
+  /// In pt, this message translates to:
+  /// **'Entrar'**
+  String get signupSignIn;
 }
 
 class _AppLocalizationsDelegate

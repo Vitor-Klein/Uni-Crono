@@ -75,7 +75,6 @@
   "loginHidePassword": "Hide password",
   "loginSubmit": "Sign in",
   "loginNewHere": "New here?",
-  "loginRequestAccess": "Request access",
   "loginInstitutionRequired": "Choose your institution",
   "loginEmailRequired": "Enter your academic e-mail",
   "loginEmailInvalid": "Invalid e-mail",
@@ -115,5 +114,21 @@
   "authWrongInstitution": "This account belongs to another institution",
 
   "authEmailAlreadyRegistered": "This e-mail already has an account",
-  "authConfirmationRequired": "Account created. Confirm your e-mail to sign in."
+  "authConfirmationRequired": "Account created. Confirm your e-mail to sign in.",
+
+  "loginCreateAccount": "Create account",
+  "signupTitle": "Create account",
+  "signupSubtitle": "Start tracking your hours.",
+  "signupNameLabel": "Full name",
+  "signupNameRequired": "Enter your name",
+  "signupCourseLabel": "Program",
+  "signupCourseHint": "E.g.: Software Engineering",
+  "signupCourseRequired": "Enter your program",
+  "signupTermLabel": "Term",
+  "signupTermHint": "1 to 12",
+  "signupTermInvalid": "Enter a term from 1 to 12",
+  "signupPasswordTooShort": "Use 8 characters or more",
+  "signupSubmit": "Create account",
+  "signupHaveAccount": "Already have an account?",
+  "signupSignIn": "Sign in"
 }

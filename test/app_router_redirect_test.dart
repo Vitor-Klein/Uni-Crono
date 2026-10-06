@@ -138,4 +138,28 @@ void main() {
       AppRoutes.login,
     );
   });
+
+  test('CA-10: without a session, /signup opens', () {
+    expect(
+      AppRouter.resolveRedirect(
+        location: AppRoutes.signup,
+        enforceUpgradeGate: true,
+        shouldBlock: false,
+        signedIn: false,
+      ),
+      isNull,
+    );
+  });
+
+  test('CA-10: with a session, /signup goes to /dashboard', () {
+    expect(
+      AppRouter.resolveRedirect(
+        location: AppRoutes.signup,
+        enforceUpgradeGate: true,
+        shouldBlock: false,
+        signedIn: true,
+      ),
+      AppRoutes.dashboard,
+    );
+  });
 }

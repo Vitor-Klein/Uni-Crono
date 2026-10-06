@@ -164,18 +164,16 @@ void main() {
     expect(currentPath(), AppRoutes.dashboard);
   });
 
-  for (final link in ['Esqueci?', 'Solicitar acesso']) {
-    testWidgets('CA-08: $link says Disponível em breve', (tester) async {
-      await pumpRoutedApp(tester, signedIn: false);
+  testWidgets('CA-08: Esqueci? says Disponível em breve', (tester) async {
+    await pumpRoutedApp(tester, signedIn: false);
 
-      await tester.ensureVisible(find.text(link));
-      await tester.pumpAndSettle();
-      await tester.tap(find.text(link));
-      await tester.pump();
+    await tester.ensureVisible(find.text('Esqueci?'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Esqueci?'));
+    await tester.pump();
 
-      expect(find.text('Disponível em breve'), findsOneWidget);
-    });
-  }
+    expect(find.text('Disponível em breve'), findsOneWidget);
+  });
 
   for (final (width, scale) in [(320.0, 1.0), (360.0, 1.5)]) {
     testWidgets('CA-02: the login form fits a ${width.toInt()}dp screen at '
