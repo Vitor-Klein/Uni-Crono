@@ -66,6 +66,7 @@ dependencies:
   subscribe_service: any
   supabase_flutter: 2.18.0
   http: ^1.6.0
+  file_picker: ^11.0.3
 
 dev_dependencies:
   flutter_test:
