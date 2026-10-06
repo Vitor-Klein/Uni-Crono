@@ -64,6 +64,8 @@ dependencies:
   pdf_service: any
   rss_feed_service: any
   subscribe_service: any
+  supabase_flutter: 2.18.0
+  http: ^1.6.0
 
 dev_dependencies:
   flutter_test:
