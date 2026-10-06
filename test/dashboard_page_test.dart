@@ -3,9 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:uni_cronos/features/hours/data/hours_repository.dart';
 import 'package:uni_cronos/features/hours/domain/hours.dart';
 import 'package:uni_cronos/features/hours/presentation/dashboard_page.dart';
 
@@ -117,20 +115,18 @@ void main() {
     tester.view.physicalSize = const Size(800, 2000);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.reset);
-    await pumpRoutedApp(tester);
+    final hours = FakeHoursRepository(demoCertificates());
+    await pumpRoutedApp(tester, hoursRepository: hours);
 
-    await tester
-        .element(find.byType(DashboardPage))
-        .read<HoursRepository>()
-        .add(
-          ApprovedCertificate(
-            id: 'new',
-            title: 'Certificado Game Jam',
-            category: HourCategory.complementary,
-            hours: 10,
-            approvedAt: DateTime(2026, 10, 1),
-          ),
-        );
+    await hours.add(
+      ApprovedCertificate(
+        id: 'new',
+        title: 'Certificado Game Jam',
+        category: HourCategory.complementary,
+        hours: 10,
+        approvedAt: DateTime(2026, 10, 1),
+      ),
+    );
     await tester.pumpAndSettle();
 
     expect(find.text('140 horas'), findsOneWidget);
@@ -140,6 +136,51 @@ void main() {
         tester.getTopLeft(find.text('Workshop de Tecnologia Comunitária')).dy,
       ),
     );
+  });
+
+  testWidgets('CA-07: a student without certificates sees 0 hours in both '
+      'categories and Nenhum certificado ainda', (tester) async {
+    await pumpRoutedApp(tester, hoursRepository: FakeHoursRepository());
+
+    expect(find.text('0 horas'), findsNWidgets(2));
+    expect(find.text('200 no total'), findsOneWidget);
+    expect(find.text('100 no total'), findsOneWidget);
+    await tester.scrollUntilVisible(
+      find.text('Nenhum certificado ainda'),
+      200,
+      scrollable: find.descendant(
+        of: find.byType(DashboardPage),
+        matching: find.byType(Scrollable),
+      ),
+    );
+    expect(find.text('Nenhum certificado ainda'), findsOneWidget);
+  });
+
+  testWidgets('CA-08: the dashboard loads the hours when it opens', (
+    tester,
+  ) async {
+    final hours = FakeHoursRepository(demoCertificates());
+    await pumpRoutedApp(tester, hoursRepository: hours);
+
+    expect(hours.refreshes, 1);
+    expect(find.text('130 horas'), findsOneWidget);
+  });
+
+  testWidgets('CA-09: a failed load says Não foi possível carregar suas horas, '
+      'and Tentar de novo loads again', (tester) async {
+    final hours = FakeHoursRepository(demoCertificates())..failLoads = true;
+    await pumpRoutedApp(tester, hoursRepository: hours);
+
+    expect(find.text('Não foi possível carregar suas horas'), findsOneWidget);
+    expect(find.text('130 horas'), findsNothing);
+
+    hours.failLoads = false;
+    await tester.tap(find.text('Tentar de novo'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Não foi possível carregar suas horas'), findsNothing);
+    expect(find.text('130 horas'), findsOneWidget);
+    expect(hours.refreshes, 2);
   });
 
   testWidgets('CA-06: Ver todos says Disponível em breve', (tester) async {

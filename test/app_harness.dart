@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:uni_cronos/app/app.dart';
@@ -13,6 +14,7 @@ import 'package:uni_cronos/features/auth/data/auth_gateway.dart';
 import 'package:uni_cronos/features/auth/domain/session.dart';
 import 'package:uni_cronos/features/auth/domain/sign_up_data.dart';
 import 'package:uni_cronos/features/hours/data/hours_repository.dart';
+import 'package:uni_cronos/features/hours/domain/hours.dart';
 import 'package:uni_cronos/features/notifications/data/notifications_preference.dart';
 
 /// An in-memory notifications preference that records every write and can be
@@ -112,6 +114,80 @@ class FakeAuthGateway implements AuthGateway {
   }
 }
 
+/// The approved certificates of [demoSession]: 130 complementary and 45
+/// extension hours, the three most recent first.
+List<ApprovedCertificate> demoCertificates() => [
+  ApprovedCertificate(
+    id: 'community-tech-workshop',
+    title: 'Workshop de Tecnologia Comunitária',
+    category: HourCategory.extension,
+    hours: 15,
+    approvedAt: DateTime(2026, 9, 20),
+  ),
+  ApprovedCertificate(
+    id: 'advanced-python-seminar',
+    title: 'Seminário Avançado de Python',
+    category: HourCategory.complementary,
+    hours: 8,
+    approvedAt: DateTime(2026, 9, 12),
+  ),
+  ApprovedCertificate(
+    id: 'university-game-jam-2024',
+    title: 'University Game Jam 2024',
+    category: HourCategory.complementary,
+    hours: 24,
+    approvedAt: DateTime(2026, 8, 30),
+  ),
+  ApprovedCertificate(
+    id: 'calculus-tutoring',
+    title: 'Monitoria de Cálculo',
+    category: HourCategory.complementary,
+    hours: 98,
+    approvedAt: DateTime(2026, 3, 1),
+  ),
+  ApprovedCertificate(
+    id: 'open-school-extension',
+    title: 'Projeto de Extensão Escola Aberta',
+    category: HourCategory.extension,
+    hours: 30,
+    approvedAt: DateTime(2026, 2, 1),
+  ),
+];
+
+/// Hours in memory: loads [certificates] on every refresh, can be told to
+/// fail the loads, and takes new certificates with [add].
+class FakeHoursRepository implements HoursRepository {
+  FakeHoursRepository([List<ApprovedCertificate>? certificates])
+    : certificates = [...?certificates];
+
+  final List<ApprovedCertificate> certificates;
+  bool failLoads = false;
+  int refreshes = 0;
+  final _subject = BehaviorSubject<HoursSnapshot>();
+
+  @override
+  Stream<HoursSnapshot> watch() => _subject.stream;
+
+  @override
+  Future<void> refresh() async {
+    refreshes++;
+    if (failLoads) {
+      _subject.addError(const HoursLoadFailure());
+      return;
+    }
+    _subject.add(HoursSnapshot.fromCertificates(certificates));
+  }
+
+  /// A certificate approved on the server, as the next load would bring it.
+  Future<void> add(ApprovedCertificate certificate) async {
+    certificates.add(certificate);
+    _subject.add(HoursSnapshot.fromCertificates(certificates));
+  }
+
+  @override
+  void dispose() => _subject.close();
+}
+
 /// Pumps the real app — splash, router and shell — with [prefs] stored and
 /// no splash wait, and settles on the first screen after the splash. Signed
 /// in as [demoSession] unless [signedIn] is false or [auth] says otherwise.
@@ -135,7 +211,8 @@ Future<void> pumpRoutedApp(
     AppProviders(
       authGateway:
           auth ?? FakeAuthGateway(signedIn: signedIn ? demoSession : null),
-      hoursRepository: hoursRepository,
+      hoursRepository:
+          hoursRepository ?? FakeHoursRepository(demoCertificates()),
       notificationsPreference: notifications ?? FakeNotificationsPreference(),
       child: const MyApp(
         enforceUpgradeGate: false,

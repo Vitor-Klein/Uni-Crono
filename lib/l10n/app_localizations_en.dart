@@ -380,4 +380,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get signupSignIn => 'Sign in';
+
+  @override
+  String get dashboardEmpty => 'No certificates yet';
+
+  @override
+  String get dashboardLoadError => 'Could not load your hours';
+
+  @override
+  String get retryAction => 'Try again';
 }

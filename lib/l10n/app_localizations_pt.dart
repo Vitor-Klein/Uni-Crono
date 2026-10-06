@@ -380,4 +380,13 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get signupSignIn => 'Entrar';
+
+  @override
+  String get dashboardEmpty => 'Nenhum certificado ainda';
+
+  @override
+  String get dashboardLoadError => 'Não foi possível carregar suas horas';
+
+  @override
+  String get retryAction => 'Tentar de novo';
 }

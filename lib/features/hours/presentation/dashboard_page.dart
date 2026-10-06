@@ -28,7 +28,8 @@ class _DashboardView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final snapshot = context.watch<DashboardCubit>().state;
+    final state = context.watch<DashboardCubit>().state;
+    final snapshot = state.snapshot;
     return ListView(
       padding: const EdgeInsets.all(AppSpacing.screenGutter),
       children: [
@@ -37,7 +38,11 @@ class _DashboardView extends StatelessWidget {
           style: Theme.of(context).textTheme.headlineSmall,
         ),
         const SizedBox(height: AppSpacing.xl),
-        if (snapshot != null) ...[
+        if (state.failed)
+          _LoadError(onRetry: context.read<DashboardCubit>().retry)
+        else if (snapshot == null)
+          const Center(child: CircularProgressIndicator())
+        else ...[
           for (final progress in snapshot.progress) ...[
             _ProgressCard(progress: progress),
             const SizedBox(height: AppSpacing.lg),
@@ -59,11 +64,44 @@ class _DashboardView extends StatelessWidget {
             ],
           ),
           const SizedBox(height: AppSpacing.sm),
+          if (snapshot.recent.isEmpty)
+            Text(
+              l10n.dashboardEmpty,
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
+            ),
           for (final certificate in snapshot.recent) ...[
             _CertificateTile(certificate: certificate),
             const SizedBox(height: AppSpacing.md),
           ],
         ],
+      ],
+    );
+  }
+}
+
+class _LoadError extends StatelessWidget {
+  const _LoadError({required this.onRetry});
+
+  final VoidCallback onRetry;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+    return Column(
+      children: [
+        Semantics(
+          liveRegion: true,
+          child: Text(
+            l10n.dashboardLoadError,
+            textAlign: TextAlign.center,
+            style: theme.textTheme.bodyLarge,
+          ),
+        ),
+        const SizedBox(height: AppSpacing.md),
+        OutlinedButton(onPressed: onRetry, child: Text(l10n.retryAction)),
       ],
     );
   }

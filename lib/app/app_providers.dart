@@ -8,6 +8,7 @@ import '../features/auth/data/auth_gateway.dart';
 import '../features/auth/data/supabase_auth_gateway.dart';
 import '../features/auth/presentation/session_cubit.dart';
 import '../features/hours/data/hours_repository.dart';
+import '../features/hours/data/supabase_hours_repository.dart';
 import '../features/notifications/data/notifications_preference.dart';
 import '../features/notifications/presentation/notifications_cubit.dart';
 
@@ -41,7 +42,8 @@ class AppProviders extends StatelessWidget {
   /// The student's account; the Supabase project when omitted.
   final AuthGateway? authGateway;
 
-  /// Where the student's hours are kept; an in-memory one when omitted.
+  /// Where the student's hours come from; the Supabase project when
+  /// omitted.
   final HoursRepository? hoursRepository;
 
   @override
@@ -49,7 +51,8 @@ class AppProviders extends StatelessWidget {
     AppThemeBootstrap.ensureConfigured();
 
     return RepositoryProvider<HoursRepository>(
-      create: (_) => hoursRepository ?? InMemoryHoursRepository(),
+      create: (_) =>
+          hoursRepository ?? SupabaseHoursRepository(Supabase.instance.client),
       dispose: (repository) => repository.dispose(),
       child: MultiBlocProvider(
         providers: [

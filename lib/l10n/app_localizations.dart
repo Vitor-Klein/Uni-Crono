@@ -819,6 +819,24 @@ abstract class AppLocalizations {
   /// In pt, this message translates to:
   /// **'Entrar'**
   String get signupSignIn;
+
+  /// No description provided for @dashboardEmpty.
+  ///
+  /// In pt, this message translates to:
+  /// **'Nenhum certificado ainda'**
+  String get dashboardEmpty;
+
+  /// No description provided for @dashboardLoadError.
+  ///
+  /// In pt, this message translates to:
+  /// **'Não foi possível carregar suas horas'**
+  String get dashboardLoadError;
+
+  /// No description provided for @retryAction.
+  ///
+  /// In pt, this message translates to:
+  /// **'Tentar de novo'**
+  String get retryAction;
 }
 
 class _AppLocalizationsDelegate

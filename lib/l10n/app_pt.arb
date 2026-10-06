@@ -145,5 +145,9 @@
   "signupPasswordTooShort": "Use 8 caracteres ou mais",
   "signupSubmit": "Criar conta",
   "signupHaveAccount": "Já tem conta?",
-  "signupSignIn": "Entrar"
+  "signupSignIn": "Entrar",
+
+  "dashboardEmpty": "Nenhum certificado ainda",
+  "dashboardLoadError": "Não foi possível carregar suas horas",
+  "retryAction": "Tentar de novo"
 }

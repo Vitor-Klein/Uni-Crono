@@ -58,6 +58,42 @@ class HoursSnapshot {
     required this.summary,
   });
 
+  /// The hours of a student with these approved [certificates]: each
+  /// category adds up its certificates, against a fixed goal.
+  factory HoursSnapshot.fromCertificates(
+    List<ApprovedCertificate> certificates,
+  ) {
+    final recent = [...certificates]
+      ..sort((a, b) => b.approvedAt.compareTo(a.approvedAt));
+    final progress = [
+      for (final category in HourCategory.values)
+        CategoryProgress(
+          category: category,
+          hours: certificates
+              .where((c) => c.category == category)
+              .fold(0, (sum, c) => sum + c.hours),
+          goal: goals[category]!,
+        ),
+    ];
+    final totalHours = progress.fold(0, (sum, p) => sum + p.hours);
+    final totalGoal = progress.fold(0, (sum, p) => sum + p.goal);
+    return HoursSnapshot(
+      progress: progress,
+      recent: recent,
+      summary: HoursSummary(
+        totalHours: totalHours,
+        certificates: certificates.length,
+        goalPercent: totalHours * 100 ~/ totalGoal,
+      ),
+    );
+  }
+
+  /// Hours each category asks for.
+  static const goals = {
+    HourCategory.complementary: 200,
+    HourCategory.extension: 100,
+  };
+
   final List<CategoryProgress> progress;
 
   /// Approved certificates, newest first.
