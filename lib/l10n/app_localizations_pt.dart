@@ -322,4 +322,20 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get animationPreferenceReduced => 'Reduzido';
+
+  @override
+  String get authInvalidCredentials => 'E-mail ou senha incorretos';
+
+  @override
+  String get authNetworkFailure => 'Sem conexão. Tente de novo.';
+
+  @override
+  String get authWrongInstitution => 'Esta conta é de outra instituição';
+
+  @override
+  String get authEmailAlreadyRegistered => 'Este e-mail já tem conta';
+
+  @override
+  String get authConfirmationRequired =>
+      'Conta criada. Confirme o e-mail para entrar.';
 }

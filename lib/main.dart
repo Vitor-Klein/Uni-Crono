@@ -10,10 +10,10 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   final bootstrap = await AppBootstrap.initialize();
+  await AppBootstrap.connectAccountServer();
 
   runApp(
     AppProviders(
-      initialSession: bootstrap.session,
       child: MyApp(firebaseWarningMessage: bootstrap.firebaseWarningMessage),
     ),
   );

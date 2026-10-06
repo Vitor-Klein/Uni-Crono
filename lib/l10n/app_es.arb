@@ -108,5 +108,12 @@
   "settingsEffectsSemantics": "Seleccionar la preferencia de animación",
   "animationPreferenceSystem": "Sistema",
   "animationPreferenceNormal": "Normal",
-  "animationPreferenceReduced": "Reducido"
+  "animationPreferenceReduced": "Reducido",
+
+  "authInvalidCredentials": "Correo o contraseña incorrectos",
+  "authNetworkFailure": "Sin conexión. Inténtalo de nuevo.",
+  "authWrongInstitution": "Esta cuenta es de otra institución",
+
+  "authEmailAlreadyRegistered": "Este correo ya tiene cuenta",
+  "authConfirmationRequired": "Cuenta creada. Confirma el correo para entrar."
 }

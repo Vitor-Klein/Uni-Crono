@@ -1,74 +1,114 @@
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:uni_cronos/features/auth/data/session_repository.dart';
+import 'package:uni_cronos/features/auth/data/auth_gateway.dart';
 import 'package:uni_cronos/features/auth/domain/session.dart';
 import 'package:uni_cronos/features/auth/presentation/session_cubit.dart';
 
-class _MemorySessionRepository implements SessionRepository {
-  Session? stored;
-
-  @override
-  Future<Session?> load() async => stored;
-
-  @override
-  Future<void> save(Session session) async => stored = session;
-
-  @override
-  Future<void> clear() async => stored = null;
-}
-
-/// Fails the way blocked browser storage does: a thrown value that is not a
-/// Dart [Exception] (a JS DOMException on web).
-class _FailingSaveRepository extends _MemorySessionRepository {
-  @override
-  Future<void> save(Session session) async =>
-      throw StateError('storage blocked');
-}
+import 'app_harness.dart';
 
 void main() {
-  const session = Session(
-    email: 'ana.souza@alunos.utfpr.edu.br',
-    institutionId: 'utfpr',
+  test('CA-01: starts from the session the account server still holds', () {
+    final cubit = SessionCubit(FakeAuthGateway(signedIn: demoSession));
+    addTearDown(cubit.close);
+
+    expect(cubit.state, demoSession);
+  });
+
+  test('CA-01: the right e-mail and password sign in with the user id, the '
+      'e-mail and the institution of the account', () async {
+    final cubit = SessionCubit(FakeAuthGateway());
+    addTearDown(cubit.close);
+
+    await cubit.signIn(
+      email: demoSession.email,
+      password: demoPassword,
+      institutionId: 'utfpr',
+    );
+
+    expect(cubit.state, demoSession);
+    expect(cubit.state!.userId, 'user-ana');
+    expect(cubit.state!.institutionId, 'utfpr');
+  });
+
+  test('CA-02: a wrong password fails with InvalidCredentials and stays '
+      'signed out', () async {
+    final cubit = SessionCubit(FakeAuthGateway());
+    addTearDown(cubit.close);
+
+    await expectLater(
+      cubit.signIn(
+        email: demoSession.email,
+        password: 'errada',
+        institutionId: 'utfpr',
+      ),
+      throwsA(isA<InvalidCredentials>()),
+    );
+    expect(cubit.state, isNull);
+  });
+
+  test(
+    'CA-03: without network, signing in fails with NetworkFailure',
+    () async {
+      final cubit = SessionCubit(FakeAuthGateway()..offline = true);
+      addTearDown(cubit.close);
+
+      await expectLater(
+        cubit.signIn(
+          email: demoSession.email,
+          password: demoPassword,
+          institutionId: 'utfpr',
+        ),
+        throwsA(isA<NetworkFailure>()),
+      );
+      expect(cubit.state, isNull);
+    },
   );
 
-  test('CA-05: starts from the session it is given', () {
-    final cubit = SessionCubit(_MemorySessionRepository(), initial: session);
+  test('CA-01: an account of another institution fails with '
+      'WrongInstitution, is signed out on the server and never shows up as '
+      'signed in', () async {
+    final auth = FakeAuthGateway();
+    final cubit = SessionCubit(auth);
     addTearDown(cubit.close);
+    final states = <Object?>[];
+    final sub = cubit.stream.listen(states.add);
+    addTearDown(sub.cancel);
 
-    expect(cubit.state, session);
+    await expectLater(
+      cubit.signIn(
+        email: demoSession.email,
+        password: demoPassword,
+        institutionId: 'ufpr',
+      ),
+      throwsA(isA<WrongInstitution>()),
+    );
+    await Future<void>.delayed(Duration.zero);
+
+    expect(cubit.state, isNull);
+    expect(auth.current, isNull);
+    expect(states.whereType<Session>(), isEmpty);
   });
 
-  test('CA-04: signing in saves the session and emits it', () async {
-    final repository = _MemorySessionRepository();
-    final cubit = SessionCubit(repository);
-    addTearDown(cubit.close);
-
-    await cubit.signIn(institutionId: 'utfpr', email: session.email);
-
-    expect(cubit.state, session);
-    expect(repository.stored, session);
-  });
-
-  test('CA-07: signing out clears the session and emits null', () async {
-    final repository = _MemorySessionRepository()..stored = session;
-    final cubit = SessionCubit(repository, initial: session);
+  test('CA-11: signing out ends the session on the server', () async {
+    final auth = FakeAuthGateway(signedIn: demoSession);
+    final cubit = SessionCubit(auth);
     addTearDown(cubit.close);
 
     await cubit.signOut();
 
     expect(cubit.state, isNull);
-    expect(repository.stored, isNull);
+    expect(auth.current, isNull);
   });
 
-  test('CA-10: when the session cannot be saved, signing in still signs in, '
-      'for this run only', () async {
-    final repository = _FailingSaveRepository();
-    final cubit = SessionCubit(repository);
+  test('CA-11: a session that expires on the server signs the student '
+      'out', () async {
+    final auth = FakeAuthGateway(signedIn: demoSession);
+    final cubit = SessionCubit(auth);
     addTearDown(cubit.close);
 
-    await cubit.signIn(institutionId: 'utfpr', email: session.email);
+    auth.expire();
+    await Future<void>.delayed(Duration.zero);
 
-    expect(cubit.state, session);
-    expect(repository.stored, isNull);
+    expect(cubit.state, isNull);
   });
 }

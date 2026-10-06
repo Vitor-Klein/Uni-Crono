@@ -705,6 +705,36 @@ abstract class AppLocalizations {
   /// In pt, this message translates to:
   /// **'Reduzido'**
   String get animationPreferenceReduced;
+
+  /// No description provided for @authInvalidCredentials.
+  ///
+  /// In pt, this message translates to:
+  /// **'E-mail ou senha incorretos'**
+  String get authInvalidCredentials;
+
+  /// No description provided for @authNetworkFailure.
+  ///
+  /// In pt, this message translates to:
+  /// **'Sem conexão. Tente de novo.'**
+  String get authNetworkFailure;
+
+  /// No description provided for @authWrongInstitution.
+  ///
+  /// In pt, this message translates to:
+  /// **'Esta conta é de outra instituição'**
+  String get authWrongInstitution;
+
+  /// No description provided for @authEmailAlreadyRegistered.
+  ///
+  /// In pt, this message translates to:
+  /// **'Este e-mail já tem conta'**
+  String get authEmailAlreadyRegistered;
+
+  /// No description provided for @authConfirmationRequired.
+  ///
+  /// In pt, this message translates to:
+  /// **'Conta criada. Confirme o e-mail para entrar.'**
+  String get authConfirmationRequired;
 }
 
 class _AppLocalizationsDelegate

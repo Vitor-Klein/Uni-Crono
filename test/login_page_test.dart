@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:uni_cronos/core/navigation/app_routes.dart';
+import 'package:uni_cronos/features/auth/presentation/login_page.dart';
+import 'package:uni_cronos/features/auth/presentation/session_cubit.dart';
 
 import 'app_harness.dart';
 
@@ -57,34 +60,50 @@ void main() {
 
   Future<void> fillIn(
     WidgetTester tester, {
+    String institution = 'UTFPR',
     String email = 'ana.souza@alunos.utfpr.edu.br',
+    String password = demoPassword,
   }) async {
     await tester.tap(find.byType(DropdownButtonFormField<String>));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('UTFPR').last);
+    await tester.tap(find.text(institution).last);
     await tester.pumpAndSettle();
     await tester.enterText(emailField(), email);
     await tester.enterText(
       find.byWidgetPredicate((w) => w is EditableText && w.obscureText),
-      'x',
+      password,
     );
   }
 
-  testWidgets('CA-04: valid institution, e-mail and password sign in, save '
-      'the session and open /dashboard', (tester) async {
+  SessionCubit sessionOf(WidgetTester tester) =>
+      tester.element(find.byType(LoginPage)).read<SessionCubit>();
+
+  testWidgets('CA-01: UTFPR, the e-mail and the right password open '
+      '/dashboard with the session of the account', (tester) async {
     await pumpRoutedApp(tester, signedIn: false);
+    final session = sessionOf(tester);
     await fillIn(tester);
 
     await tester.tap(find.text('Entrar'));
     await tester.pumpAndSettle();
 
     expect(currentPath(), AppRoutes.dashboard);
-    final prefs = await SharedPreferences.getInstance();
-    expect(prefs.getString('session_email'), 'ana.souza@alunos.utfpr.edu.br');
-    expect(prefs.getString('session_institution'), 'utfpr');
+    expect(session.state, demoSession);
   });
 
-  testWidgets('CA-04: the password is saved nowhere', (tester) async {
+  testWidgets('CA-02: a wrong password says E-mail ou senha incorretos and '
+      'stays on /login', (tester) async {
+    await pumpRoutedApp(tester, signedIn: false);
+    await fillIn(tester, password: 'errada');
+
+    await tester.tap(find.text('Entrar'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('E-mail ou senha incorretos'), findsOneWidget);
+    expect(currentPath(), AppRoutes.login);
+  });
+
+  testWidgets('CA-02: the password is saved nowhere', (tester) async {
     await pumpRoutedApp(tester, signedIn: false);
     await fillIn(tester);
 
@@ -94,22 +113,47 @@ void main() {
     final prefs = await SharedPreferences.getInstance();
     for (final key in prefs.getKeys()) {
       expect(key.toLowerCase(), isNot(contains('password')), reason: key);
-      expect(prefs.get(key), isNot('x'), reason: key);
+      expect(prefs.get(key), isNot(demoPassword), reason: key);
     }
   });
 
-  testWidgets('CA-04: spaces around the e-mail are dropped', (tester) async {
+  testWidgets('CA-03: without network, signing in says Sem conexão. Tente de '
+      'novo.', (tester) async {
+    await pumpRoutedApp(tester, auth: FakeAuthGateway()..offline = true);
+    await fillIn(tester);
+
+    await tester.tap(find.text('Entrar'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Sem conexão. Tente de novo.'), findsOneWidget);
+    expect(currentPath(), AppRoutes.login);
+  });
+
+  testWidgets('CA-01: an account of another institution does not sign in and '
+      'says so', (tester) async {
+    await pumpRoutedApp(tester, signedIn: false);
+    final session = sessionOf(tester);
+    await fillIn(tester, institution: 'UFPR');
+
+    await tester.tap(find.text('Entrar'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Esta conta é de outra instituição'), findsOneWidget);
+    expect(currentPath(), AppRoutes.login);
+    expect(session.state, isNull);
+  });
+
+  testWidgets('CA-01: spaces around the e-mail are dropped', (tester) async {
     await pumpRoutedApp(tester, signedIn: false);
     await fillIn(tester, email: '  ana.souza@alunos.utfpr.edu.br  ');
 
     await tester.tap(find.text('Entrar'));
     await tester.pumpAndSettle();
 
-    final prefs = await SharedPreferences.getInstance();
-    expect(prefs.getString('session_email'), 'ana.souza@alunos.utfpr.edu.br');
+    expect(currentPath(), AppRoutes.dashboard);
   });
 
-  testWidgets('CA-04: pressing done on the keyboard after the password signs '
+  testWidgets('CA-01: pressing done on the keyboard after the password signs '
       'in', (tester) async {
     await pumpRoutedApp(tester, signedIn: false);
     await fillIn(tester);
@@ -166,22 +210,5 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Informe seu e-mail acadêmico'), findsNothing);
-  });
-
-  testWidgets('CA-10: when the session cannot be saved, signing in still '
-      'opens /dashboard and nothing is saved', (tester) async {
-    await pumpRoutedApp(
-      tester,
-      signedIn: false,
-      sessionRepository: FailingSaveSessionRepository(),
-    );
-    await fillIn(tester);
-
-    await tester.tap(find.text('Entrar'));
-    await tester.pumpAndSettle();
-
-    expect(currentPath(), AppRoutes.dashboard);
-    final prefs = await SharedPreferences.getInstance();
-    expect(prefs.containsKey('session_email'), isFalse);
   });
 }

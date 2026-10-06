@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:uni_cronos/app/shell/app_shell.dart';
 import 'package:uni_cronos/core/navigation/app_routes.dart';
@@ -18,23 +17,34 @@ void main() {
     expect(find.byType(NavigationBar), findsNothing);
   });
 
-  testWidgets('CA-05: with a saved session, after the splash the app is on '
-      '/dashboard', (tester) async {
+  testWidgets('CA-05: with a session kept by the account server, after the '
+      'splash the app is on /dashboard', (tester) async {
     await pumpRoutedApp(tester);
 
     expect(currentPath(), AppRoutes.dashboard);
   });
 
-  testWidgets('CA-07: signing out clears the session and goes to /login', (
-    tester,
-  ) async {
-    await pumpRoutedApp(tester);
+  testWidgets('CA-11: signing out ends the session on the server and goes to '
+      '/login', (tester) async {
+    final auth = FakeAuthGateway(signedIn: demoSession);
+    await pumpRoutedApp(tester, auth: auth);
 
     await tester.element(find.byType(AppShell)).read<SessionCubit>().signOut();
     await tester.pumpAndSettle();
 
     expect(currentPath(), AppRoutes.login);
-    final prefs = await SharedPreferences.getInstance();
-    expect(prefs.containsKey('session_email'), isFalse);
+    expect(auth.current, isNull);
+  });
+
+  testWidgets('CA-11: a session that expires on the server goes to /login', (
+    tester,
+  ) async {
+    final auth = FakeAuthGateway(signedIn: demoSession);
+    await pumpRoutedApp(tester, auth: auth);
+
+    auth.expire();
+    await tester.pumpAndSettle();
+
+    expect(currentPath(), AppRoutes.login);
   });
 }

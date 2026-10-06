@@ -5,12 +5,15 @@ import 'package:next_widgets_service/next_widgets_service.dart';
 import '../../../app/app_info.dart';
 import '../../../core/theme/app_tokens.dart';
 import '../../../l10n/app_localizations.dart';
+import '../data/auth_gateway.dart';
 import '../domain/email_format.dart';
 import '../domain/institution.dart';
+import 'auth_failure_message.dart';
+import 'form_error.dart';
 import 'session_cubit.dart';
 
-/// Sign-in screen of the prototype: it checks the format of what is typed and
-/// keeps the session on this device. No server is consulted.
+/// Sign-in screen: e-mail and password go to the account server, and the
+/// account has to belong to the chosen institution.
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -24,6 +27,8 @@ class _LoginPageState extends State<LoginPage> {
   final _password = TextEditingController();
   String? _institutionId;
   bool _obscurePassword = true;
+  bool _submitting = false;
+  AuthFailure? _failure;
 
   @override
   void dispose() {
@@ -33,11 +38,23 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> _submit() async {
+    if (_submitting) return;
     if (!(_formKey.currentState?.validate() ?? false)) return;
-    await context.read<SessionCubit>().signIn(
-      institutionId: _institutionId!,
-      email: _email.text.trim(),
-    );
+    setState(() {
+      _submitting = true;
+      _failure = null;
+    });
+    try {
+      await context.read<SessionCubit>().signIn(
+        email: _email.text.trim(),
+        password: _password.text,
+        institutionId: _institutionId!,
+      );
+    } on AuthFailure catch (failure) {
+      if (mounted) setState(() => _failure = failure);
+    } finally {
+      if (mounted) setState(() => _submitting = false);
+    }
   }
 
   void _comingSoon() {
@@ -174,7 +191,12 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 const SizedBox(height: AppSpacing.xl),
-                FilledButton(onPressed: _submit, child: Text(l10n.loginSubmit)),
+                if (_failure case final failure?)
+                  FormError(authFailureMessage(l10n, failure)),
+                FilledButton(
+                  onPressed: _submitting ? null : _submit,
+                  child: Text(l10n.loginSubmit),
+                ),
                 const SizedBox(height: AppSpacing.lg),
                 Wrap(
                   alignment: WrapAlignment.center,

@@ -67,3 +67,7 @@ graphify-out/
 .env
 *.local
 # <<< ray
+
+# Configuração local de build (--dart-define-from-file); o formato está em
+# config/app.example.json.
+config/app.json

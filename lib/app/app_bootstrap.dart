@@ -3,11 +3,12 @@ import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
+import '../core/config/app_config.dart';
 
 import '../core/config/remote_config_service.dart';
 import '../core/theme/font_licenses.dart';
-import '../features/auth/data/session_repository.dart';
-import '../features/auth/domain/session.dart';
 import '../features/notifications/messages/data/message_storage.dart';
 import '../features/notifications/data/push_service.dart';
 import '../firebase_options.dart';
@@ -17,14 +18,10 @@ class AppBootstrapResult {
   const AppBootstrapResult({
     required this.firebaseInitialized,
     required this.firebaseWarningMessage,
-    required this.session,
   });
 
   final bool firebaseInitialized;
   final String? firebaseWarningMessage;
-
-  /// The saved session; null when nobody is signed in.
-  final Session? session;
 }
 
 class AppBootstrap {
@@ -50,18 +47,25 @@ class AppBootstrap {
         ? 'Aviso (teste): verifique o login do Firebase neste ambiente.'
         : null;
 
-    Session? session;
-    try {
-      session = await const SharedPrefsSessionRepository().load();
-    } catch (e) {
-      // Never log the session itself: it holds personal data.
-      debugPrint('Session load failed: ${e.runtimeType}');
-    }
-
     return AppBootstrapResult(
       firebaseInitialized: firebaseInitialized,
       firebaseWarningMessage: firebaseWarningMessage,
-      session: session,
+    );
+  }
+
+  /// Connects to the account server (Supabase). Must run before runApp: the
+  /// saved session has to be known before the first redirect, so "still
+  /// loading" never looks like "signed out".
+  static Future<void> connectAccountServer() async {
+    if (!AppConfig.isConfigured) {
+      throw StateError(
+        'Supabase is not configured: run with '
+        '--dart-define-from-file=config/app.json',
+      );
+    }
+    await Supabase.initialize(
+      url: AppConfig.supabaseUrl,
+      publishableKey: AppConfig.supabasePublishableKey,
     );
   }
 

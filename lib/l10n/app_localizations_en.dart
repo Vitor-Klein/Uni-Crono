@@ -321,4 +321,21 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get animationPreferenceReduced => 'Reduced';
+
+  @override
+  String get authInvalidCredentials => 'Wrong e-mail or password';
+
+  @override
+  String get authNetworkFailure => 'No connection. Try again.';
+
+  @override
+  String get authWrongInstitution =>
+      'This account belongs to another institution';
+
+  @override
+  String get authEmailAlreadyRegistered => 'This e-mail already has an account';
+
+  @override
+  String get authConfirmationRequired =>
+      'Account created. Confirm your e-mail to sign in.';
 }

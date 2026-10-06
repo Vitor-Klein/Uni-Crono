@@ -108,5 +108,12 @@
   "settingsEffectsSemantics": "Select animation preference",
   "animationPreferenceSystem": "System",
   "animationPreferenceNormal": "Normal",
-  "animationPreferenceReduced": "Reduced"
+  "animationPreferenceReduced": "Reduced",
+
+  "authInvalidCredentials": "Wrong e-mail or password",
+  "authNetworkFailure": "No connection. Try again.",
+  "authWrongInstitution": "This account belongs to another institution",
+
+  "authEmailAlreadyRegistered": "This e-mail already has an account",
+  "authConfirmationRequired": "Account created. Confirm your e-mail to sign in."
 }

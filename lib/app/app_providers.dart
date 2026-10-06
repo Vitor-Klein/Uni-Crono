@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:next_core_service/next_core_service.dart';
+import 'package:supabase_flutter/supabase_flutter.dart' hide Session;
 
 import '../core/theme/template_theme_provider.dart';
-import '../features/auth/data/session_repository.dart';
-import '../features/auth/domain/session.dart';
+import '../features/auth/data/auth_gateway.dart';
+import '../features/auth/data/supabase_auth_gateway.dart';
 import '../features/auth/presentation/session_cubit.dart';
 import '../features/hours/data/hours_repository.dart';
 import '../features/notifications/data/notifications_preference.dart';
@@ -26,8 +27,7 @@ class AppProviders extends StatelessWidget {
   const AppProviders({
     required this.child,
     this.notificationsPreference,
-    this.sessionRepository,
-    this.initialSession,
+    this.authGateway,
     this.hoursRepository,
     super.key,
   });
@@ -38,11 +38,8 @@ class AppProviders extends StatelessWidget {
   /// service when omitted.
   final NotificationsPreference? notificationsPreference;
 
-  /// Where the session is kept; the device's saved preferences when omitted.
-  final SessionRepository? sessionRepository;
-
-  /// The session read before the app ran; null when nobody is signed in.
-  final Session? initialSession;
+  /// The student's account; the Supabase project when omitted.
+  final AuthGateway? authGateway;
 
   /// Where the student's hours are kept; an in-memory one when omitted.
   final HoursRepository? hoursRepository;
@@ -80,8 +77,7 @@ class AppProviders extends StatelessWidget {
           ),
           BlocProvider(
             create: (_) => SessionCubit(
-              sessionRepository ?? const SharedPrefsSessionRepository(),
-              initial: initialSession,
+              authGateway ?? SupabaseAuthGateway(Supabase.instance.client),
             ),
           ),
           // Eager: the saved choice loads at startup, so the More modal never
