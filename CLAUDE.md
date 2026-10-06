@@ -113,6 +113,12 @@ está lá.
   plugins).
 - `flutter test`  — a suíte inteira.
 - `dart format --output=none --set-exit-if-changed lib test`  — formatação.
+- `services/certificate_reader/.venv/Scripts/python -m pytest services/certificate_reader`
+  — testes do leitor de certificados (Python).
+- `services/certificate_reader/.venv/Scripts/python -m ruff check services/certificate_reader`
+  — lint do leitor.
+- `services/certificate_reader/.venv/Scripts/python -m ruff format --check services/certificate_reader`
+  — formatação do leitor.
 
 Definição de pronto: todos os CAs da spec com teste verde + os gates acima
 passando + nenhum TODO novo no código + os **artefatos que andam juntos**
