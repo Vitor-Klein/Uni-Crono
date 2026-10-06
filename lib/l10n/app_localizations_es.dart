@@ -391,4 +391,82 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get retryAction => 'Intentar de nuevo';
+
+  @override
+  String get uploadTitle => 'Registrar certificado';
+
+  @override
+  String get uploadSubtitle =>
+      'Sube el PDF del certificado: leemos las horas y la categoría por ti.';
+
+  @override
+  String get uploadDropTitle => 'Elige el archivo';
+
+  @override
+  String get uploadDropHint => 'PDF (hasta 10 MB)';
+
+  @override
+  String get uploadOr => 'o';
+
+  @override
+  String get uploadBrowse => 'Buscar archivos';
+
+  @override
+  String get uploadCancel => 'Cancelar';
+
+  @override
+  String get uploadSubmit => 'Enviar certificado';
+
+  @override
+  String get uploadInvalidFile => 'Usa un PDF de hasta 10 MB';
+
+  @override
+  String get uploadReading => 'Leyendo certificado…';
+
+  @override
+  String uploadLaunched(int hours, String category) {
+    return 'Certificado registrado: +$hours h en $category';
+  }
+
+  @override
+  String get uploadDuplicate => 'Este certificado ya fue registrado';
+
+  @override
+  String get uploadUnavailable =>
+      'No se pudo leer el certificado. Inténtalo de nuevo.';
+
+  @override
+  String uploadSizeKb(String size) {
+    return '$size KB';
+  }
+
+  @override
+  String uploadSizeMb(String size) {
+    return '$size MB';
+  }
+
+  @override
+  String get manualTitle => 'Datos del certificado';
+
+  @override
+  String get manualMessage =>
+      'No encontramos las horas en este certificado. Ingresa los datos.';
+
+  @override
+  String get manualActivityLabel => 'Actividad';
+
+  @override
+  String get manualActivityRequired => 'Ingresa la actividad';
+
+  @override
+  String get manualHoursLabel => 'Carga horaria (h)';
+
+  @override
+  String get manualHoursInvalid => 'Ingresa las horas (1 a 999)';
+
+  @override
+  String get manualCategoryLabel => 'Categoría';
+
+  @override
+  String get manualSubmit => 'Registrar';
 }

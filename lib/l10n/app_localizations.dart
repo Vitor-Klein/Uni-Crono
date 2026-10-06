@@ -837,6 +837,144 @@ abstract class AppLocalizations {
   /// In pt, this message translates to:
   /// **'Tentar de novo'**
   String get retryAction;
+
+  /// No description provided for @uploadTitle.
+  ///
+  /// In pt, this message translates to:
+  /// **'Lançar certificado'**
+  String get uploadTitle;
+
+  /// No description provided for @uploadSubtitle.
+  ///
+  /// In pt, this message translates to:
+  /// **'Envie o PDF do certificado: o sistema lê as horas e a categoria para você.'**
+  String get uploadSubtitle;
+
+  /// No description provided for @uploadDropTitle.
+  ///
+  /// In pt, this message translates to:
+  /// **'Escolha o arquivo'**
+  String get uploadDropTitle;
+
+  /// No description provided for @uploadDropHint.
+  ///
+  /// In pt, this message translates to:
+  /// **'PDF (até 10 MB)'**
+  String get uploadDropHint;
+
+  /// No description provided for @uploadOr.
+  ///
+  /// In pt, this message translates to:
+  /// **'ou'**
+  String get uploadOr;
+
+  /// No description provided for @uploadBrowse.
+  ///
+  /// In pt, this message translates to:
+  /// **'Procurar arquivos'**
+  String get uploadBrowse;
+
+  /// No description provided for @uploadCancel.
+  ///
+  /// In pt, this message translates to:
+  /// **'Cancelar'**
+  String get uploadCancel;
+
+  /// No description provided for @uploadSubmit.
+  ///
+  /// In pt, this message translates to:
+  /// **'Enviar certificado'**
+  String get uploadSubmit;
+
+  /// No description provided for @uploadInvalidFile.
+  ///
+  /// In pt, this message translates to:
+  /// **'Use um PDF de até 10 MB'**
+  String get uploadInvalidFile;
+
+  /// No description provided for @uploadReading.
+  ///
+  /// In pt, this message translates to:
+  /// **'Lendo certificado…'**
+  String get uploadReading;
+
+  /// No description provided for @uploadLaunched.
+  ///
+  /// In pt, this message translates to:
+  /// **'Certificado lançado: +{hours} h em {category}'**
+  String uploadLaunched(int hours, String category);
+
+  /// No description provided for @uploadDuplicate.
+  ///
+  /// In pt, this message translates to:
+  /// **'Este certificado já foi lançado'**
+  String get uploadDuplicate;
+
+  /// No description provided for @uploadUnavailable.
+  ///
+  /// In pt, this message translates to:
+  /// **'Não foi possível ler o certificado. Tente de novo.'**
+  String get uploadUnavailable;
+
+  /// No description provided for @uploadSizeKb.
+  ///
+  /// In pt, this message translates to:
+  /// **'{size} KB'**
+  String uploadSizeKb(String size);
+
+  /// No description provided for @uploadSizeMb.
+  ///
+  /// In pt, this message translates to:
+  /// **'{size} MB'**
+  String uploadSizeMb(String size);
+
+  /// No description provided for @manualTitle.
+  ///
+  /// In pt, this message translates to:
+  /// **'Informe os dados do certificado'**
+  String get manualTitle;
+
+  /// No description provided for @manualMessage.
+  ///
+  /// In pt, this message translates to:
+  /// **'Não encontramos as horas neste certificado. Informe os dados.'**
+  String get manualMessage;
+
+  /// No description provided for @manualActivityLabel.
+  ///
+  /// In pt, this message translates to:
+  /// **'Atividade'**
+  String get manualActivityLabel;
+
+  /// No description provided for @manualActivityRequired.
+  ///
+  /// In pt, this message translates to:
+  /// **'Informe a atividade'**
+  String get manualActivityRequired;
+
+  /// No description provided for @manualHoursLabel.
+  ///
+  /// In pt, this message translates to:
+  /// **'Carga horária (h)'**
+  String get manualHoursLabel;
+
+  /// No description provided for @manualHoursInvalid.
+  ///
+  /// In pt, this message translates to:
+  /// **'Informe as horas (1 a 999)'**
+  String get manualHoursInvalid;
+
+  /// No description provided for @manualCategoryLabel.
+  ///
+  /// In pt, this message translates to:
+  /// **'Categoria'**
+  String get manualCategoryLabel;
+
+  /// No description provided for @manualSubmit.
+  ///
+  /// In pt, this message translates to:
+  /// **'Lançar'**
+  String get manualSubmit;
 }
 
 class _AppLocalizationsDelegate

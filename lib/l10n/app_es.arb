@@ -134,5 +134,29 @@
 
   "dashboardEmpty": "Aún no hay certificados",
   "dashboardLoadError": "No se pudieron cargar tus horas",
-  "retryAction": "Intentar de nuevo"
+  "retryAction": "Intentar de nuevo",
+
+  "uploadTitle": "Registrar certificado",
+  "uploadSubtitle": "Sube el PDF del certificado: leemos las horas y la categoría por ti.",
+  "uploadDropTitle": "Elige el archivo",
+  "uploadDropHint": "PDF (hasta 10 MB)",
+  "uploadOr": "o",
+  "uploadBrowse": "Buscar archivos",
+  "uploadCancel": "Cancelar",
+  "uploadSubmit": "Enviar certificado",
+  "uploadInvalidFile": "Usa un PDF de hasta 10 MB",
+  "uploadReading": "Leyendo certificado…",
+  "uploadLaunched": "Certificado registrado: +{hours} h en {category}",
+  "uploadDuplicate": "Este certificado ya fue registrado",
+  "uploadUnavailable": "No se pudo leer el certificado. Inténtalo de nuevo.",
+  "uploadSizeKb": "{size} KB",
+  "uploadSizeMb": "{size} MB",
+  "manualTitle": "Datos del certificado",
+  "manualMessage": "No encontramos las horas en este certificado. Ingresa los datos.",
+  "manualActivityLabel": "Actividad",
+  "manualActivityRequired": "Ingresa la actividad",
+  "manualHoursLabel": "Carga horaria (h)",
+  "manualHoursInvalid": "Ingresa las horas (1 a 999)",
+  "manualCategoryLabel": "Categoría",
+  "manualSubmit": "Registrar"
 }

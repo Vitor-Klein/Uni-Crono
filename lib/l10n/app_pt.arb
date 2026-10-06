@@ -149,5 +149,32 @@
 
   "dashboardEmpty": "Nenhum certificado ainda",
   "dashboardLoadError": "Não foi possível carregar suas horas",
-  "retryAction": "Tentar de novo"
+  "retryAction": "Tentar de novo",
+
+  "uploadTitle": "Lançar certificado",
+  "uploadSubtitle": "Envie o PDF do certificado: o sistema lê as horas e a categoria para você.",
+  "uploadDropTitle": "Escolha o arquivo",
+  "uploadDropHint": "PDF (até 10 MB)",
+  "uploadOr": "ou",
+  "uploadBrowse": "Procurar arquivos",
+  "uploadCancel": "Cancelar",
+  "uploadSubmit": "Enviar certificado",
+  "uploadInvalidFile": "Use um PDF de até 10 MB",
+  "uploadReading": "Lendo certificado…",
+  "uploadLaunched": "Certificado lançado: +{hours} h em {category}",
+  "@uploadLaunched": {"placeholders": {"hours": {"type": "int"}, "category": {"type": "String"}}},
+  "uploadDuplicate": "Este certificado já foi lançado",
+  "uploadUnavailable": "Não foi possível ler o certificado. Tente de novo.",
+  "uploadSizeKb": "{size} KB",
+  "@uploadSizeKb": {"placeholders": {"size": {"type": "String"}}},
+  "uploadSizeMb": "{size} MB",
+  "@uploadSizeMb": {"placeholders": {"size": {"type": "String"}}},
+  "manualTitle": "Informe os dados do certificado",
+  "manualMessage": "Não encontramos as horas neste certificado. Informe os dados.",
+  "manualActivityLabel": "Atividade",
+  "manualActivityRequired": "Informe a atividade",
+  "manualHoursLabel": "Carga horária (h)",
+  "manualHoursInvalid": "Informe as horas (1 a 999)",
+  "manualCategoryLabel": "Categoria",
+  "manualSubmit": "Lançar"
 }

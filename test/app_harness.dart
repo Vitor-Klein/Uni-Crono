@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -16,6 +17,9 @@ import 'package:uni_cronos/features/auth/domain/sign_up_data.dart';
 import 'package:uni_cronos/features/hours/data/hours_repository.dart';
 import 'package:uni_cronos/features/hours/domain/hours.dart';
 import 'package:uni_cronos/features/notifications/data/notifications_preference.dart';
+import 'package:uni_cronos/features/upload/data/certificate_launcher.dart';
+import 'package:uni_cronos/features/upload/data/certificate_picker.dart';
+import 'package:uni_cronos/features/upload/domain/picked_file.dart';
 
 /// An in-memory notifications preference that records every write and can be
 /// told to fail them.
@@ -188,6 +192,69 @@ class FakeHoursRepository implements HoursRepository {
   void dispose() => _subject.close();
 }
 
+/// A file of [sizeBytes] named [name]; a PDF by its first bytes unless
+/// [pdf] is false.
+PickedFile pickedFile(String name, int sizeBytes, {bool pdf = true}) {
+  final bytes = Uint8List(sizeBytes);
+  if (pdf) bytes.setRange(0, 5, '%PDF-'.codeUnits);
+  return PickedFile(name: name, sizeBytes: sizeBytes, bytes: bytes);
+}
+
+/// A file chooser that hands over [next], and counts how often it opened.
+class FakeCertificatePicker implements CertificatePicker {
+  FakeCertificatePicker([this.next]);
+
+  PickedFile? next;
+  int picks = 0;
+
+  @override
+  Future<PickedFile?> pick() async {
+    picks++;
+    return next;
+  }
+}
+
+/// A reader in memory: answers [result], or throws [failure]; [gate], when
+/// set, holds the answer until completed. Records every call.
+class FakeCertificateLauncher implements CertificateLauncher {
+  LaunchedCertificate result = const LaunchedCertificate(
+    title: 'Certificado Game Jam',
+    category: HourCategory.complementary,
+    hours: 10,
+  );
+  LaunchFailure? failure;
+  LaunchFailure? manualFailure;
+  Completer<void>? gate;
+  final launched = <PickedFile>[];
+  final manual = <(String, String, HourCategory, int)>[];
+  final discarded = <String>[];
+
+  @override
+  Future<LaunchedCertificate> launch(PickedFile file) async {
+    launched.add(file);
+    await gate?.future;
+    if (failure case final failure?) throw failure;
+    return result;
+  }
+
+  @override
+  Future<LaunchedCertificate> launchManual(
+    UnreadableCertificate pending, {
+    required String title,
+    required HourCategory category,
+    required int hours,
+  }) async {
+    manual.add((pending.path, title, category, hours));
+    if (manualFailure case final failure?) throw failure;
+    return LaunchedCertificate(title: title, category: category, hours: hours);
+  }
+
+  @override
+  Future<void> discard(UnreadableCertificate pending) async {
+    discarded.add(pending.path);
+  }
+}
+
 /// Pumps the real app — splash, router and shell — with [prefs] stored and
 /// no splash wait, and settles on the first screen after the splash. Signed
 /// in as [demoSession] unless [signedIn] is false or [auth] says otherwise.
@@ -198,6 +265,8 @@ Future<void> pumpRoutedApp(
   bool signedIn = true,
   FakeAuthGateway? auth,
   HoursRepository? hoursRepository,
+  CertificatePicker? picker,
+  CertificateLauncher? launcher,
 }) async {
   SharedPreferences.setMockInitialValues(prefs);
   PackageInfo.setMockInitialValues(
@@ -213,6 +282,8 @@ Future<void> pumpRoutedApp(
           auth ?? FakeAuthGateway(signedIn: signedIn ? demoSession : null),
       hoursRepository:
           hoursRepository ?? FakeHoursRepository(demoCertificates()),
+      certificatePicker: picker ?? FakeCertificatePicker(),
+      certificateLauncher: launcher ?? FakeCertificateLauncher(),
       notificationsPreference: notifications ?? FakeNotificationsPreference(),
       child: const MyApp(
         enforceUpgradeGate: false,

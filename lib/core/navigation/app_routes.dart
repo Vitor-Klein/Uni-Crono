@@ -4,6 +4,7 @@ abstract final class AppRoutes {
   static const signup = '/signup';
   static const dashboard = '/dashboard';
   static const upload = '/upload';
+  static const uploadManual = '/upload/manual';
   static const activities = '/activities';
   static const profile = '/profile';
   static const upgradeRequired = '/upgrade-required';

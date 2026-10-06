@@ -134,5 +134,29 @@
 
   "dashboardEmpty": "No certificates yet",
   "dashboardLoadError": "Could not load your hours",
-  "retryAction": "Try again"
+  "retryAction": "Try again",
+
+  "uploadTitle": "Submit certificate",
+  "uploadSubtitle": "Upload the certificate PDF: we read the hours and the category for you.",
+  "uploadDropTitle": "Choose the file",
+  "uploadDropHint": "PDF (up to 10 MB)",
+  "uploadOr": "or",
+  "uploadBrowse": "Browse files",
+  "uploadCancel": "Cancel",
+  "uploadSubmit": "Send certificate",
+  "uploadInvalidFile": "Use a PDF of up to 10 MB",
+  "uploadReading": "Reading certificate…",
+  "uploadLaunched": "Certificate submitted: +{hours} h in {category}",
+  "uploadDuplicate": "This certificate was already submitted",
+  "uploadUnavailable": "Could not read the certificate. Try again.",
+  "uploadSizeKb": "{size} KB",
+  "uploadSizeMb": "{size} MB",
+  "manualTitle": "Certificate details",
+  "manualMessage": "We could not find the hours in this certificate. Enter the details.",
+  "manualActivityLabel": "Activity",
+  "manualActivityRequired": "Enter the activity",
+  "manualHoursLabel": "Workload (h)",
+  "manualHoursInvalid": "Enter the hours (1 to 999)",
+  "manualCategoryLabel": "Category",
+  "manualSubmit": "Submit"
 }

@@ -389,4 +389,81 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get retryAction => 'Try again';
+
+  @override
+  String get uploadTitle => 'Submit certificate';
+
+  @override
+  String get uploadSubtitle =>
+      'Upload the certificate PDF: we read the hours and the category for you.';
+
+  @override
+  String get uploadDropTitle => 'Choose the file';
+
+  @override
+  String get uploadDropHint => 'PDF (up to 10 MB)';
+
+  @override
+  String get uploadOr => 'or';
+
+  @override
+  String get uploadBrowse => 'Browse files';
+
+  @override
+  String get uploadCancel => 'Cancel';
+
+  @override
+  String get uploadSubmit => 'Send certificate';
+
+  @override
+  String get uploadInvalidFile => 'Use a PDF of up to 10 MB';
+
+  @override
+  String get uploadReading => 'Reading certificate…';
+
+  @override
+  String uploadLaunched(int hours, String category) {
+    return 'Certificate submitted: +$hours h in $category';
+  }
+
+  @override
+  String get uploadDuplicate => 'This certificate was already submitted';
+
+  @override
+  String get uploadUnavailable => 'Could not read the certificate. Try again.';
+
+  @override
+  String uploadSizeKb(String size) {
+    return '$size KB';
+  }
+
+  @override
+  String uploadSizeMb(String size) {
+    return '$size MB';
+  }
+
+  @override
+  String get manualTitle => 'Certificate details';
+
+  @override
+  String get manualMessage =>
+      'We could not find the hours in this certificate. Enter the details.';
+
+  @override
+  String get manualActivityLabel => 'Activity';
+
+  @override
+  String get manualActivityRequired => 'Enter the activity';
+
+  @override
+  String get manualHoursLabel => 'Workload (h)';
+
+  @override
+  String get manualHoursInvalid => 'Enter the hours (1 to 999)';
+
+  @override
+  String get manualCategoryLabel => 'Category';
+
+  @override
+  String get manualSubmit => 'Submit';
 }
