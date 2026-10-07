@@ -30,9 +30,9 @@ raios continuam vindo de `lib/core/theme/`.
 - **RF-01:** À esquerda, um selo redondo amarelo com o chapéu de formatura
   **preenchido** em azul-escuro, e a marca: "Uni" em azul-escuro e "Cronos" em
   dourado.
-- **RF-02:** À direita, o avatar com as iniciais (ou o ícone de pessoa antes do
-  perfil), num anel amarelo. Continua alvo de 48dp, anunciado como "Abrir
-  menu", abrindo o modal "Mais".
+- **RF-02:** À direita, o botão "mais" (três pontos num círculo branco), no
+  lugar do avatar com as iniciais. Continua alvo de 48dp, anunciado como
+  "Abrir menu", abrindo o modal "Mais".
 - **RF-03:** O header é igual em Dashboard, Enviar e Atividades, com a mesma
   altura, e sem botão de voltar. Sem saudação.
 - **RF-04:** O Perfil não tem header: a página começa no cartão do aluno, logo
@@ -70,8 +70,8 @@ raios continuam vindo de `lib/core/theme/`.
   (`Icons.school`) e "Uni Cronos", e nenhuma saudação.
 - **CA-04:** Em Enviar e Atividades, o header mostra o chapéu e "Uni Cronos",
   com a mesma altura do Dashboard. No Perfil não há header.
-- **CA-05:** O avatar do header continua: alvo de 48dp, anunciado só como
-  "Abrir menu", abrindo o modal "Mais"; o header não tem botão de voltar.
+- **CA-05:** O botão do menu do header é alvo de 48dp, anunciado só como
+  "Abrir menu", e abre o modal "Mais"; o header não tem botão de voltar.
 - **CA-06:** O header cabe em 320dp a 1,5x de texto sem estourar.
 - **CA-07:** O Perfil mostra "Ana Souza", o e-mail, "UTFPR · Engenharia de
   Software · 5º período", e as iniciais "AS" no avatar grande.
@@ -89,6 +89,8 @@ raios continuam vindo de `lib/core/theme/`.
 - **CA-15:** A marca do header é "Uni" em `tertiary` e "Cronos" em
   `primaryFixedDim`.
 - **CA-16:** A marca do header usa o tamanho de `headlineSmall`, em Bold (700).
+- **CA-17:** O botão do canto superior direito é o ícone
+  `more_vert_outlined`, e o header não mostra as iniciais do aluno.
 
 ## Fora de escopo
 
@@ -102,8 +104,8 @@ raios continuam vindo de `lib/core/theme/`.
 
 - Nenhuma cor literal nos widgets: todas vêm de papéis do `ColorScheme`, que
   passam pelo filtro de daltonismo exatamente uma vez.
-- O amarelo de fundo (`primaryContainer`) é acento: selos, anel do avatar,
-  indicador da aba — nunca fundo de cartão no Perfil.
+- O amarelo de fundo (`primaryContainer`) é acento: selos e indicador da aba —
+  nunca fundo de cartão no Perfil.
 - `primaryFixedDim` (dourado) e `tertiary` (azul-escuro) são cores da marca, só
   no logotipo do header; não servem para texto corrido.
 - Todo alvo tocável do header e do Perfil tem pelo menos 48dp.
@@ -179,6 +181,11 @@ class ShellAppBar extends StatefulWidget implements PreferredSizeWidget {
 - **Sem capa no Perfil.** A capa em gradiente dourado do plano foi trocada por
   um cartão branco (o amarelo de fundo foi considerado bruto); o anel do avatar
   grande também saiu.
+- **Botão "mais" no lugar do avatar**, a pedido, depois do primeiro commit. As
+  iniciais saíram do header (o Perfil ainda as mostra no cartão); os testes da
+  006 que tocavam em "AS" para abrir o menu passaram a tocar no botão pelo
+  rótulo "Abrir menu", e o teste da 010 sobre as iniciais "da app bar" foi
+  renomeado para o que ele de fato verifica: as iniciais no cartão do Perfil.
 - **Header no `Scaffold.appBar`.** Uma versão intermediária o pôs no fluxo da
   página para crescer com a saudação em duas linhas; isso fez a barreira de
   acessibilidade da navegação das abas esconder o header do leitor de tela.

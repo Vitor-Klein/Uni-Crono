@@ -121,11 +121,11 @@ A casca tem:
   (`lib/app/app_info.dart`) em `headlineSmall` Bold, em duas cores: "Uni" em
   `tertiary` e "Cronos" em `primaryFixedDim` — como logotipo, dispensada do
   contraste mínimo de texto. Em tela estreita a marca encolhe para caber, em
-  vez de ser cortada. Sem botão de voltar. À direita, o avatar com as iniciais do perfil
-  (`ProfileCubit`; um ícone de pessoa antes de o perfil chegar), num anel
-  `primaryContainer`: alvo de 48dp, anunciado como "Abrir menu", que abre o
-  modal "Mais" (`showHomeMoreModal`): Mensagens, Configurações, Compartilhar/
-  Privacidade/Termos quando o Remote Config tem a URL, nome e versão do app.
+  vez de ser cortada. Sem botão de voltar. À direita, o botão "mais"
+  (`Icons.more_vert_outlined` num círculo branco): alvo de 48dp, anunciado como
+  "Abrir menu", que abre o modal "Mais" (`showHomeMoreModal`): Mensagens,
+  Configurações, Compartilhar/Privacidade/Termos quando o Remote Config tem a
+  URL, nome e versão do app.
 - **O Perfil não tem header:** a página cuida da barra de status (`SafeArea`) e
   abre no cartão do aluno.
 - **Barra inferior** (`NavigationBar`): ícones `*_outlined`; indicador da aba
