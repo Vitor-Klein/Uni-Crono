@@ -181,6 +181,10 @@ class ShellAppBar extends StatefulWidget implements PreferredSizeWidget {
 - **Sem capa no Perfil.** A capa em gradiente dourado do plano foi trocada por
   um cartão branco (o amarelo de fundo foi considerado bruto); o anel do avatar
   grande também saiu.
+- **Depois, também a pedido:** o "mais" virou a grade de 9 pontos
+  (`apps_outlined`), e o **Perfil voltou a ter o header**, igual às outras abas
+  (RF-04 e a parte "No Perfil não há header" de CA-04 deixam de valer; o teste
+  de CA-04 passou a pedir o header no Perfil).
 - **Botão "mais" no lugar do avatar**, a pedido, depois do primeiro commit. As
   iniciais saíram do header (o Perfil ainda as mostra no cartão); os testes da
   006 que tocavam em "AS" para abrir o menu passaram a tocar no botão pelo
