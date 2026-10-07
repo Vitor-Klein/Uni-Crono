@@ -1,6 +1,6 @@
 ---
 id: 013
-status: aprovada
+status: implementada
 depende_de: [009, 012]
 ---
 
@@ -100,6 +100,22 @@ grant insert on public.certificates to authenticated;
 
 ## Decisões durante a implementação
 
-- …
+- **`pdfrx` 2.4.7**, não 2.4.8: o `pdfrx_engine` das versões novas pede
+  `meta ^1.18`, e o Flutter 3.41.5 trava o `meta` em 1.17.0.
+- **Duplicado conferido antes do upload** (consulta pelo SHA-256), e de novo
+  pela violação do único na gravação, com o PDF apagado.
+- **`discard` saiu do `CertificateLauncher`:** nada sobe antes do lançamento,
+  então desistir do formulário não tem o que apagar.
+- **O título pendente vem da leitura** (que cai no nome do arquivo quando o
+  texto não traz título).
+- **Emissor é o nome da instituição da conta** (metadados), e nada quando ela
+  falta: um padrão de palavra vazio casaria com qualquer texto.
+- **`foldForSearch` virou `foldText` em `lib/core/utils/`:** o Hub e a leitura
+  usam a mesma função, sem uma feature importar a outra.
+- **`rls.sql` conta só os perfis do próprio teste:** o banco já tem conta de
+  verdade.
+- **Verificação no aparelho:** o APK com `pdfrx` compilou e subiu no Android
+  (Supabase iniciado, sem exceção); o envio de uma declaração real fica para o
+  usuário conferir.
 
 ## Perguntas em aberto

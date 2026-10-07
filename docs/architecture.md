@@ -8,8 +8,8 @@ seção `<architecture>` do `CLAUDE.md`, que é o que o agente lê em todo turno
 fica a descrição; lá, o que não se discute.
 
 Stack: Flutter (Dart), com os microsserviços `next_*` da BFAC; Supabase
-(Auth, Postgres, Storage) como servidor; e um leitor de certificados em
-Python (FastAPI + pypdf) em `services/certificate_reader/`.
+(Auth, Postgres, Storage) como servidor, sem servidor próprio. Os PDFs dos
+certificados são lidos no próprio app (`pdfrx`).
 
 ## Visão em uma tela
 
@@ -193,31 +193,39 @@ numa transação desfeita no fim e levanta exceção a cada asserção que falha
 | Tabela / bucket | Quem lê | Quem escreve |
 |---|---|---|
 | `profiles` (`full_name`, `institution_id`, `course`, `term`) | o próprio aluno | o gatilho `handle_new_user`, a partir dos metadados do cadastro |
-| `certificates` (`title`, `issuer`, `category`, `hours` 1–999, `file_path`, `file_sha256`, `source` `extracted`/`manual`, `approved_at`; único por aluno e SHA-256) | o próprio aluno | só o leitor de certificados, com a `service_role` |
+| `certificates` (`title`, `issuer`, `category`, `hours` 1–999, `file_path`, `file_sha256`, `source` `extracted`/`manual`, `approved_at`; único por aluno e SHA-256) | o próprio aluno | o próprio aluno, só com o próprio `user_id`; ninguém altera nem apaga |
 | `opportunities` (curso ou evento, categoria, horas, quem oferece, modalidade, início, link `https`, destaque, publicada) | aluno autenticado, só as publicadas | migração ou painel |
-| bucket `certificates` (privado, 10 MB, só PDF) | o aluno, na própria pasta `<uid>/`; o leitor | o aluno envia e apaga na própria pasta; o leitor apaga |
+| bucket `certificates` (privado, 10 MB, só PDF) | o aluno, na própria pasta `<uid>/` | o aluno envia e apaga na própria pasta |
 
-- RLS ligada em todas as tabelas de `public`. O papel `anon` não lê nada, e o
-  `authenticated` não escreve em nenhuma tabela.
-- O app só conhece a chave publicável; a `service_role` mora só no ambiente do
-  leitor.
+- RLS ligada em todas as tabelas de `public`. O papel `anon` não lê nada; o
+  `authenticated` só grava certificado com o próprio `user_id` e não altera
+  nem apaga linha nenhuma.
+- O app só conhece a chave publicável. Como quem grava o certificado é o app,
+  quem chamar a API direto pode lançar horas sem PDF de verdade: risco aceito.
 - O catálogo inicial são seis exemplos fictícios: quem oferece leva
   "(exemplo)" e os links apontam para `example.com`.
 
 ## Envio de certificado
 
-A aba Enviar (`lib/features/upload/`) manda um PDF para ser lido e contado; as
-horas entram sem tela de conferência.
+A aba Enviar (`lib/features/upload/`) lê o PDF no próprio aparelho e conta as
+horas; elas entram sem tela de conferência.
 
 - **Escolha:** `CertificatePicker` (em produção, `FilePickerCertificatePicker`,
   só PDF). O app aceita o arquivo que termina em `.pdf`, tem até 10 MB e começa
   com `%PDF-` (`isAcceptedCertificate`); senão, "Use um PDF de até 10 MB".
-- **Envio:** `CertificateLauncher`; em produção, o `SupabaseCertificateLauncher`
-  sobe o PDF para `certificates/<uid>/<uuid v4>.pdf` e chama o leitor
-  (`CERTIFICATE_READER_URL`) com o token do aluno. O resultado é o certificado
-  lançado ou uma falha: `Unreadable` (sem texto ou sem horas; o PDF fica
-  guardado), `Duplicate` ou `ReaderUnavailable` (sem rede, leitor fora,
-  resposta inesperada, endereço do leitor não configurado).
+- **Leitura:** `PdfTextExtractor` (em produção, `PdfrxTextExtractor`: o texto
+  das até 10 primeiras páginas, pelo PDFium; "" quando o PDF não tem texto ou
+  não abre) e as regras de `readCertificate` (abaixo).
+- **Lançamento:** `CertificateLauncher`; em produção, o
+  `SupabaseCertificateLauncher`:
+  - sem texto ou sem carga horária, nada sobe: `Unreadable`, com o arquivo e o
+    título lido, e o app abre o formulário manual;
+  - o aluno já tem esse PDF (mesmo SHA-256): `Duplicate`, sem upload;
+  - senão, sobe o PDF para `certificates/<uid>/<uuid v4>.pdf` e grava o
+    certificado (`source` `extracted`, ou `manual` pelo formulário). Se a
+    gravação falha, o PDF que subiu é apagado; violação do único por aluno e
+    SHA-256 também é `Duplicate`;
+  - sem rede ou com o servidor recusando: `ReaderUnavailable`.
 - **Estado:** o `UploadCubit` (arquivo, arquivo recusado, enviando, falha, PDF
   pendente) nasce na casca, para `/upload` e `/upload/manual` trabalharem no
   mesmo arquivo.
@@ -225,55 +233,31 @@ horas entram sem tela de conferência.
   "Certificado lançado: +N h em <categoria>" e vai ao Dashboard. Vindo do
   formulário, primeiro leva a aba Enviar de volta a `/upload` e só no frame
   seguinte vai ao Dashboard, para a aba não reabrir no formulário.
-- **Formulário manual** (`/upload/manual`, `ManualEntryPage`), para PDF sem
-  texto ou sem horas: título preenchido pelo nome do arquivo
-  (`titleFromFileName`), horas de 1 a 999 e categoria (Horas Complementares por
-  padrão). "Cancelar" apaga o PDF guardado e volta a `/upload` com o arquivo
-  ainda escolhido. O formulário é um `SingleChildScrollView`, não uma lista
-  preguiçosa: campo construído fora da tela sairia do `Form` e escaparia da
-  validação.
+- **Formulário manual** (`/upload/manual`, `ManualEntryPage`): título
+  preenchido pela leitura, horas de 1 a 999 e categoria (Horas Complementares
+  por padrão). "Cancelar" volta a `/upload` com o arquivo ainda escolhido. O
+  formulário é um `SingleChildScrollView`, não uma lista preguiçosa: campo
+  construído fora da tela sairia do `Form` e escaparia da validação.
 - A tela segue a "Lançar Certificado" do Figma; a área tracejada é um
   `CustomPainter` com os tokens (`outlineVariant`, `AppRadii.lg`). Não há
   arrastar e soltar.
 
-## Leitor de certificados
+## Leitura do certificado
 
-Serviço Python em `services/certificate_reader/` (FastAPI, pypdf e httpx2, com
-versões fixadas em `requirements.txt`), publicado como função no Vercel
-(`api/index.py`, `vercel.json`). Ambiente: `SUPABASE_URL`,
-`SUPABASE_SERVICE_ROLE_KEY` e `ALLOWED_ORIGINS` (CORS do app web).
+Regras de `lib/features/upload/domain/certificate_reading.dart`, sobre o texto
+sem acentos e em minúsculas (`foldText`, `lib/core/utils/fold_text.dart`):
 
-- `POST /api/certificates/read` `{path, file_name}` e
-  `POST /api/certificates/manual` `{path, title, category, hours}`, com
-  `Authorization: Bearer <token do aluno>`.
-- Antes de tudo: o token é conferido no Supabase Auth (`/auth/v1/user`) — senão
-  401; o caminho tem de ser `<uid do token>/<uuid>.pdf` — senão 403. Depois:
-  arquivo inexistente, 404; mais de 10 MB, 413 e apagado; sem a assinatura
-  `%PDF-`, 415 e apagado.
-- `read`: sem texto, 422 `no_text`; sem carga horária, 422 `no_hours` (nos dois
-  casos o PDF fica, para o lançamento manual); o mesmo PDF (SHA-256) do mesmo
-  aluno, 409 `duplicate` e a cópia é apagada; senão grava com
-  `source = 'extracted'` e responde 201 `{title, issuer, category, hours}`.
-- `manual`: campos inválidos, 422 `invalid`; se o leitor, relendo o PDF, acha
-  as horas, 409 `readable` e nada é gravado; senão grava com
-  `source = 'manual'`. Num PDF que o leitor consegue ler, as horas que contam
-  são sempre as dele.
-- Qualquer outra falha (configuração ausente, Supabase fora do ar) é 503
-  `unavailable`, com só o tipo do erro no log. Nenhuma resposta traz texto do
-  PDF, caminho interno ou stack trace.
-- Regras de leitura (`reader/extract.py`), sobre o texto das até 10 primeiras
-  páginas, sem acentos e em minúsculas:
-  - **horas:** o número depois de "carga horária" (até 40 caracteres entre os
-    dois); senão a primeira duração (`8h`, `10h30`, `20 horas`, `12 hrs`,
-    `40 (quarenta) horas`) que não seja hora do relógio (precedida de "às",
-    "das" ou "até"). Minutos são descartados; fora de 1 a 999, não há horas;
-  - **categoria:** extensão se o texto fala em "extensão" ou "extensionista";
-    senão, complementares;
-  - **título:** o nome entre aspas depois de "participou d(o|a)", "concluiu o
-    curso" ou "evento"; senão o trecho depois dos dois primeiros marcadores, até
-    a vírgula ou o ponto; senão o nome do arquivo, cada palavra com inicial
-    maiúscula. No máximo 120 caracteres;
-  - **emissor:** a sigla da instituição do aluno, quando aparece no texto.
+- **horas:** o número depois de "carga horária" (até 40 caracteres entre os
+  dois); senão a primeira duração (`8h`, `10h30`, `20 horas`, `12 hrs`,
+  `40 (quarenta) horas`) que não seja hora do relógio (precedida de "às",
+  "das" ou "até"). Minutos são descartados; fora de 1 a 999, não há horas;
+- **categoria:** extensão se o texto fala em "extensão" ou "extensionista";
+  senão, complementares;
+- **título:** o nome entre aspas depois de "participou d(o|a)", "concluiu o
+  curso" ou "evento"; senão o trecho depois dos dois primeiros marcadores, até a
+  vírgula ou o ponto; senão o nome do arquivo, cada palavra com inicial
+  maiúscula. No máximo 120 caracteres;
+- **emissor:** o nome da instituição da conta, quando aparece no texto.
 
 ## Hub de Oportunidades
 
@@ -284,7 +268,7 @@ publicadas).
 - `visibleOpportunities` (função pura): os filtros Todas / Cursos / Eventos /
   Extensão / Complementares (um por vez) e a busca por título, descrição e quem
   oferece valem juntos (E). A busca ignora maiúsculas e acentos
-  (`foldForSearch`). O destaque vem primeiro; os outros, por data de início.
+  (`foldText`). O destaque vem primeiro; os outros, por data de início.
 - Linha do catálogo que o app não entende é pulada (o resto aparece); link que
   não é `https` é descartado. "Inscrever-se" só aparece com link e abre fora do
   app pelo `LinkOpener` (`lib/core/utils/link_opener.dart`; em produção, o
@@ -320,9 +304,9 @@ nunca divergem.
 
 Os valores públicos de build vêm de `--dart-define-from-file=config/app.json`
 (fora do git; o formato está em `config/app.example.json`), lidos por
-`AppConfig` (`lib/core/config/`): `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY` e
-`CERTIFICATE_READER_URL`. Sem o Supabase configurado, o app não abre
-(`StateError` em `connectAccountServer`).
+`AppConfig` (`lib/core/config/`): `SUPABASE_URL` e `SUPABASE_PUBLISHABLE_KEY`.
+Sem eles, o `main()` mostra `ConfigMissingApp` (a mensagem diz como rodar) em
+vez do app. No VS Code, o `.vscode/launch.json` já passa o arquivo.
 
 ## Idioma
 

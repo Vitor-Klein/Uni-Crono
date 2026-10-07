@@ -47,38 +47,15 @@ Nada de Firebase nem de Supabase em teste de widget: o que depende deles entra
 por uma interface com versão falsa — `FakeAuthGateway`, `FakeHoursRepository`
 (com `demoCertificates()`), `FakeCertificatePicker`/`FakeCertificateLauncher`,
 `FakeOpportunityRepository`, `FakeProfileRepository`, `FakeLinkOpener` — que
-pode falhar sob comando. Os adaptadores do Supabase são testados com um
+pode falhar sob comando. O `pdfrx` usa o PDFium nativo, que não roda em
+`flutter test`: o `PdfTextExtractor` entra falso, entregando um texto, e a
+leitura real é conferida à mão no aparelho. Os adaptadores do Supabase são testados com um
 `SupabaseClient` sobre o `MockClient` do `http`; toda resposta simulada leva a
 `request` de origem, que o SDK lê de volta.
 
 Testes de banco: `supabase/tests/*.sql`, rodados contra o projeto numa
 transação com `rollback`, trocando de papel com `set local role` e
 `request.jwt.claims`.
-
-Leitor em Python: pytest em `services/certificate_reader/tests/`. O ID vai no
-nome da função (`test_ca08_…`), porque nome de função não aceita hífen. Os PDFs
-de teste são gerados pelo próprio teste (`tests/pdf_factory.py`) — nenhum
-certificado real entra no repositório — e o Supabase entra por um `Gateway`
-falso ou por um `httpx2.MockTransport`.
-
-Toque em widget que pode estar fora da tela padrão do teste (800×600) — ou de
-uma tela reduzida no próprio teste — vem depois de `tester.ensureVisible`: um
-toque que não acerta só gera aviso e deixa o teste passar sem testar nada. Numa
-lista preguiçosa (`ListView`), o item longe da tela nem é construído e o
-`ensureVisible` não o encontra. Nesse caso, role como o usuário faria, com
-`tester.scrollUntilVisible(..., scrollable: <o Scrollable da página>)`. A saída
-do `flutter test` não pode ter linhas `Warning:`.
-
-Tela nova ganha teste de layout em tela estreita e texto grande (ex.: 320dp a
-1,0× e 360dp a 1,5×, com `tester.view.physicalSize` e
-`textScaleFactorTestValue`), afirmando `tester.takeException()` nulo — a
-verificação manual em 390dp com texto normal não pega estouro de layout.
-O `takeException()` também não pega palavra quebrada no meio, porque isso não
-é estouro. Teste que mede largura de texto carrega a fonte real do estilo
-(`FontLoader` com o TTF de `assets/fonts/`): com a fonte padrão dos testes, as
-larguras não têm relação com as do app. Para afirmar que uma palavra ficou numa
-linha só, todas as caixas de `RenderParagraph.getBoxesForSelection` sobre ela
-têm o mesmo `top`.
 
 ## Commits
 
@@ -107,8 +84,9 @@ que impede o repo de acumular arquivo gerado defasado:
   **Supabase** de `docs/architecture.md`
 - `lib/l10n/app_pt.arb` → `app_en.arb` e `app_es.arb` (mesmas chaves) e os
   `app_localizations*.dart` gerados (`flutter gen-l10n`)
-- `services/certificate_reader/requirements*.txt` → o `.venv` reinstalado e a
-  seção **Leitor de certificados** de `docs/architecture.md`
+- regras de `certificate_reading.dart` → os casos de
+  `test/certificate_reading_test.dart` e a seção **Leitura do certificado** de
+  `docs/architecture.md`
 
 Um par típico: schema → migration, cliente gerado, e o documento que descreve o
 modelo de dados. O gerado nunca se edita à mão; regenera-se.
