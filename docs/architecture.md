@@ -114,13 +114,20 @@ publicável do projeto.
 
 A casca tem:
 
-- **App bar** (`ShellAppBar`): um `NextAppBar` (o lint do projeto proíbe o
-  `AppBar` do Flutter) com a marca `kAppName` (`lib/app/app_info.dart`)
-  centralizada, sem botão de voltar, e o avatar com as iniciais do perfil
-  (`ProfileCubit`; um ícone de pessoa antes de o perfil chegar). O avatar é um
-  alvo de 48dp, anunciado como "Abrir menu", e abre o modal "Mais"
-  (`showHomeMoreModal`): Mensagens, Configurações, Compartilhar/Privacidade/
-  Termos quando o Remote Config tem a URL, nome e versão do app.
+- **Header** (`ShellAppBar`, no `Scaffold.appBar`, 72dp): widget próprio, sem
+  `AppBar` (o lint do projeto o proíbe) e sem `NextAppBar` (que só centraliza um
+  título de texto). À esquerda, o selo redondo `primaryContainer` com o chapéu
+  **preenchido** (`Icons.school`, em `tertiary`) e a marca `kAppName`
+  (`lib/app/app_info.dart`) em `headlineSmall` Bold, em duas cores: "Uni" em
+  `tertiary` e "Cronos" em `primaryFixedDim` — como logotipo, dispensada do
+  contraste mínimo de texto. Em tela estreita a marca encolhe para caber, em
+  vez de ser cortada. Sem botão de voltar. À direita, o avatar com as iniciais do perfil
+  (`ProfileCubit`; um ícone de pessoa antes de o perfil chegar), num anel
+  `primaryContainer`: alvo de 48dp, anunciado como "Abrir menu", que abre o
+  modal "Mais" (`showHomeMoreModal`): Mensagens, Configurações, Compartilhar/
+  Privacidade/Termos quando o Remote Config tem a URL, nome e versão do app.
+- **O Perfil não tem header:** a página cuida da barra de status (`SafeArea`) e
+  abre no cartão do aluno.
 - **Barra inferior** (`NavigationBar`): ícones `*_outlined`; indicador da aba
   ativa em `primaryContainer` com ícone `onPrimaryContainer`; rótulo ativo em
   `primary`, inativos em `onSurfaceVariant`.
@@ -174,11 +181,15 @@ no `AppProviders` como `RepositoryProvider<HoursRepository>`, acima de todos os
   certificados, "Nenhum certificado ainda". Como a casca mantém as abas
   montadas, um certificado novo já aparece ao voltar.
 - **A página é um `ListView` preguiçoso** com:
-  - um card por categoria. O ícone fica num círculo **acima** do título, e não
-    ao lado como no Figma, para o título ter a largura toda e não quebrar no
-    meio da palavra em telas estreitas com texto grande. Depois vêm o subtítulo
-    e a barra, e embaixo as horas e a meta, nas duas pontas;
-  - a seção "Aprovados recentemente", com "Ver todos" ("Disponível em breve").
+  - um card branco por categoria (`AppRadii.xl`, `AppShadows.lg`). No topo, o
+    ícone num selo dourado suave e, na outra ponta, a % da meta num selo
+    (`CategoryProgress.ratio`, logo nunca acima de 100%). O título vem **abaixo**
+    do ícone, e não ao lado como no Figma, para ter a largura toda e não quebrar
+    no meio da palavra em telas estreitas com texto grande. Depois vêm o
+    subtítulo e a barra, e embaixo as horas e a meta, nas duas pontas;
+  - a seção "Aprovados recentemente", com "Ver todos" ("Disponível em breve"):
+    um card por certificado, com as horas num selo e "Aprovado" com um ícone
+    de confirmação; sem certificados, um quadro vazio com ícone.
 - **Leitor de tela:** cada barra é anunciada com a categoria e "N de M horas",
   em `Semantics(label, value)` com a barra dentro de `ExcludeSemantics`. Por
   isso ela não tem o papel de barra de progresso, que só aceita um número como
@@ -289,16 +300,22 @@ A aba Perfil (`lib/features/profile/`) mostra o `ProfileCubit` da casca: o
 conta) e o `HoursSummary` do mesmo `HoursRepository` do Dashboard — os dois
 nunca divergem.
 
-- Carteirinha (`primaryContainer`): iniciais (`StudentProfile.initials`), nome,
-  e-mail e "instituição · curso · Nº período"; resumo: horas lançadas,
-  certificados e percentual da meta.
-- "PREFERÊNCIAS": Notificações, Idioma e Acessibilidade abrem as mesmas folhas
-  do modal de configurações (`openNotificationsSheet`; `openLanguageSheet` e
-  `openAccessibilitySheet`, de
+O amarelo é acento, nunca fundo de cartão: os cartões são brancos
+(`surfaceContainerLowest`, `AppRadii.xl`) e os ícones ficam em selos dourados
+suaves.
+
+- Cartão do aluno: avatar grande com as iniciais (`StudentProfile.initials`),
+  nome, e-mail e uma pílula com "instituição · curso · Nº período"; abaixo de
+  uma divisória, o resumo — horas lançadas, certificados e percentual da meta —,
+  cada número com seu ícone, separados por divisórias verticais.
+- "PREFERÊNCIAS", num cartão: Notificações, Idioma e Acessibilidade, com seta,
+  abrem as mesmas folhas do modal de configurações (`openNotificationsSheet`;
+  `openLanguageSheet` e `openAccessibilitySheet`, de
   `lib/features/settings/presentation/settings_sheets.dart`).
-- "CONTA": "Sair" pede confirmação ("Sair da conta?") e chama
-  `SessionCubit.signOut()`.
-- Com falha, "Não foi possível carregar seu perfil" e "Tentar de novo".
+- "CONTA", num cartão: "Sair", em `error` e sem seta, pede confirmação ("Sair
+  da conta?") e chama `SessionCubit.signOut()`.
+- Com falha, "Não foi possível carregar seu perfil" e "Tentar de novo" no lugar
+  da identidade, dentro do cartão.
 
 ## Configuração
 
@@ -343,7 +360,8 @@ O tema é montado em duas camadas:
    `fontFamily` (Inter) e as cores de quatro estilos de texto.
 2. **O `builder` do `MaterialApp`** (`lib/app/app.dart`) acrescenta o que o factory
    não monta, a partir de `lib/core/theme/app_tokens.dart`:
-   - `AppColorRoles.applyTo` — `primaryContainer`, `surfaceContainer*`,
+   - `AppColorRoles.applyTo` — `primaryContainer`/`onPrimaryContainer`,
+     `primaryFixedDim`, `tertiary` (substitui o do factory), `surfaceContainer*`,
      `onSurfaceVariant`, `outline*`, `errorContainer`/`onErrorContainer`;
    - `AppTypography.applyTo` — a escala tipográfica;
    - o estilo dos botões preenchidos (`primaryContainer`/`onPrimaryContainer`) e
@@ -361,6 +379,7 @@ aplica a matriz duas vezes.
 |---|---|---|---|
 | `primary` | `#755B00` | `onPrimary` | `#FFFFFF` |
 | `primaryContainer` | `#FECB29` | `onPrimaryContainer` | `#6F5600` |
+| `primaryFixedDim` | `#F0B400` | `tertiary` | `#1E3A6E` |
 | `secondary` | `#5B5F61` | `onSecondary` | `#FFFFFF` |
 | `surface` | `#F9F9F9` | `onSurface` | `#1A1C1C` |
 | `surfaceContainerLowest` | `#FFFFFF` | `onSurfaceVariant` | `#4E4633` |
@@ -372,6 +391,9 @@ aplica a matriz duas vezes.
 O fundo das telas é `surface`; cards e folhas ficam nos `surfaceContainer*`. O
 texto do tema é opaco: `onSurface` no principal, `onSurfaceVariant` em
 `bodyMedium`/`bodySmall`. Todo par texto/fundo do esquema tem contraste ≥ 4.5:1.
+`primaryFixedDim` e `tertiary` são cores da marca (o "Cronos" e o chapéu do
+header), não papéis de texto: o dourado sobre `surface` não chega a 4.5:1 e só
+aparece no logotipo.
 
 ### Tipografia
 
@@ -401,7 +423,8 @@ Constantes em `app_tokens.dart`:
 
 - `AppSpacing` — grade de 4: `xs 4`, `sm 8`, `md 12`, `lg 16`, `xl 24`, `xxl 32`,
   `xxxl 48`, `section 80`; `screenGutter` = 24 (margem lateral das telas).
-- `AppRadii` — `xs 2`, `sm 4`, `md 8`, `lg 12`, `pill 9999`.
+- `AppRadii` — `xs 2`, `sm 4`, `md 8`, `lg 12`, `xl 20` (cartões grandes e a
+  folha do modal), `pill 9999`.
 - `AppShadows` — `sm`, `md`, `lg`: sombras de 5% de opacidade, a `lg` com tom
   dourado.
 
@@ -410,7 +433,8 @@ Constantes em `app_tokens.dart`:
 - Cor, fonte, espaçamento, raio ou sombra de design: em
   `lib/core/theme/app_tokens.dart` (ou no `_LightConfig`, se for um dos papéis que
   o factory monta) — nunca literal no widget. Os widgets herdados do template
-  (`app_modal`, `notifications_sheet`, …) ainda têm raios e cores literais.
+  (`notifications_sheet`, …) ainda têm raios e cores literais; o `app_modal`
+  já usa os tokens.
 - Código de … vai em `…`.
 
 Se duas coisas parecidas moram em lugares diferentes, é aqui que se diz como não
