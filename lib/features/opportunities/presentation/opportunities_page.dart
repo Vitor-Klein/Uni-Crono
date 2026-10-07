@@ -60,7 +60,7 @@ class _HubViewState extends State<_HubView> {
           AppSpacing.screenGutter,
         ),
         children: [
-          Text(l10n.hubTitle, style: theme.textTheme.headlineSmall),
+          Text(l10n.hubTitle, style: theme.textTheme.headlineLarge),
           const SizedBox(height: AppSpacing.sm),
           Text(
             l10n.hubSubtitle,
