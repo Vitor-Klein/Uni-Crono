@@ -76,11 +76,11 @@ está lá.
   - Ícones: `Icons.*_outlined` do SDK; nenhum pacote de ícones.
   - A fonte do design é a Page 1 do Figma do Uni Cronos; a Page 2 é de outro
     projeto e não vale.
-  - Servidor: Supabase (`uni-cronos`, org KleinOS). O app usa só a chave
-    publicável; só o leitor de certificados, com a `service_role`, grava
-    certificados.
-  - Leitura de certificados: serviço Python em `services/certificate_reader/`,
-    publicado no Vercel.
+  - Servidor: Supabase (`uni-cronos`, org KleinOS), e nenhum servidor próprio.
+    O app usa só a chave publicável.
+  - Leitura de certificados no próprio app (Dart, `pdfrx`). O app grava os
+    certificados do aluno; horas lançadas pela API sem PDF de verdade são um
+    risco aceito.
 </architecture>
 
 <test_strategy>
@@ -118,12 +118,6 @@ está lá.
   plugins).
 - `flutter test`  — a suíte inteira.
 - `dart format --output=none --set-exit-if-changed lib test`  — formatação.
-- `services/certificate_reader/.venv/Scripts/python -m pytest services/certificate_reader`
-  — testes do leitor de certificados (Python).
-- `services/certificate_reader/.venv/Scripts/python -m ruff check services/certificate_reader`
-  — lint do leitor.
-- `services/certificate_reader/.venv/Scripts/python -m ruff format --check services/certificate_reader`
-  — formatação do leitor.
 
 Definição de pronto: todos os CAs da spec com teste verde + os gates acima
 passando + nenhum TODO novo no código + os **artefatos que andam juntos**
