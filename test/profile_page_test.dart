@@ -59,7 +59,7 @@ void main() {
     );
     expect(find.text('175 h'), findsOneWidget);
     expect(find.text('5'), findsOneWidget);
-    expect(find.text('58%'), findsOneWidget);
+    expect(find.text('74%'), findsOneWidget);
   });
 
   testWidgets('CA-06: the profile card shows the initials of the '

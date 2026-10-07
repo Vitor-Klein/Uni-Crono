@@ -41,7 +41,7 @@ void main() {
       for (final (icon, value) in [
         (Icons.schedule_outlined, '175 h'),
         (Icons.description_outlined, '5'),
-        (Icons.flag_outlined, '58%'),
+        (Icons.flag_outlined, '74%'),
       ]) {
         expect(_inProfile(find.byIcon(icon)), findsOneWidget, reason: value);
         expect(
@@ -121,8 +121,8 @@ void main() {
 
       Finder inDashboard(Finder f) =>
           find.descendant(of: find.byType(DashboardPage), matching: f);
-      expect(inDashboard(find.text('65%')), findsOneWidget);
-      expect(inDashboard(find.text('45%')), findsOneWidget);
+      expect(inDashboard(find.text('100%')), findsOneWidget);
+      expect(inDashboard(find.text('22%')), findsOneWidget);
     });
 
     testWidgets('CA-12: past the goal the share stays at 100%', (tester) async {

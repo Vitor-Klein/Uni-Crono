@@ -18,19 +18,19 @@ void main() {
     )..addFont(Future.value(ByteData.sublistView(bytes)))).load();
   });
 
-  testWidgets('CA-01: the dashboard shows 130 of 200 complementary hours and '
-      '45 of 100 extension hours, with bars at 0.65 and 0.45', (tester) async {
+  testWidgets('CA-01: the dashboard shows 130 of 35 complementary hours and '
+      '45 of 200 extension hours, with bars at 1.0 and 0.225', (tester) async {
     await pumpRoutedApp(tester);
 
     expect(find.text('Progresso acadêmico'), findsOneWidget);
     expect(find.text('Horas Complementares'), findsWidgets);
     expect(find.text('Atividades extracurriculares'), findsOneWidget);
     expect(find.text('130 horas'), findsOneWidget);
-    expect(find.text('200 no total'), findsOneWidget);
+    expect(find.text('35 no total'), findsOneWidget);
     expect(find.text('Horas de Extensão'), findsWidgets);
     expect(find.text('Envolvimento com a comunidade'), findsOneWidget);
     expect(find.text('45 horas'), findsOneWidget);
-    expect(find.text('100 no total'), findsOneWidget);
+    expect(find.text('200 no total'), findsOneWidget);
 
     final bars = tester
         .widgetList<LinearProgressIndicator>(
@@ -39,8 +39,8 @@ void main() {
         .map((bar) => bar.value!)
         .toList();
     expect(bars, hasLength(2));
-    expect(bars[0], closeTo(0.65, 1e-9));
-    expect(bars[1], closeTo(0.45, 1e-9));
+    expect(bars[0], 1.0);
+    expect(bars[1], closeTo(0.225, 1e-9));
   });
 
   testWidgets('CA-01: the hours sit at the left and the goal at the right end '
@@ -54,7 +54,7 @@ void main() {
         .getTopLeft(find.byType(LinearProgressIndicator).first)
         .dx;
     expect(
-      tester.getTopRight(find.text('200 no total')).dx,
+      tester.getTopRight(find.text('35 no total')).dx,
       closeTo(barRight, 1),
     );
     expect(tester.getTopLeft(find.text('130 horas')).dx, closeTo(barLeft, 1));
@@ -69,9 +69,9 @@ void main() {
     final complementary = tester.getSemantics(bars.at(0));
     final extension = tester.getSemantics(bars.at(1));
     expect(complementary.label, contains('Horas Complementares'));
-    expect(complementary.value, '130 de 200 horas');
+    expect(complementary.value, '130 de 35 horas');
     expect(extension.label, contains('Horas de Extensão'));
-    expect(extension.value, '45 de 100 horas');
+    expect(extension.value, '45 de 200 horas');
     semantics.dispose();
   });
 
@@ -143,8 +143,8 @@ void main() {
     await pumpRoutedApp(tester, hoursRepository: FakeHoursRepository());
 
     expect(find.text('0 horas'), findsNWidgets(2));
+    expect(find.text('35 no total'), findsOneWidget);
     expect(find.text('200 no total'), findsOneWidget);
-    expect(find.text('100 no total'), findsOneWidget);
     await tester.scrollUntilVisible(
       find.text('Nenhum certificado ainda'),
       200,

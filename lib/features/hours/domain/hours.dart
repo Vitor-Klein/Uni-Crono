@@ -33,6 +33,10 @@ class CategoryProgress {
   /// Share of the goal reached, capped at 1.0 — hours above the goal still
   /// count in [hours].
   double get ratio => (hours / goal).clamp(0.0, 1.0);
+
+  /// Share of the goal reached, in whole percent, rounded down and capped at
+  /// 100.
+  int get percent => (hours * 100 ~/ goal).clamp(0, 100);
 }
 
 /// Totals across both categories.
@@ -90,8 +94,8 @@ class HoursSnapshot {
 
   /// Hours each category asks for.
   static const goals = {
-    HourCategory.complementary: 200,
-    HourCategory.extension: 100,
+    HourCategory.complementary: 35,
+    HourCategory.extension: 200,
   };
 
   final List<CategoryProgress> progress;

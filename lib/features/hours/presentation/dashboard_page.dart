@@ -194,11 +194,7 @@ class _ProgressCard extends StatelessWidget {
               children: [
                 _IconBadge(icon: category.icon),
                 const Spacer(),
-                _Pill(
-                  text: l10n.dashboardGoalPercent(
-                    (progress.ratio * 100).round(),
-                  ),
-                ),
+                _Pill(text: l10n.dashboardGoalPercent(progress.percent)),
               ],
             ),
             const SizedBox(height: AppSpacing.lg),

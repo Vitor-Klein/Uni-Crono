@@ -7,14 +7,14 @@ import 'app_harness.dart';
 void main() {
   final demo = HoursSnapshot.fromCertificates(demoCertificates());
 
-  test('CA-01: the demo certificates give 130 of 200 complementary hours and '
-      '45 of 100 extension hours', () {
+  test('CA-01: the demo certificates give 130 of 35 complementary hours and '
+      '45 of 200 extension hours', () {
     final complementary = demo.of(HourCategory.complementary);
     final extension = demo.of(HourCategory.extension);
-    expect((complementary.hours, complementary.goal), (130, 200));
-    expect((extension.hours, extension.goal), (45, 100));
-    expect(complementary.ratio, closeTo(0.65, 1e-9));
-    expect(extension.ratio, closeTo(0.45, 1e-9));
+    expect((complementary.hours, complementary.goal), (130, 35));
+    expect((extension.hours, extension.goal), (45, 200));
+    expect(complementary.ratio, 1.0);
+    expect(extension.ratio, closeTo(0.225, 1e-9));
   });
 
   test('CA-02: the recent list is newest first', () {
@@ -29,16 +29,16 @@ void main() {
   });
 
   test('CA-04: the summary counts every hour and certificate: 175 hours, 5 '
-      'certificates and 58% of the goal', () {
+      'certificates and 74% of the goal', () {
     final summary = demo.summary;
 
     expect(
       (summary.totalHours, summary.certificates, summary.goalPercent),
-      (175, 5, 58),
+      (175, 5, 74),
     );
   });
 
-  test('CA-04: the goal percent rounds down, so 176 of 300 hours is 58%', () {
+  test('CA-04: the goal percent rounds down, so 176 of 235 hours is 74%', () {
     final summary = HoursSnapshot.fromCertificates([
       ...demoCertificates(),
       ApprovedCertificate(
@@ -50,7 +50,7 @@ void main() {
       ),
     ]).summary;
 
-    expect((summary.totalHours, summary.goalPercent), (176, 58));
+    expect((summary.totalHours, summary.goalPercent), (176, 74));
   });
 
   test('CA-05: the progress ratio never goes past 1.0', () {
@@ -64,14 +64,14 @@ void main() {
     expect(over.hours, 210);
   });
 
-  test('CA-07: a student without certificates has 0 of 200 and 0 of 100 '
+  test('CA-07: a student without certificates has 0 of 35 and 0 of 200 '
       'hours, nothing recent and 0% of the goal', () {
     final empty = HoursSnapshot.fromCertificates(const []);
 
     expect(empty.of(HourCategory.complementary).hours, 0);
-    expect(empty.of(HourCategory.complementary).goal, 200);
+    expect(empty.of(HourCategory.complementary).goal, 35);
     expect(empty.of(HourCategory.extension).hours, 0);
-    expect(empty.of(HourCategory.extension).goal, 100);
+    expect(empty.of(HourCategory.extension).goal, 200);
     expect(empty.recent, isEmpty);
     expect(
       (
@@ -83,8 +83,8 @@ void main() {
     );
   });
 
-  test('CA-08: 10 complementary and 15 extension hours give 10 of 200 and 15 '
-      'of 100, newest first', () {
+  test('CA-08: 10 complementary and 15 extension hours give 10 of 35 and 15 '
+      'of 200, newest first', () {
     final snapshot = HoursSnapshot.fromCertificates([
       ApprovedCertificate(
         id: 'a',
