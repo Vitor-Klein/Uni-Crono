@@ -101,24 +101,27 @@ void main() {
     );
   });
 
-  testWidgets('CA-04: the app bar shows the brand, and the avatar opens the '
-      'More modal', (tester) async {
-    await pumpRoutedApp(tester);
+  testWidgets(
+    'CA-04: the app bar shows the brand, and the menu button opens the '
+    'More modal',
+    (tester) async {
+      await pumpRoutedApp(tester);
 
-    expect(
-      find.descendant(
-        of: find.byType(ShellAppBar),
-        matching: find.text('Uni Cronos'),
-      ),
-      findsOneWidget,
-    );
+      expect(
+        find.descendant(
+          of: find.byType(ShellAppBar),
+          matching: find.text('Uni Cronos'),
+        ),
+        findsOneWidget,
+      );
 
-    await tester.tap(find.text('AS'));
-    await tester.pumpAndSettle();
+      await tester.tap(find.bySemanticsLabel('Abrir menu'));
+      await tester.pumpAndSettle();
 
-    expect(find.text('MENSAGENS'), findsOneWidget);
-    expect(find.text('CONFIGURAÇÕES'), findsOneWidget);
-  });
+      expect(find.text('MENSAGENS'), findsOneWidget);
+      expect(find.text('CONFIGURAÇÕES'), findsOneWidget);
+    },
+  );
 
   testWidgets('CA-04: the shell app bar has no back button', (tester) async {
     await pumpRoutedApp(tester);
@@ -139,7 +142,7 @@ void main() {
       notifications: FakeNotificationsPreference(enabled: false),
     );
 
-    await tester.tap(find.text('AS'));
+    await tester.tap(find.bySemanticsLabel('Abrir menu'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('CONFIGURAÇÕES'));
     await tester.pumpAndSettle();
@@ -148,7 +151,7 @@ void main() {
   });
 
   Future<void> openNotifications(WidgetTester tester) async {
-    await tester.tap(find.text('AS'));
+    await tester.tap(find.bySemanticsLabel('Abrir menu'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('CONFIGURAÇÕES'));
     await tester.pumpAndSettle();
@@ -219,37 +222,41 @@ void main() {
     expect(labelStyle.resolve({})!.color, cs.onSurfaceVariant);
   });
 
-  testWidgets('CA-04: the avatar is a 48dp target announced only as the menu '
-      'button', (tester) async {
-    final semantics = tester.ensureSemantics();
-    await pumpRoutedApp(tester);
+  testWidgets(
+    'CA-04: the menu button is a 48dp target announced only as the menu '
+    'button',
+    (tester) async {
+      final semantics = tester.ensureSemantics();
+      await pumpRoutedApp(tester);
 
-    final avatar = find.bySemanticsLabel('Abrir menu');
-    expect(avatar, findsOneWidget);
-    final size = tester.getSize(avatar);
-    expect(size.width, greaterThanOrEqualTo(kMinInteractiveDimension));
-    expect(size.height, greaterThanOrEqualTo(kMinInteractiveDimension));
-    semantics.dispose();
-  });
+      final avatar = find.bySemanticsLabel('Abrir menu');
+      expect(avatar, findsOneWidget);
+      final size = tester.getSize(avatar);
+      expect(size.width, greaterThanOrEqualTo(kMinInteractiveDimension));
+      expect(size.height, greaterThanOrEqualTo(kMinInteractiveDimension));
+      semantics.dispose();
+    },
+  );
 
-  testWidgets('CA-04: screen readers can open the More modal from the avatar', (
-    tester,
-  ) async {
-    final semantics = tester.ensureSemantics();
-    await pumpRoutedApp(tester);
+  testWidgets(
+    'CA-04: screen readers can open the More modal from the menu button',
+    (tester) async {
+      final semantics = tester.ensureSemantics();
+      await pumpRoutedApp(tester);
 
-    final avatar = find.bySemanticsLabel('Abrir menu');
-    expect(
-      tester
-          .getSemantics(avatar)
-          .getSemanticsData()
-          .hasAction(SemanticsAction.tap),
-      isTrue,
-    );
-    tester.semantics.tap(find.semantics.byLabel('Abrir menu'));
-    await tester.pumpAndSettle();
+      final avatar = find.bySemanticsLabel('Abrir menu');
+      expect(
+        tester
+            .getSemantics(avatar)
+            .getSemanticsData()
+            .hasAction(SemanticsAction.tap),
+        isTrue,
+      );
+      tester.semantics.tap(find.semantics.byLabel('Abrir menu'));
+      await tester.pumpAndSettle();
 
-    expect(find.text('MENSAGENS'), findsOneWidget);
-    semantics.dispose();
-  });
+      expect(find.text('MENSAGENS'), findsOneWidget);
+      semantics.dispose();
+    },
+  );
 }

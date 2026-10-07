@@ -7,12 +7,11 @@ import '../../core/theme/app_tokens.dart';
 import '../../features/home/presentation/home_more_modal.dart';
 import '../../features/notifications/presentation/notifications_cubit.dart';
 import '../../features/notifications/presentation/open_notifications_sheet.dart';
-import '../../features/profile/presentation/profile_cubit.dart';
 import '../../l10n/app_localizations.dart';
 import '../app_info.dart';
 
 /// Header of the shell: the cap badge and the brand, left-aligned, and the
-/// student's avatar, which opens the More modal (messages, settings,
+/// "more" button, which opens the More modal (messages, settings,
 /// share/legal, app version).
 ///
 /// Built without `AppBar`: `NextAppBar` only centers a plain title, and the
@@ -87,7 +86,7 @@ class _ShellAppBarState extends State<ShellAppBar> {
                     child: Semantics(header: true, child: const _Wordmark()),
                   ),
                   const SizedBox(width: AppSpacing.sm),
-                  _Avatar(onTap: _openMore),
+                  _MoreButton(onTap: _openMore),
                 ],
               ),
             ),
@@ -159,17 +158,18 @@ class _CapBadge extends StatelessWidget {
   }
 }
 
-/// The student's avatar inside a gold ring: a 48dp target announced as
-/// "Abrir menu".
-class _Avatar extends StatelessWidget {
-  const _Avatar({required this.onTap});
+/// The "more" button: three dots on a soft round surface, a 48dp target
+/// announced as "Abrir menu".
+class _MoreButton extends StatelessWidget {
+  const _MoreButton({required this.onTap});
 
   final VoidCallback onTap;
 
+  static const double _size = 40;
+
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final cs = theme.colorScheme;
+    final cs = Theme.of(context).colorScheme;
     return Semantics(
       button: true,
       label: AppLocalizations.of(context)!.shellMenuSemantics,
@@ -183,42 +183,18 @@ class _Avatar extends StatelessWidget {
           child: Center(
             child: DecoratedBox(
               decoration: BoxDecoration(
+                color: cs.surfaceContainerLowest,
                 shape: BoxShape.circle,
-                border: Border.all(color: cs.primaryContainer, width: 2),
+                boxShadow: AppShadows.md,
               ),
-              child: Padding(
-                padding: const EdgeInsets.all(2),
-                child: CircleAvatar(
-                  radius: 17,
-                  backgroundColor: cs.surfaceContainerLow,
-                  child: _Initials(
-                    style: theme.textTheme.labelLarge?.copyWith(
-                      fontWeight: FontWeight.w700,
-                      color: cs.primary,
-                    ),
-                    iconColor: cs.primary,
-                  ),
-                ),
+              child: SizedBox.square(
+                dimension: _size,
+                child: Icon(Icons.more_vert_outlined, color: cs.onSurface),
               ),
             ),
           ),
         ),
       ),
     );
-  }
-}
-
-/// The student's initials once the profile is loaded; a person icon before.
-class _Initials extends StatelessWidget {
-  const _Initials({required this.style, required this.iconColor});
-
-  final TextStyle? style;
-  final Color iconColor;
-
-  @override
-  Widget build(BuildContext context) {
-    final profile = context.watch<ProfileCubit>().state.profile;
-    if (profile == null) return Icon(Icons.person_outline, color: iconColor);
-    return Text(profile.initials, style: style);
   }
 }

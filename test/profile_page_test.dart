@@ -62,7 +62,7 @@ void main() {
     expect(find.text('58%'), findsOneWidget);
   });
 
-  testWidgets('CA-06: the avatar of the app bar shows the initials of the '
+  testWidgets('CA-06: the profile card shows the initials of the '
       'profile', (tester) async {
     await _openProfile(
       tester,

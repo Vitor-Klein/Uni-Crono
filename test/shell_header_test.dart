@@ -44,6 +44,14 @@ void main() {
     expect(colors, {'Uni': cs.tertiary, 'Cronos': cs.primaryFixedDim});
   });
 
+  testWidgets('CA-17: the top-right button is a "more" icon, not the '
+      "student's initials", (tester) async {
+    await pumpRoutedApp(tester);
+
+    expect(_inHeader(find.byIcon(Icons.more_vert_outlined)), findsOneWidget);
+    expect(_inHeader(find.text('AS')), findsNothing);
+  });
+
   testWidgets('CA-16: the brand is set large and bold, in the headline size', (
     tester,
   ) async {
@@ -87,22 +95,25 @@ void main() {
   });
 
   for (final tab in ['Dashboard', 'Enviar', 'Atividades']) {
-    testWidgets('CA-05: on $tab the avatar is a 48dp target that opens the '
-        'More modal, and the header has no back button', (tester) async {
-      await pumpRoutedApp(tester);
-      await tester.tap(navLabel(tab));
-      await tester.pumpAndSettle();
+    testWidgets(
+      'CA-05: on $tab the menu button is a 48dp target that opens the '
+      'More modal, and the header has no back button',
+      (tester) async {
+        await pumpRoutedApp(tester);
+        await tester.tap(navLabel(tab));
+        await tester.pumpAndSettle();
 
-      final avatar = find.bySemanticsLabel('Abrir menu');
-      expect(tester.getSize(avatar), const Size.square(48));
-      expect(_inHeader(find.byType(IconButton)), findsNothing);
-      expect(_inHeader(find.byType(BackButton)), findsNothing);
+        final menu = find.bySemanticsLabel('Abrir menu');
+        expect(tester.getSize(menu), const Size.square(48));
+        expect(_inHeader(find.byType(IconButton)), findsNothing);
+        expect(_inHeader(find.byType(BackButton)), findsNothing);
 
-      await tester.tap(avatar);
-      await tester.pumpAndSettle();
+        await tester.tap(menu);
+        await tester.pumpAndSettle();
 
-      expect(find.text('MENSAGENS'), findsOneWidget);
-    });
+        expect(find.text('MENSAGENS'), findsOneWidget);
+      },
+    );
   }
 
   testWidgets('CA-06: the header fits a 320dp screen at 1.5x text', (
