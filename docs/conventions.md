@@ -92,7 +92,10 @@ têm o mesmo `top`.
 
 ## Branches
 
-…
+Baseado em tronco: `main` é a única branch permanente e está sempre com os gates
+verdes; funcionalidade nova vai numa branch curta (`feat/`, `fix/`, `docs/`) que
+volta para `main` revisada. O modelo completo, com o diagrama, está em
+[03-planejamento.md](03-planejamento.md#32-estratégia-de-branches).
 
 ## Artefatos que andam juntos
 

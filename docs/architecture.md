@@ -336,6 +336,13 @@ Os valores públicos de build vêm de `--dart-define-from-file=config/app.json`
 Sem eles, o `main()` mostra `ConfigMissingApp` (a mensagem diz como rodar) em
 vez do app. No VS Code, o `.vscode/launch.json` já passa o arquivo.
 
+O Firebase Remote Config guarda os links do menu "Mais": `android_share_url`,
+`ios_share_url`, `web_share_url`, `contact_url`, `privacy_policy_url` e
+`terms_url` (os três últimos abrem no `/webview`). O
+`firebase_remote_config_template.json` tem as chaves, e
+`dart run tool/update_config.dart` o envia ao Firebase (precisa da CLI do
+Firebase logada).
+
 ## Idioma
 
 pt é o idioma oficial. Sem preferência salva, o `MaterialApp` recebe

@@ -1,8 +1,12 @@
 # docs/ — Uni-Crono
 
-Toda a documentação do projeto mora aqui. Ela se divide em duas naturezas que não
+Toda a documentação do projeto mora aqui. Ela se divide em três naturezas que não
 se misturam:
 
+- **Apresentação** — os documentos numerados, para quem avalia ou conhece o
+  projeto: [01-visao-e-requisitos.md](01-visao-e-requisitos.md),
+  [02-arquitetura.md](02-arquitetura.md) e [03-planejamento.md](03-planejamento.md).
+  Resumem e apontam para o estado; não o repetem em detalhe.
 - **Estado** — `architecture.md` e `conventions.md`: o sistema como ele é hoje.
 - **Processo** — `specs/` e `plans/`: o que se decidiu fazer, e como.
 
