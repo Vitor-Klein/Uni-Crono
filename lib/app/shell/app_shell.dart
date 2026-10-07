@@ -4,18 +4,23 @@ import 'package:go_router/go_router.dart';
 import '../../l10n/app_localizations.dart';
 import 'shell_app_bar.dart';
 
-/// Frame of the signed-in app: the current tab and the bottom navigation.
+/// Frame of the signed-in app: the header, the current tab and the bottom
+/// navigation. The profile has no header: it opens on the student's card.
 class AppShell extends StatelessWidget {
   const AppShell({required this.navigationShell, super.key});
 
   final StatefulNavigationShell navigationShell;
+
+  static const _profileIndex = 3;
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final cs = Theme.of(context).colorScheme;
     return Scaffold(
-      appBar: const ShellAppBar(),
+      appBar: navigationShell.currentIndex == _profileIndex
+          ? null
+          : const ShellAppBar(),
       body: navigationShell,
       bottomNavigationBar: NavigationBarTheme(
         data: NavigationBarTheme.of(context).copyWith(

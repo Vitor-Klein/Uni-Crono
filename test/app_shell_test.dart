@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 
 import 'package:uni_cronos/app/app_router.dart';
 import 'package:uni_cronos/app/shell/app_shell.dart';
+import 'package:uni_cronos/app/shell/shell_app_bar.dart';
 import 'package:uni_cronos/core/navigation/app_routes.dart';
 import 'package:uni_cronos/features/opportunities/presentation/opportunities_page.dart';
 
@@ -106,7 +107,7 @@ void main() {
 
     expect(
       find.descendant(
-        of: find.byType(AppBar),
+        of: find.byType(ShellAppBar),
         matching: find.text('Uni Cronos'),
       ),
       findsOneWidget,
@@ -124,7 +125,7 @@ void main() {
 
     expect(
       find.descendant(
-        of: find.byType(AppBar),
+        of: find.byType(ShellAppBar),
         matching: find.byType(IconButton),
       ),
       findsNothing,

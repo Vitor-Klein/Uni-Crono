@@ -47,6 +47,8 @@ final designColors = <String, (Color Function(ColorScheme), Color)>{
   'primaryContainer': ((c) => c.primaryContainer, const Color(0xFFFECB29)),
   'onPrimaryContainer': ((c) => c.onPrimaryContainer, const Color(0xFF6F5600)),
   'secondary': ((c) => c.secondary, const Color(0xFF5B5F61)),
+  'tertiary': ((c) => c.tertiary, const Color(0xFF1E3A6E)),
+  'primaryFixedDim': ((c) => c.primaryFixedDim, const Color(0xFFF0B400)),
   'surface': ((c) => c.surface, const Color(0xFFF9F9F9)),
   'surfaceContainerLowest': (
     (c) => c.surfaceContainerLowest,
@@ -101,6 +103,8 @@ void main() {
 
         const addedRoles = [
           'primaryContainer',
+          'tertiary',
+          'primaryFixedDim',
           'onPrimaryContainer',
           'surfaceContainerLowest',
           'surfaceContainerLow',

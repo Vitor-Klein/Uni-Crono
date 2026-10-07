@@ -259,6 +259,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dashboardSeeAll => 'See all';
 
   @override
+  String dashboardGoalPercent(int percent) {
+    return '$percent%';
+  }
+
+  @override
   String certificateHours(int hours) {
     return '+$hours h';
   }

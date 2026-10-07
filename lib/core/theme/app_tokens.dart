@@ -8,6 +8,14 @@ import 'package:flutter/material.dart';
 abstract final class AppColorRoles {
   static const primaryContainer = Color(0xFFFECB29);
   static const onPrimaryContainer = Color(0xFF6F5600);
+
+  /// Dark blue of the brand mark (the cap in the header). Replaces the
+  /// factory's tertiary, which the design does not use.
+  static const tertiary = Color(0xFF1E3A6E);
+
+  /// Gold of the "Cronos" in the brand wordmark. As a logotype it is exempt
+  /// from the text contrast minimum, which it does not meet.
+  static const primaryFixedDim = Color(0xFFF0B400);
   static const surfaceContainerLowest = Color(0xFFFFFFFF);
   static const surfaceContainerLow = Color(0xFFF3F3F4);
   static const surfaceContainer = Color(0xFFEEEEEE);
@@ -26,6 +34,8 @@ abstract final class AppColorRoles {
   }) => scheme.copyWith(
     primaryContainer: filter(primaryContainer),
     onPrimaryContainer: filter(onPrimaryContainer),
+    tertiary: filter(tertiary),
+    primaryFixedDim: filter(primaryFixedDim),
     surfaceContainerLowest: filter(surfaceContainerLowest),
     surfaceContainerLow: filter(surfaceContainerLow),
     surfaceContainer: filter(surfaceContainer),
@@ -60,6 +70,9 @@ abstract final class AppRadii {
   static const double sm = 4;
   static const double md = 8;
   static const double lg = 12;
+
+  /// Large cards: the profile card, grouped settings, the More sheet.
+  static const double xl = 20;
 
   /// Fully rounded ends: chips, pills, avatars.
   static const double pill = 9999;

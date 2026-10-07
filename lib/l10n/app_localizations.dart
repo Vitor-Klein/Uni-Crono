@@ -586,6 +586,12 @@ abstract class AppLocalizations {
   /// **'Ver todos'**
   String get dashboardSeeAll;
 
+  /// No description provided for @dashboardGoalPercent.
+  ///
+  /// In pt, this message translates to:
+  /// **'{percent}%'**
+  String dashboardGoalPercent(int percent);
+
   /// No description provided for @certificateHours.
   ///
   /// In pt, this message translates to:

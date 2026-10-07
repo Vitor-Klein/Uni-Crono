@@ -89,6 +89,7 @@
   "hoursGoalTotal": "{goal} total",
   "dashboardRecentTitle": "Recently approved",
   "dashboardSeeAll": "See all",
+  "dashboardGoalPercent": "{percent}%",
   "certificateHours": "+{hours} h",
   "certificateApproved": "Approved",
   "hoursProgressSemantics": "{hours} of {goal} hours",

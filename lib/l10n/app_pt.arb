@@ -95,6 +95,8 @@
   },
   "dashboardRecentTitle": "Aprovados recentemente",
   "dashboardSeeAll": "Ver todos",
+  "dashboardGoalPercent": "{percent}%",
+  "@dashboardGoalPercent": {"placeholders": {"percent": {"type": "int"}}},
   "certificateHours": "+{hours} h",
   "@certificateHours": {
     "placeholders": { "hours": { "type": "int" } }

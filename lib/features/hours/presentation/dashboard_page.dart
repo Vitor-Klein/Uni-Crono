@@ -28,16 +28,19 @@ class _DashboardView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
     final state = context.watch<DashboardCubit>().state;
     final snapshot = state.snapshot;
     return ListView(
-      padding: const EdgeInsets.all(AppSpacing.screenGutter),
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.screenGutter,
+        AppSpacing.sm,
+        AppSpacing.screenGutter,
+        AppSpacing.screenGutter,
+      ),
       children: [
-        Text(
-          l10n.dashboardTitle,
-          style: Theme.of(context).textTheme.headlineSmall,
-        ),
-        const SizedBox(height: AppSpacing.xl),
+        Text(l10n.dashboardTitle, style: theme.textTheme.headlineSmall),
+        const SizedBox(height: AppSpacing.lg),
         if (state.failed)
           _LoadError(onRetry: context.read<DashboardCubit>().retry)
         else if (snapshot == null)
@@ -47,13 +50,13 @@ class _DashboardView extends StatelessWidget {
             _ProgressCard(progress: progress),
             const SizedBox(height: AppSpacing.lg),
           ],
-          const SizedBox(height: AppSpacing.sm),
+          const SizedBox(height: AppSpacing.md),
           Row(
             children: [
               Expanded(
                 child: Text(
                   l10n.dashboardRecentTitle,
-                  style: Theme.of(context).textTheme.titleLarge,
+                  style: theme.textTheme.titleLarge,
                 ),
               ),
               TextButton(
@@ -64,13 +67,7 @@ class _DashboardView extends StatelessWidget {
             ],
           ),
           const SizedBox(height: AppSpacing.sm),
-          if (snapshot.recent.isEmpty)
-            Text(
-              l10n.dashboardEmpty,
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
-            ),
+          if (snapshot.recent.isEmpty) _EmptyRecent(text: l10n.dashboardEmpty),
           for (final certificate in snapshot.recent) ...[
             _CertificateTile(certificate: certificate),
             const SizedBox(height: AppSpacing.md),
@@ -107,6 +104,74 @@ class _LoadError extends StatelessWidget {
   }
 }
 
+/// White card of the dashboard: large radius and the soft gold shadow.
+BoxDecoration _cardDecoration(ColorScheme cs, {double radius = AppRadii.xl}) =>
+    BoxDecoration(
+      color: cs.surfaceContainerLowest,
+      borderRadius: BorderRadius.circular(radius),
+      boxShadow: AppShadows.lg,
+    );
+
+/// An icon on a soft gold badge: the brand yellow as an accent.
+class _IconBadge extends StatelessWidget {
+  const _IconBadge({required this.icon});
+
+  final IconData icon;
+
+  static const double _size = 44;
+
+  @override
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    return ExcludeSemantics(
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: cs.primaryContainer.withValues(alpha: 0.2),
+          borderRadius: BorderRadius.circular(AppRadii.lg),
+        ),
+        child: SizedBox.square(
+          dimension: _size,
+          child: Icon(icon, color: cs.onPrimaryContainer),
+        ),
+      ),
+    );
+  }
+}
+
+/// A short value in a rounded pill: the share of the goal, the hours of a
+/// certificate.
+class _Pill extends StatelessWidget {
+  const _Pill({required this.text});
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final cs = theme.colorScheme;
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: cs.primaryContainer.withValues(alpha: 0.2),
+        borderRadius: BorderRadius.circular(AppRadii.pill),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.md,
+          vertical: AppSpacing.xs,
+        ),
+        child: Text(
+          text,
+          style: theme.textTheme.labelLarge?.copyWith(
+            fontWeight: FontWeight.w700,
+            color: cs.onPrimaryContainer,
+            height: 1.5,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class _ProgressCard extends StatelessWidget {
   const _ProgressCard({required this.progress});
 
@@ -119,26 +184,29 @@ class _ProgressCard extends StatelessWidget {
     final cs = theme.colorScheme;
     final category = progress.category;
     return DecoratedBox(
-      decoration: BoxDecoration(
-        color: cs.surfaceContainerLowest,
-        borderRadius: BorderRadius.circular(AppRadii.md),
-        boxShadow: AppShadows.sm,
-      ),
+      decoration: _cardDecoration(cs),
       child: Padding(
         padding: const EdgeInsets.all(AppSpacing.xl),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CircleAvatar(
-              backgroundColor: cs.surfaceContainer,
-              child: Icon(category.icon, color: cs.primary),
+            Row(
+              children: [
+                _IconBadge(icon: category.icon),
+                const Spacer(),
+                _Pill(
+                  text: l10n.dashboardGoalPercent(
+                    (progress.ratio * 100).round(),
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(height: AppSpacing.md),
+            const SizedBox(height: AppSpacing.lg),
             Text(category.title(l10n), style: theme.textTheme.titleLarge),
             const SizedBox(height: AppSpacing.xs),
             Text(
               category.subtitle(l10n),
-              style: theme.textTheme.bodyLarge?.copyWith(
+              style: theme.textTheme.bodyMedium?.copyWith(
                 color: cs.onSurfaceVariant,
               ),
             ),
@@ -154,7 +222,7 @@ class _ProgressCard extends StatelessWidget {
                   child: LinearProgressIndicator(
                     value: progress.ratio,
                     color: cs.primary,
-                    minHeight: AppSpacing.sm,
+                    minHeight: AppSpacing.md,
                     backgroundColor: cs.surfaceContainer,
                   ),
                 ),
@@ -171,13 +239,50 @@ class _ProgressCard extends StatelessWidget {
                     l10n.hoursAccumulated(progress.hours),
                     style: theme.textTheme.labelLarge?.copyWith(
                       fontWeight: FontWeight.w700,
+                      color: cs.onSurface,
                     ),
                   ),
                   Text(
                     l10n.hoursGoalTotal(progress.goal),
-                    style: theme.textTheme.labelLarge,
+                    style: theme.textTheme.labelLarge?.copyWith(
+                      color: cs.onSurfaceVariant,
+                    ),
                   ),
                 ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _EmptyRecent extends StatelessWidget {
+  const _EmptyRecent({required this.text});
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final cs = theme.colorScheme;
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: cs.surfaceContainerLow,
+        borderRadius: BorderRadius.circular(AppRadii.xl),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(AppSpacing.xl),
+        child: Column(
+          children: [
+            Icon(Icons.inbox_outlined, color: cs.onSurfaceVariant),
+            const SizedBox(height: AppSpacing.sm),
+            Text(
+              text,
+              textAlign: TextAlign.center,
+              style: theme.textTheme.bodyLarge?.copyWith(
+                color: cs.onSurfaceVariant,
               ),
             ),
           ],
@@ -198,25 +303,24 @@ class _CertificateTile extends StatelessWidget {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
     return DecoratedBox(
-      decoration: BoxDecoration(
-        color: cs.surfaceContainerLowest,
-        borderRadius: BorderRadius.circular(AppRadii.md),
-        boxShadow: AppShadows.sm,
-      ),
+      decoration: _cardDecoration(cs, radius: AppRadii.lg),
       child: Padding(
         padding: const EdgeInsets.all(AppSpacing.lg),
         child: Row(
           children: [
-            CircleAvatar(
-              backgroundColor: cs.surfaceContainer,
-              child: Icon(certificate.category.icon, color: cs.primary),
-            ),
+            _IconBadge(icon: certificate.category.icon),
             const SizedBox(width: AppSpacing.md),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(certificate.title, style: theme.textTheme.titleMedium),
+                  Text(
+                    certificate.title,
+                    style: theme.textTheme.bodyLarge?.copyWith(
+                      fontWeight: FontWeight.w600,
+                      color: cs.onSurface,
+                    ),
+                  ),
                   Text(
                     certificate.category.title(l10n),
                     style: theme.textTheme.bodyMedium?.copyWith(
@@ -230,18 +334,24 @@ class _CertificateTile extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Text(
-                  l10n.certificateHours(certificate.hours),
-                  style: theme.textTheme.labelLarge?.copyWith(
-                    fontWeight: FontWeight.w700,
-                    color: cs.primary,
-                  ),
-                ),
-                Text(
-                  l10n.certificateApproved,
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: cs.onSurfaceVariant,
-                  ),
+                _Pill(text: l10n.certificateHours(certificate.hours)),
+                const SizedBox(height: AppSpacing.xs),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.check_circle_outline,
+                      size: AppSpacing.lg,
+                      color: cs.primary,
+                    ),
+                    const SizedBox(width: AppSpacing.xs),
+                    Text(
+                      l10n.certificateApproved,
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: cs.onSurfaceVariant,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
