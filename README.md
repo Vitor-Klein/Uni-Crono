@@ -25,8 +25,11 @@ O projeto foi gerado a partir do *base_nextup_template* (Flutter). Para rodar lo
 # Instalar as dependências
 flutter pub get
 
-# Rodar o app
-flutter run
+# Configuração do servidor (uma vez): copie o exemplo e preencha
+cp config/app.example.json config/app.json
+
+# Rodar o app (no VS Code, o F5 já passa a configuração: .vscode/launch.json)
+flutter run --dart-define-from-file=config/app.json
 
 # Analisar o código (custom lint rules)
 dart run custom_lint

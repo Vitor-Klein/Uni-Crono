@@ -215,5 +215,7 @@
   "profileSignOut": "Sair",
   "profileSignOutTitle": "Sair da conta?",
   "profileSignOutBody": "Você vai precisar entrar de novo para ver suas horas.",
-  "profileLoadError": "Não foi possível carregar seu perfil"
+  "profileLoadError": "Não foi possível carregar seu perfil",
+
+  "configMissingMessage": "O app não encontrou a configuração do servidor. Rode com --dart-define-from-file=config/app.json."
 }

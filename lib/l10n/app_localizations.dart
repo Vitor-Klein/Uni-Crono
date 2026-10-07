@@ -1179,6 +1179,12 @@ abstract class AppLocalizations {
   /// In pt, this message translates to:
   /// **'Não foi possível carregar seu perfil'**
   String get profileLoadError;
+
+  /// No description provided for @configMissingMessage.
+  ///
+  /// In pt, this message translates to:
+  /// **'O app não encontrou a configuração do servidor. Rode com --dart-define-from-file=config/app.json.'**
+  String get configMissingMessage;
 }
 
 class _AppLocalizationsDelegate

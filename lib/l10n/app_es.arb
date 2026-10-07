@@ -193,5 +193,7 @@
   "profileSignOut": "Salir",
   "profileSignOutTitle": "¿Salir de la cuenta?",
   "profileSignOutBody": "Tendrás que entrar de nuevo para ver tus horas.",
-  "profileLoadError": "No se pudo cargar tu perfil"
+  "profileLoadError": "No se pudo cargar tu perfil",
+
+  "configMissingMessage": "La app no encontró la configuración del servidor. Ejecútala con --dart-define-from-file=config/app.json."
 }

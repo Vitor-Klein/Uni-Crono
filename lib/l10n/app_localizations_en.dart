@@ -578,4 +578,8 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get profileLoadError => 'Could not load your profile';
+
+  @override
+  String get configMissingMessage =>
+      'The app did not find the server settings. Run it with --dart-define-from-file=config/app.json.';
 }

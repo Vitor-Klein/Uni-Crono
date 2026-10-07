@@ -193,5 +193,7 @@
   "profileSignOut": "Sign out",
   "profileSignOutTitle": "Sign out?",
   "profileSignOutBody": "You will need to sign in again to see your hours.",
-  "profileLoadError": "Could not load your profile"
+  "profileLoadError": "Could not load your profile",
+
+  "configMissingMessage": "The app did not find the server settings. Run it with --dart-define-from-file=config/app.json."
 }
