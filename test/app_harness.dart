@@ -381,6 +381,8 @@ class FakeLinkOpener implements LinkOpener {
 /// Pumps the real app — splash, router and shell — with [prefs] stored and
 /// no splash wait, and settles on the first screen after the splash. Signed
 /// in as [demoSession] unless [signedIn] is false or [auth] says otherwise.
+/// With [settle] false it stops at the first frame, on the splash, which then
+/// lasts [splashDuration].
 Future<void> pumpRoutedApp(
   WidgetTester tester, {
   Map<String, Object> prefs = const {},
@@ -393,6 +395,8 @@ Future<void> pumpRoutedApp(
   OpportunityRepository? opportunities,
   ProfileRepository? profile,
   LinkOpener? links,
+  Duration splashDuration = Duration.zero,
+  bool settle = true,
 }) async {
   SharedPreferences.setMockInitialValues(prefs);
   PackageInfo.setMockInitialValues(
@@ -414,13 +418,10 @@ Future<void> pumpRoutedApp(
       profileRepository: profile ?? FakeProfileRepository(),
       linkOpener: links ?? FakeLinkOpener(),
       notificationsPreference: notifications ?? FakeNotificationsPreference(),
-      child: const MyApp(
-        enforceUpgradeGate: false,
-        splashDuration: Duration.zero,
-      ),
+      child: MyApp(enforceUpgradeGate: false, splashDuration: splashDuration),
     ),
   );
-  await tester.pumpAndSettle();
+  if (settle) await tester.pumpAndSettle();
 }
 
 /// The path the router is on.
