@@ -116,7 +116,7 @@ raios continuam vindo de `lib/core/theme/`.
 // lib/core/theme/app_tokens.dart — AppColorRoles
 static const primaryContainer = Color(0xFFFECB29);   // sem mudança
 static const onPrimaryContainer = Color(0xFF6F5600); // sem mudança
-static const primaryFixedDim = Color(0xFFF0B400);    // novo: "Cronos"
+static const primaryFixedDim = Color(0xFFFFD238);    // novo: "Cronos"
 static const tertiary = Color(0xFF4E3B00);           // novo: chapéu e "Uni"
 
 // AppRadii
@@ -169,7 +169,8 @@ class ShellAppBar extends StatefulWidget implements PreferredSizeWidget {
 - **Duas cores de marca novas.** "Cronos" pediu um dourado mais escuro que o
   amarelo de fundo; tentar escurecer o próprio `primaryContainer` deixou o selo
   e o indicador da aba escuros demais. Ficou: `primaryContainer` como antes
-  (fundos) e `primaryFixedDim` `#F0B400` para o texto — o ouro da imagem de
+  (fundos) e `primaryFixedDim` para o texto — por fim `#FFD238`, pedido pelo
+  hex, depois do ouro `#F0B400` da imagem de
   referência, depois de testar `#FECB29`, `#E06C00`, `#D97400` e `#FFB300`.
   O tom do chapéu e do "Uni" entrou como `tertiary` (primeiro azul-escuro
   `#1E3A6E`, depois, a pedido, marrom-escuro `#4E3B00`, um tom abaixo do

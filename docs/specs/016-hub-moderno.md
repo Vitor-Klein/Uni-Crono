@@ -37,7 +37,8 @@ cartões mais limpos.
 ## Critérios de aceite
 
 - **CA-01:** O título "Hub de Oportunidades" fica sozinho, sem selo nem ícone,
-  no tamanho de `headlineSmall`.
+  grande (`headlineLarge`, Bold); num celular de 360dp, quebra em "Hub de" sobre
+  "Oportunidades" inteira.
 - **CA-02:** A busca é um campo arredondado em pílula, com a lupa, e continua
   anunciada como "Buscar oportunidades".
 - **CA-03:** As horas de cada cartão ficam num selo junto do ícone de relógio.
@@ -60,8 +61,8 @@ cartões mais limpos.
 - **Sem ícone no título.** O selo amarelo com `explore_outlined` ao lado de
   "Hub de Oportunidades" (RF-01) foi feito e depois retirado a pedido; o
   título ficou sozinho em `headlineSmall`, e o CA-01 passou a exigir isso.
-- O título deixou o `displayMedium` do Figma pelo `headlineSmall`, o mesmo do
-  Dashboard.
+- O título deixou o `displayMedium` do Figma; passou pelo `headlineSmall` e, a
+  pedido, ficou no `headlineLarge` (36px Bold), para chamar mais atenção.
 
 ## Perguntas em aberto
 

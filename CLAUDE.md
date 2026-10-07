@@ -67,11 +67,12 @@ está lá.
   - Idioma oficial **pt**: o app abre em pt qualquer que seja o idioma do
     aparelho; en e es são traduções, só por escolha salva do usuário. O ARB de
     referência é `lib/l10n/app_pt.arb`.
-  - Só tema claro por enquanto: `themeMode` fixo em `ThemeMode.light`. A escolha
-    de tema do menu de acessibilidade fica visível e é salva, sem efeito.
+  - Tema claro e escuro: o `themeMode` segue a escolha do menu de acessibilidade
+    (Sistema / Claro / Escuro). Toda tela funciona nos dois.
   - Cor, tipografia, espaçamento, raio e sombra vêm de `lib/core/theme/`
-    (`app_tokens.dart` + `_LightConfig`), nunca literais em widget novo. Papel de
-    cor novo passa pelo filtro de daltonismo exatamente uma vez.
+    (`app_tokens.dart` + `_LightConfig`/`_DarkConfig`), nunca literais em widget
+    novo. Papel de cor novo entra nas duas paletas (`AppColorRoles.light` e
+    `.dark`) e passa pelo filtro de daltonismo exatamente uma vez.
   - Fontes empacotadas em `assets/fonts/` (sem `google_fonts`).
   - Ícones: `Icons.*_outlined` do SDK; nenhum pacote de ícones.
   - A fonte do design é a Page 1 do Figma do Uni Cronos; a Page 2 é de outro

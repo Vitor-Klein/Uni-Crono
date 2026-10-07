@@ -60,7 +60,10 @@ respeita a preferência de "reduzir animações":
   `ProfileCubit` (perfil e resumo das horas) nascem no `pageBuilder` da casca.
   Sair da conta tira o app da casca e descarta os dois.
 
-A splash (`SplashScreen(duration:)`, 3 s por padrão) leva a `/dashboard`. O
+A splash (`SplashScreen(duration:)`, 3 s por padrão) abre com um zoom: a imagem
+vai de 85% e transparente a 100% e opaca em 1,2 s (`easeOutCubic`); com
+animações reduzidas (`isAnimationDisabled`), já aparece inteira. Ela leva a
+`/dashboard` (sem sessão, o `redirect` manda para `/login`). O
 `redirect` é a função pura `AppRouter.resolveRedirect`, nesta ordem:
 
 1. a splash sempre passa;
@@ -289,7 +292,8 @@ publicadas).
 - Carregando, indicador; com falha, "Não foi possível carregar as
   oportunidades" e "Tentar de novo"; puxar para baixo recarrega; sem resultado,
   "Nenhuma oportunidade encontrada".
-- Título "Hub de Oportunidades" em `headlineSmall`, como o do Dashboard. A busca
+- Título "Hub de Oportunidades" grande, em `headlineLarge` Bold, para chamar a
+  atenção: no celular quebra em "Hub de" / "Oportunidades". A busca
   é um campo branco em pílula (`AppRadii.pill`), com sombra suave e lupa em
   `primary`; os filtros são pílulas, a selecionada em `primaryContainer` e as
   outras brancas com borda `outlineVariant`.
@@ -354,14 +358,16 @@ subclasse de `S` com os textos em pt, sem passar por `S.load` — que alteraria 
 
 ## Tema e design system
 
-O app renderiza **só o tema claro**: o `MaterialApp` recebe `themeMode:
-ThemeMode.light` e não tem `darkTheme`. A escolha de tema do menu de
-acessibilidade continua lá e é salva pelo `AppThemeCubit`, mas não muda o que é
-renderizado.
+O app tem **tema claro e escuro**: o `MaterialApp` recebe `theme`, `darkTheme` e
+o `themeMode` do `AppThemeCubit`, que segue a escolha salva no menu de
+acessibilidade — Sistema (o do aparelho), Claro ou Escuro. Nenhum widget escolhe
+cor pelo tema: todos leem do `ColorScheme`, e a troca é só de tokens. O header
+pede ícones da barra de status escuros no claro e claros no escuro.
 
 O tema é montado em duas camadas:
 
-1. **`AppThemeFactory`** (`next_core_service`), alimentado pelo `_LightConfig` de
+1. **`AppThemeFactory`** (`next_core_service`), alimentado pelo `_LightConfig` e
+   pelo `_DarkConfig` de
    `lib/core/theme/template_theme_provider.dart`. Ele monta só dez papéis de cor
    (`primary`, `secondary`, `tertiary`, `error`, `surface` e seus `on*`), uma
    `fontFamily` (Inter) e as cores de quatro estilos de texto.
@@ -369,7 +375,8 @@ O tema é montado em duas camadas:
    não monta, a partir de `lib/core/theme/app_tokens.dart`:
    - `AppColorRoles.applyTo` — `primaryContainer`/`onPrimaryContainer`,
      `primaryFixedDim`, `tertiary` (substitui o do factory), `surfaceContainer*`,
-     `onSurfaceVariant`, `outline*`, `errorContainer`/`onErrorContainer`;
+     `onSurfaceVariant`, `outline*`, `errorContainer`/`onErrorContainer`, do
+     conjunto `AppColorRoles.light` ou `.dark` conforme o brilho do esquema;
    - `AppTypography.applyTo` — a escala tipográfica;
    - o estilo dos botões preenchidos (`primaryContainer`/`onPrimaryContainer`) e
      o acento de TextButton, Switch, progresso e seleção (`accent1` = `primary`).
@@ -386,7 +393,7 @@ aplica a matriz duas vezes.
 |---|---|---|---|
 | `primary` | `#755B00` | `onPrimary` | `#FFFFFF` |
 | `primaryContainer` | `#FECB29` | `onPrimaryContainer` | `#6F5600` |
-| `primaryFixedDim` | `#F0B400` | `tertiary` | `#4E3B00` |
+| `primaryFixedDim` | `#FFD238` | `tertiary` | `#4E3B00` |
 | `secondary` | `#5B5F61` | `onSecondary` | `#FFFFFF` |
 | `surface` | `#F9F9F9` | `onSurface` | `#1A1C1C` |
 | `surfaceContainerLowest` | `#FFFFFF` | `onSurfaceVariant` | `#4E4633` |
@@ -395,12 +402,30 @@ aplica a matriz duas vezes.
 | `surfaceContainerHigh` | `#E8E8E8` | `error` / `onError` | `#BA1A1A` / `#FFFFFF` |
 | `surfaceContainerHighest` | `#E2E2E2` | `errorContainer` / `onErrorContainer` | `#FFDAD6` / `#93000A` |
 
-O fundo das telas é `surface`; cards e folhas ficam nos `surfaceContainer*`. O
-texto do tema é opaco: `onSurface` no principal, `onSurfaceVariant` em
-`bodyMedium`/`bodySmall`. Todo par texto/fundo do esquema tem contraste ≥ 4.5:1.
-`primaryFixedDim` e `tertiary` são cores da marca (o "Cronos" e o chapéu do
-header), não papéis de texto: o dourado sobre `surface` não chega a 4.5:1 e só
-aparece no logotipo.
+### Cores (tema escuro)
+
+Preto amarronzado com o dourado da marca como acento.
+
+| Papel | Hex | Papel | Hex |
+|---|---|---|---|
+| `primary` | `#F2C14E` | `onPrimary` | `#3D2F00` |
+| `primaryContainer` | `#5A4500` | `onPrimaryContainer` | `#FFE08B` |
+| `primaryFixedDim` | `#FFD238` | `tertiary` | `#F3E6C8` |
+| `secondary` | `#C4C7C9` | `onSecondary` | `#2D3133` |
+| `surface` | `#15130F` | `onSurface` | `#EDE7DB` |
+| `surfaceContainerLowest` | `#221F19` | `onSurfaceVariant` | `#D3C8B1` |
+| `surfaceContainerLow` | `#2B2720` | `outline` | `#9C917A` |
+| `surfaceContainer` | `#353028` | `outlineVariant` | `#4F4738` |
+| `surfaceContainerHigh` | `#403A31` | `error` / `onError` | `#FFB4AB` / `#690005` |
+| `surfaceContainerHighest` | `#4B443A` | `errorContainer` / `onErrorContainer` | `#93000A` / `#FFDAD6` |
+
+O fundo das telas é `surface`; cards e folhas ficam nos `surfaceContainer*` —
+os cards em `surfaceContainerLowest`, que é o branco no claro e um tom acima do
+fundo no escuro. O texto do tema é opaco: `onSurface` no principal,
+`onSurfaceVariant` em `bodyMedium`/`bodySmall`. Nas duas paletas, todo par
+texto/fundo do esquema tem contraste ≥ 4.5:1. `primaryFixedDim` e `tertiary` são
+cores da marca (o "Cronos" e o chapéu do header), não papéis de texto: no claro,
+o amarelo sobre `surface` não chega a 4.5:1 e só aparece no logotipo.
 
 ### Tipografia
 
