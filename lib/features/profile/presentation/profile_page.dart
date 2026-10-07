@@ -44,56 +44,52 @@ class ProfilePage extends StatelessWidget {
     final cs = Theme.of(context).colorScheme;
     final state = context.watch<ProfileCubit>().state;
     final notificationsOn = context.watch<NotificationsCubit>().state;
-    // No header on this tab: the page keeps clear of the status bar itself.
-    return SafeArea(
-      bottom: false,
-      child: ListView(
-        padding: const EdgeInsets.all(AppSpacing.screenGutter),
-        children: [
-          _StudentCard(state: state),
-          const SizedBox(height: AppSpacing.xxl),
-          _SectionTitle(l10n.profilePreferences),
-          _Group(
-            children: [
-              _SettingsTile(
-                icon: notificationsOn
-                    ? Icons.notifications_active_outlined
-                    : Icons.notifications_off_outlined,
-                title: l10n.profileNotifications,
-                subtitle: notificationsOn
-                    ? l10n.enabledLabel
-                    : l10n.disabledLabel,
-                onTap: () => openNotificationsSheet(context),
-              ),
-              _SettingsTile(
-                icon: Icons.language_outlined,
-                title: l10n.profileLanguage,
-                subtitle: languageName(Localizations.localeOf(context)),
-                onTap: () => openLanguageSheet(context),
-              ),
-              _SettingsTile(
-                icon: Icons.accessibility_new_outlined,
-                title: l10n.profileAccessibility,
-                subtitle: l10n.settingsAccessibilitySubtitle,
-                onTap: () => openAccessibilitySheet(context),
-              ),
-            ],
-          ),
-          const SizedBox(height: AppSpacing.xl),
-          _SectionTitle(l10n.profileAccount),
-          _Group(
-            children: [
-              _SettingsTile(
-                icon: Icons.logout_outlined,
-                title: l10n.profileSignOut,
-                color: cs.error,
-                badgeColor: cs.errorContainer,
-                onTap: () => _confirmSignOut(context),
-              ),
-            ],
-          ),
-        ],
-      ),
+    return ListView(
+      padding: const EdgeInsets.all(AppSpacing.screenGutter),
+      children: [
+        _StudentCard(state: state),
+        const SizedBox(height: AppSpacing.xxl),
+        _SectionTitle(l10n.profilePreferences),
+        _Group(
+          children: [
+            _SettingsTile(
+              icon: notificationsOn
+                  ? Icons.notifications_active_outlined
+                  : Icons.notifications_off_outlined,
+              title: l10n.profileNotifications,
+              subtitle: notificationsOn
+                  ? l10n.enabledLabel
+                  : l10n.disabledLabel,
+              onTap: () => openNotificationsSheet(context),
+            ),
+            _SettingsTile(
+              icon: Icons.language_outlined,
+              title: l10n.profileLanguage,
+              subtitle: languageName(Localizations.localeOf(context)),
+              onTap: () => openLanguageSheet(context),
+            ),
+            _SettingsTile(
+              icon: Icons.accessibility_new_outlined,
+              title: l10n.profileAccessibility,
+              subtitle: l10n.settingsAccessibilitySubtitle,
+              onTap: () => openAccessibilitySheet(context),
+            ),
+          ],
+        ),
+        const SizedBox(height: AppSpacing.xl),
+        _SectionTitle(l10n.profileAccount),
+        _Group(
+          children: [
+            _SettingsTile(
+              icon: Icons.logout_outlined,
+              title: l10n.profileSignOut,
+              color: cs.error,
+              badgeColor: cs.errorContainer,
+              onTap: () => _confirmSignOut(context),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

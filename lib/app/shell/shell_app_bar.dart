@@ -158,7 +158,7 @@ class _CapBadge extends StatelessWidget {
   }
 }
 
-/// The "more" button: three dots on a soft round surface, a 48dp target
+/// The "more" button: a nine-dot grid on a soft round surface, a 48dp target
 /// announced as "Abrir menu".
 class _MoreButton extends StatelessWidget {
   const _MoreButton({required this.onTap});
@@ -189,7 +189,7 @@ class _MoreButton extends StatelessWidget {
               ),
               child: SizedBox.square(
                 dimension: _size,
-                child: Icon(Icons.more_vert_outlined, color: cs.onSurface),
+                child: Icon(Icons.apps_outlined, color: cs.onSurface),
               ),
             ),
           ),

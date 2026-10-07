@@ -44,13 +44,16 @@ void main() {
     expect(colors, {'Uni': cs.tertiary, 'Cronos': cs.primaryFixedDim});
   });
 
-  testWidgets('CA-17: the top-right button is a "more" icon, not the '
-      "student's initials", (tester) async {
-    await pumpRoutedApp(tester);
+  testWidgets(
+    'CA-17: the top-right button is the nine-dot "more" icon, not the '
+    "student's initials",
+    (tester) async {
+      await pumpRoutedApp(tester);
 
-    expect(_inHeader(find.byIcon(Icons.more_vert_outlined)), findsOneWidget);
-    expect(_inHeader(find.text('AS')), findsNothing);
-  });
+      expect(_inHeader(find.byIcon(Icons.apps_outlined)), findsOneWidget);
+      expect(_inHeader(find.text('AS')), findsNothing);
+    },
+  );
 
   testWidgets('CA-16: the brand is set large and bold, in the headline size', (
     tester,
@@ -85,13 +88,17 @@ void main() {
     });
   }
 
-  testWidgets('CA-04: the profile has no header', (tester) async {
+  testWidgets('CA-04: the profile has the same header, with the brand and the '
+      'menu button', (tester) async {
     await pumpRoutedApp(tester);
+    final dashboardHeight = tester.getSize(find.byType(ShellAppBar)).height;
 
     await tester.tap(navLabel('Perfil'));
     await tester.pumpAndSettle();
 
-    expect(find.byType(ShellAppBar), findsNothing);
+    expect(_inHeader(find.text('Uni Cronos')), findsOneWidget);
+    expect(_inHeader(find.byIcon(Icons.apps_outlined)), findsOneWidget);
+    expect(tester.getSize(find.byType(ShellAppBar)).height, dashboardHeight);
   });
 
   for (final tab in ['Dashboard', 'Enviar', 'Atividades']) {
