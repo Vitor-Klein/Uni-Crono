@@ -1,3 +1,4 @@
+import '../../../core/utils/fold_text.dart';
 import '../../hours/domain/hours.dart';
 
 enum OpportunityKind { course, event }
@@ -46,7 +47,7 @@ List<Opportunity> visibleOpportunities(
   required OpportunityFilter filter,
   required String query,
 }) {
-  final needle = foldForSearch(query.trim());
+  final needle = foldText(query.trim());
   bool kept(Opportunity o) => switch (filter) {
     OpportunityFilter.all => true,
     OpportunityFilter.courses => o.kind == OpportunityKind.course,
@@ -56,25 +57,10 @@ List<Opportunity> visibleOpportunities(
   };
   bool found(Opportunity o) =>
       needle.isEmpty ||
-      foldForSearch(
-        '${o.title} ${o.description} ${o.provider}',
-      ).contains(needle);
+      foldText('${o.title} ${o.description} ${o.provider}').contains(needle);
   final far = DateTime(9999);
   return all.where((o) => kept(o) && found(o)).toList()..sort((a, b) {
     if (a.featured != b.featured) return a.featured ? -1 : 1;
     return (a.startsAt ?? far).compareTo(b.startsAt ?? far);
   });
-}
-
-const _accented = 'áàâãäéèêëíìîïóòôõöúùûüçñ';
-const _plain = 'aaaaaeeeeiiiiooooouuuucn';
-
-/// Lower case without accents, so "Extensão" is found by "extensao".
-String foldForSearch(String text) {
-  final buffer = StringBuffer();
-  for (final char in text.toLowerCase().split('')) {
-    final index = _accented.indexOf(char);
-    buffer.write(index < 0 ? char : _plain[index]);
-  }
-  return buffer.toString();
 }
