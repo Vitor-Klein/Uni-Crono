@@ -9,9 +9,10 @@ abstract final class AppColorRoles {
   static const primaryContainer = Color(0xFFFECB29);
   static const onPrimaryContainer = Color(0xFF6F5600);
 
-  /// Dark blue of the brand mark (the cap in the header). Replaces the
+  /// Dark brown of the brand mark (the cap and "Uni" in the header), a deeper
+  /// shade of the progress-bar `primary`. Replaces the
   /// factory's tertiary, which the design does not use.
-  static const tertiary = Color(0xFF1E3A6E);
+  static const tertiary = Color(0xFF4E3B00);
 
   /// Gold of the "Cronos" in the brand wordmark. As a logotype it is exempt
   /// from the text contrast minimum, which it does not meet.

@@ -47,40 +47,73 @@ class _HubViewState extends State<_HubView> {
     final theme = Theme.of(context);
     final cubit = context.read<OpportunitiesCubit>();
     final state = context.watch<OpportunitiesCubit>().state;
+    final cs = theme.colorScheme;
     final visible = state.visible;
+    const pill = BorderRadius.all(Radius.circular(AppRadii.pill));
     return RefreshIndicator(
       onRefresh: cubit.load,
       child: ListView(
-        padding: const EdgeInsets.all(AppSpacing.screenGutter),
+        padding: const EdgeInsets.fromLTRB(
+          AppSpacing.screenGutter,
+          AppSpacing.sm,
+          AppSpacing.screenGutter,
+          AppSpacing.screenGutter,
+        ),
         children: [
-          Text(l10n.hubTitle, style: theme.textTheme.displayMedium),
+          Text(l10n.hubTitle, style: theme.textTheme.headlineSmall),
           const SizedBox(height: AppSpacing.sm),
           Text(
             l10n.hubSubtitle,
             style: theme.textTheme.bodyLarge?.copyWith(
-              color: theme.colorScheme.onSurfaceVariant,
+              color: cs.onSurfaceVariant,
             ),
           ),
           const SizedBox(height: AppSpacing.xl),
-          Semantics(
-            label: l10n.hubSearchLabel,
-            child: TextField(
-              controller: _search,
-              onChanged: cubit.setQuery,
-              textInputAction: TextInputAction.search,
-              decoration: InputDecoration(
-                hintText: l10n.hubSearchHint,
-                prefixIcon: const Icon(Icons.search_outlined),
-                filled: true,
-                fillColor: theme.colorScheme.surfaceContainerLow,
-                border: const OutlineInputBorder(
-                  borderSide: BorderSide.none,
-                  borderRadius: BorderRadius.all(Radius.circular(AppRadii.md)),
+          DecoratedBox(
+            decoration: const BoxDecoration(
+              borderRadius: pill,
+              boxShadow: AppShadows.lg,
+            ),
+            child: Semantics(
+              label: l10n.hubSearchLabel,
+              child: TextField(
+                controller: _search,
+                onChanged: cubit.setQuery,
+                textInputAction: TextInputAction.search,
+                decoration: InputDecoration(
+                  hintText: l10n.hubSearchHint,
+                  hintStyle: theme.textTheme.bodyLarge?.copyWith(
+                    color: cs.onSurfaceVariant,
+                  ),
+                  prefixIcon: Padding(
+                    padding: const EdgeInsets.only(
+                      left: AppSpacing.lg,
+                      right: AppSpacing.sm,
+                    ),
+                    child: Icon(Icons.search_outlined, color: cs.primary),
+                  ),
+                  filled: true,
+                  fillColor: cs.surfaceContainerLowest,
+                  contentPadding: const EdgeInsets.symmetric(
+                    vertical: AppSpacing.lg,
+                  ),
+                  border: const OutlineInputBorder(
+                    borderSide: BorderSide.none,
+                    borderRadius: pill,
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: cs.outlineVariant),
+                    borderRadius: pill,
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: cs.primary, width: 2),
+                    borderRadius: pill,
+                  ),
                 ),
               ),
             ),
           ),
-          const SizedBox(height: AppSpacing.md),
+          const SizedBox(height: AppSpacing.lg),
           Wrap(
             spacing: AppSpacing.sm,
             runSpacing: AppSpacing.sm,
@@ -89,7 +122,17 @@ class _HubViewState extends State<_HubView> {
                 ChoiceChip(
                   label: Text(_filterLabel(l10n, filter)),
                   selected: state.filter == filter,
-                  selectedColor: theme.colorScheme.primaryContainer,
+                  selectedColor: cs.primaryContainer,
+                  backgroundColor: cs.surfaceContainerLowest,
+                  side: state.filter == filter
+                      ? BorderSide.none
+                      : BorderSide(color: cs.outlineVariant),
+                  shape: const StadiumBorder(),
+                  labelStyle: theme.textTheme.labelLarge?.copyWith(
+                    color: state.filter == filter
+                        ? cs.onPrimaryContainer
+                        : cs.onSurfaceVariant,
+                  ),
                   showCheckmark: false,
                   onSelected: (_) => cubit.setFilter(filter),
                 ),
@@ -131,6 +174,31 @@ class _HubViewState extends State<_HubView> {
         OpportunityFilter.extension => l10n.hubFilterExtension,
         OpportunityFilter.complementary => l10n.hubFilterComplementary,
       };
+}
+
+/// An icon on a soft gold badge: the brand yellow as an accent.
+class _IconBadge extends StatelessWidget {
+  const _IconBadge({required this.icon, this.size = 44});
+
+  final IconData icon;
+  final double size;
+
+  @override
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    return ExcludeSemantics(
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: cs.primaryContainer.withValues(alpha: 0.2),
+          borderRadius: BorderRadius.circular(AppRadii.lg),
+        ),
+        child: SizedBox.square(
+          dimension: size,
+          child: Icon(icon, size: size / 2, color: cs.onPrimaryContainer),
+        ),
+      ),
+    );
+  }
 }
 
 class _LoadError extends StatelessWidget {
@@ -180,93 +248,123 @@ class _OpportunityCard extends StatelessWidget {
         ? Icons.menu_book_outlined
         : Icons.event_outlined;
     void signUp() => context.read<LinkOpener>().open(url!);
-    return Card(
-      margin: EdgeInsets.zero,
-      color: cs.surfaceContainerLowest,
-      clipBehavior: Clip.antiAlias,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AppRadii.md),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          if (featured)
-            ColoredBox(
-              color: cs.surfaceContainer,
-              child: Padding(
-                padding: const EdgeInsets.all(AppSpacing.xxl),
-                child: Icon(kindIcon, size: AppSpacing.xxxl, color: cs.primary),
+    final radius = BorderRadius.circular(AppRadii.xl);
+    return DecoratedBox(
+      decoration: BoxDecoration(borderRadius: radius, boxShadow: AppShadows.lg),
+      child: Card(
+        margin: EdgeInsets.zero,
+        elevation: 0,
+        color: cs.surfaceContainerLowest,
+        clipBehavior: Clip.antiAlias,
+        shape: RoundedRectangleBorder(borderRadius: radius),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            if (featured)
+              ColoredBox(
+                color: cs.primaryContainer.withValues(alpha: 0.2),
+                child: Padding(
+                  padding: const EdgeInsets.all(AppSpacing.xxl),
+                  child: Icon(
+                    kindIcon,
+                    size: AppSpacing.xxxl,
+                    color: cs.onPrimaryContainer,
+                  ),
+                ),
               ),
-            ),
-          Padding(
-            padding: const EdgeInsets.all(AppSpacing.xl),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    if (!featured) ...[
-                      Icon(kindIcon, color: cs.primary),
-                      const SizedBox(width: AppSpacing.sm),
-                    ],
-                    Expanded(
-                      child: Text(
-                        _tag(l10n, o).toUpperCase(),
-                        style: theme.textTheme.labelSmall?.copyWith(
-                          color: cs.onSurfaceVariant,
+            Padding(
+              padding: const EdgeInsets.all(AppSpacing.xl),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      if (!featured) ...[
+                        _IconBadge(icon: kindIcon, size: 36),
+                        const SizedBox(width: AppSpacing.md),
+                      ],
+                      Expanded(
+                        child: Text(
+                          _tag(l10n, o).toUpperCase(),
+                          style: theme.textTheme.labelSmall?.copyWith(
+                            color: cs.onSurfaceVariant,
+                          ),
                         ),
                       ),
+                    ],
+                  ),
+                  const SizedBox(height: AppSpacing.md),
+                  Text(
+                    o.title,
+                    style: featured
+                        ? theme.textTheme.headlineSmall
+                        : theme.textTheme.titleLarge,
+                  ),
+                  const SizedBox(height: AppSpacing.sm),
+                  Text(
+                    _meta(context, l10n, o),
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: cs.onSurfaceVariant,
+                      fontWeight: FontWeight.w500,
                     ),
-                  ],
-                ),
-                const SizedBox(height: AppSpacing.sm),
-                Text(
-                  o.title,
-                  style: featured
-                      ? theme.textTheme.headlineMedium
-                      : theme.textTheme.titleLarge,
-                ),
-                const SizedBox(height: AppSpacing.sm),
-                Text(
-                  _meta(context, l10n, o),
-                  style: theme.textTheme.bodyMedium,
-                ),
-                const SizedBox(height: AppSpacing.sm),
-                Text(o.description, style: theme.textTheme.bodyMedium),
-                const SizedBox(height: AppSpacing.lg),
-                Wrap(
-                  alignment: WrapAlignment.spaceBetween,
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  spacing: AppSpacing.sm,
-                  runSpacing: AppSpacing.sm,
-                  children: [
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(Icons.schedule_outlined, color: cs.primary),
-                        const SizedBox(width: AppSpacing.xs),
-                        Text(
-                          l10n.hubHours(o.hours),
-                          style: theme.textTheme.labelLarge,
+                  ),
+                  const SizedBox(height: AppSpacing.sm),
+                  Text(o.description, style: theme.textTheme.bodyMedium),
+                  const SizedBox(height: AppSpacing.lg),
+                  Wrap(
+                    alignment: WrapAlignment.spaceBetween,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    spacing: AppSpacing.sm,
+                    runSpacing: AppSpacing.sm,
+                    children: [
+                      DecoratedBox(
+                        key: const ValueKey('hub-hours-pill'),
+                        decoration: BoxDecoration(
+                          color: cs.primaryContainer.withValues(alpha: 0.2),
+                          borderRadius: BorderRadius.circular(AppRadii.pill),
                         ),
-                      ],
-                    ),
-                    if (url != null)
-                      featured
-                          ? FilledButton(
-                              onPressed: signUp,
-                              child: Text(l10n.hubSignUp),
-                            )
-                          : OutlinedButton(
-                              onPressed: signUp,
-                              child: Text(l10n.hubSignUp),
-                            ),
-                  ],
-                ),
-              ],
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: AppSpacing.md,
+                            vertical: AppSpacing.sm,
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.schedule_outlined,
+                                size: AppSpacing.lg + AppSpacing.xs,
+                                color: cs.onPrimaryContainer,
+                              ),
+                              const SizedBox(width: AppSpacing.xs),
+                              Text(
+                                l10n.hubHours(o.hours),
+                                style: theme.textTheme.labelLarge?.copyWith(
+                                  fontWeight: FontWeight.w700,
+                                  color: cs.onPrimaryContainer,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      if (url != null)
+                        featured
+                            ? FilledButton(
+                                onPressed: signUp,
+                                child: Text(l10n.hubSignUp),
+                              )
+                            : OutlinedButton(
+                                onPressed: signUp,
+                                child: Text(l10n.hubSignUp),
+                              ),
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

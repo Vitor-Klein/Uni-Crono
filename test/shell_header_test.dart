@@ -18,7 +18,7 @@ void main() {
     expect(_inHeader(find.textContaining('Olá')), findsNothing);
   });
 
-  testWidgets('CA-11: the cap is painted in the dark blue of the scheme', (
+  testWidgets('CA-11: the cap is painted in the dark brown of the scheme', (
     tester,
   ) async {
     await pumpRoutedApp(tester);
@@ -28,7 +28,7 @@ void main() {
     expect(cap.color, cs.tertiary);
   });
 
-  testWidgets('CA-15: the brand reads "Uni" in dark blue and "Cronos" in '
+  testWidgets('CA-15: the brand reads "Uni" in dark brown and "Cronos" in '
       'gold', (tester) async {
     await pumpRoutedApp(tester);
 

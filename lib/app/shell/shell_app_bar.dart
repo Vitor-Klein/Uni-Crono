@@ -97,7 +97,7 @@ class _ShellAppBarState extends State<ShellAppBar> {
   }
 }
 
-/// The brand in two colors: the first word ("Uni") in dark blue, the rest
+/// The brand in two colors: the first word ("Uni") in dark brown, the rest
 /// ("Cronos") in gold, large and bold. It scales down to fit a narrow header
 /// rather than being cut short.
 class _Wordmark extends StatelessWidget {
@@ -133,7 +133,7 @@ class _Wordmark extends StatelessWidget {
   }
 }
 
-/// The brand mark: a filled dark-blue graduation cap on a round gold badge.
+/// The brand mark: a filled dark-brown graduation cap on a round gold badge.
 class _CapBadge extends StatelessWidget {
   const _CapBadge();
 
