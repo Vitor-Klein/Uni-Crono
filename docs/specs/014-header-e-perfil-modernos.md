@@ -28,7 +28,7 @@ raios continuam vindo de `lib/core/theme/`.
 ### Header (`ShellAppBar`)
 
 - **RF-01:** À esquerda, um selo redondo amarelo com o chapéu de formatura
-  **preenchido** em azul-escuro, e a marca: "Uni" em azul-escuro e "Cronos" em
+  **preenchido** em marrom-escuro, e a marca: "Uni" em marrom-escuro e "Cronos" em
   dourado.
 - **RF-02:** À direita, o botão "mais" (três pontos num círculo branco), no
   lugar do avatar com as iniciais. Continua alvo de 48dp, anunciado como
@@ -80,7 +80,7 @@ raios continuam vindo de `lib/core/theme/`.
 - **CA-09:** Notificações, Idioma e Acessibilidade mostram a seta
   (`chevron_right_outlined`); "Sair" não tem seta.
 - **CA-10:** O Perfil cabe em 320dp a 1x e 360dp a 1,5x de texto sem estourar.
-- **CA-11:** O chapéu do header é pintado em `tertiary` (azul-escuro).
+- **CA-11:** O chapéu do header é pintado em `tertiary` (marrom-escuro).
 - **CA-12:** Cada cartão de categoria do Dashboard mostra a % da meta ("65%",
   "45%"); acima da meta, mostra "100%".
 - **CA-13:** Nenhum cartão do Perfil usa `primaryContainer` como fundo.
@@ -106,7 +106,7 @@ raios continuam vindo de `lib/core/theme/`.
   passam pelo filtro de daltonismo exatamente uma vez.
 - O amarelo de fundo (`primaryContainer`) é acento: selos e indicador da aba —
   nunca fundo de cartão no Perfil.
-- `primaryFixedDim` (dourado) e `tertiary` (azul-escuro) são cores da marca, só
+- `primaryFixedDim` (dourado) e `tertiary` (marrom-escuro) são cores da marca, só
   no logotipo do header; não servem para texto corrido.
 - Todo alvo tocável do header e do Perfil tem pelo menos 48dp.
 
@@ -117,7 +117,7 @@ raios continuam vindo de `lib/core/theme/`.
 static const primaryContainer = Color(0xFFFECB29);   // sem mudança
 static const onPrimaryContainer = Color(0xFF6F5600); // sem mudança
 static const primaryFixedDim = Color(0xFFF0B400);    // novo: "Cronos"
-static const tertiary = Color(0xFF1E3A6E);           // novo: chapéu e "Uni"
+static const tertiary = Color(0xFF4E3B00);           // novo: chapéu e "Uni"
 
 // AppRadii
 static const double xl = 20;                         // novo: cartões grandes
@@ -171,7 +171,9 @@ class ShellAppBar extends StatefulWidget implements PreferredSizeWidget {
   e o indicador da aba escuros demais. Ficou: `primaryContainer` como antes
   (fundos) e `primaryFixedDim` `#F0B400` para o texto — o ouro da imagem de
   referência, depois de testar `#FECB29`, `#E06C00`, `#D97400` e `#FFB300`.
-  O azul-escuro do chapéu e do "Uni" entrou como `tertiary`, substituindo o do
+  O tom do chapéu e do "Uni" entrou como `tertiary` (primeiro azul-escuro
+  `#1E3A6E`, depois, a pedido, marrom-escuro `#4E3B00`, um tom abaixo do
+  `primary` da barra de progresso), substituindo o do
   factory, que o design não usava.
 - **Marca maior** (`headlineSmall`, 28px, em vez de `titleLarge`), num
   `FittedBox` que a encolhe em vez de cortá-la em tela estreita. O peso fica no

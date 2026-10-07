@@ -289,10 +289,15 @@ publicadas).
 - Carregando, indicador; com falha, "Não foi possível carregar as
   oportunidades" e "Tentar de novo"; puxar para baixo recarrega; sem resultado,
   "Nenhuma oportunidade encontrada".
-- O destaque é um card com bloco ilustrado (ícone do tipo sobre
-  `surfaceContainer`, no lugar da foto do Figma) e botão preenchido; os outros
-  são cards com botão contornado. O controlador da busca pertence à página,
-  porque a lista é preguiçosa.
+- Título "Hub de Oportunidades" em `headlineSmall`, como o do Dashboard. A busca
+  é um campo branco em pílula (`AppRadii.pill`), com sombra suave e lupa em
+  `primary`; os filtros são pílulas, a selecionada em `primaryContainer` e as
+  outras brancas com borda `outlineVariant`.
+- Os cards são brancos, `AppRadii.xl`, com `AppShadows.lg`; o ícone do tipo vai
+  num selo dourado suave e as horas num selo com relógio. O destaque tem o
+  bloco ilustrado (ícone do tipo sobre dourado suave, no lugar da foto do
+  Figma) e botão preenchido; os outros, botão contornado. O controlador da
+  busca pertence à página, porque a lista é preguiçosa.
 
 ## Perfil
 
@@ -381,7 +386,7 @@ aplica a matriz duas vezes.
 |---|---|---|---|
 | `primary` | `#755B00` | `onPrimary` | `#FFFFFF` |
 | `primaryContainer` | `#FECB29` | `onPrimaryContainer` | `#6F5600` |
-| `primaryFixedDim` | `#F0B400` | `tertiary` | `#1E3A6E` |
+| `primaryFixedDim` | `#F0B400` | `tertiary` | `#4E3B00` |
 | `secondary` | `#5B5F61` | `onSecondary` | `#FFFFFF` |
 | `surface` | `#F9F9F9` | `onSurface` | `#1A1C1C` |
 | `surfaceContainerLowest` | `#FFFFFF` | `onSurfaceVariant` | `#4E4633` |
