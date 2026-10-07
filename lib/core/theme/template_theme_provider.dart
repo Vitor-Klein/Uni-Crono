@@ -28,52 +28,66 @@ class TemplateThemeConfigProvider extends AppThemeConfigProvider {
       mode == ThemeModeType.dark ? _dark : _light;
 }
 
-/// Dark mode: light navigation over the dark Scaffold background.
-/// `primaryColor` is white because the transparent NextAppBar paints the
-/// title, the icons and the status bar with it — it must contrast against
-/// `primaryBackgroundColor`, not against a bar of its own.
+/// Dark mode: the warm near-black of the brand, with the gold as the accent.
+/// The gold `primaryColor` is the foreground painted by the transparent
+/// NextAppBar and the progress bars, so it must contrast against
+/// `primaryBackgroundColor`. The roles the factory does not build come from
+/// `AppColorRoles.dark` (`app_tokens.dart`).
 class _DarkConfig extends DefaultAppThemeDarkConfig {
-  /// Navigation **foreground**: NextAppBar title/icons/back button (the bar
-  /// itself is transparent), NextSnack text and status bar. It is not the
-  /// backdrop of the bar — that one comes from the Scaffold/surface.
   @override
-  Color get primaryColor => const Color(0xFFFFFFFF);
+  String get fontFamily => AppTypography.body;
+
+  /// Navigation **foreground** (NextAppBar title/icons, NextSnack text) and
+  /// the progress bars.
+  @override
+  Color get primaryColor => const Color(0xFFF2C14E);
 
   /// Icons and text over the primary background (filled primary surfaces).
   @override
-  Color get onPrimaryColor => const Color(0xFFFFFFFF);
+  Color get onPrimaryColor => const Color(0xFF3D2F00);
 
-  /// Accent color for interactive elements: TextButton foreground, Switch,
-  /// ProgressIndicator and text selection (`app/app.dart`'s `builder`, wired
-  /// through the color-blindness filter `f()`). Indigo — the one hue not
-  /// already used by error/warning/success/info, so it never reads as a
-  /// severity state.
   @override
-  Color get accent1Color => const Color(0xFFA99BFF);
+  Color get secondaryColor => const Color(0xFFC4C7C9);
+
+  @override
+  Color get onSecondaryColor => const Color(0xFF2D3133);
+
+  /// Accent for interactive elements: TextButton foreground, Switch,
+  /// ProgressIndicator and text selection. The same gold as [primaryColor],
+  /// as in light.
+  @override
+  Color get accent1Color => const Color(0xFFF2C14E);
 
   /// Main Scaffold background (the screen behind every widget).
   @override
-  Color get primaryBackgroundColor => const Color(0xFF121214);
+  Color get primaryBackgroundColor => const Color(0xFF15130F);
 
   /// Background of secondary containers (drawers, side panels, alt sections).
   @override
-  Color get secondaryBackgroundColor => const Color(0xFF2A2A30);
+  Color get secondaryBackgroundColor => const Color(0xFF2B2720);
 
-  /// Background of cards, chips, dialogs and bottom sheets.
+  /// The screen color, as in light (`surface` = the Scaffold background); the
+  /// cards use `surfaceContainerLowest`.
   @override
-  Color get surfaceColor => const Color(0xFF1D1D21);
+  Color get surfaceColor => const Color(0xFF15130F);
 
   /// Text and icons over surfaces (cards, chips, dialogs).
   @override
-  Color get onSurfaceColor => const Color(0xFFFFFFFF);
+  Color get onSurfaceColor => const Color(0xFFEDE7DB);
+
+  @override
+  Color get textPrimaryColor => const Color(0xFFEDE7DB);
+
+  @override
+  Color get textSecondaryColor => const Color(0xFFD3C8B1);
 
   /// Severity: error (destructive, failure). Becomes colorScheme.error.
   @override
-  Color get errorColor => const Color(0xFFFF8A80);
+  Color get errorColor => const Color(0xFFFFB4AB);
 
   /// Text and icons over the error background. Becomes colorScheme.onError.
   @override
-  Color get onErrorColor => const Color(0xFF000000);
+  Color get onErrorColor => const Color(0xFF690005);
 
   /// Severity: warning (attention, degradation). Becomes AppColorsExtra.warning.
   @override
@@ -88,7 +102,7 @@ class _DarkConfig extends DefaultAppThemeDarkConfig {
   Color get infoColor => const Color(0xFF64B5F6);
 }
 
-/// Light mode — the only one the app renders (see `app/app.dart`). The gold
+/// Light mode, the default one (the dark is [_DarkConfig]). The gold
 /// `primaryColor` is the foreground painted by the transparent NextAppBar, so
 /// it must contrast against `primaryBackgroundColor`.
 /// Filled buttons (FilledButton/ElevatedButton) use the yellow
@@ -145,7 +159,7 @@ class _LightConfig extends DefaultAppThemeLightConfig {
   Color get textPrimaryColor => const Color(0xFF1A1C1C);
 
   /// Secondary text (bodyMedium, bodySmall). Opaque, same as
-  /// `AppColorRoles.onSurfaceVariant`.
+  /// `AppColorRoles.light.onSurfaceVariant`.
   @override
   Color get textSecondaryColor => const Color(0xFF4E4633);
 

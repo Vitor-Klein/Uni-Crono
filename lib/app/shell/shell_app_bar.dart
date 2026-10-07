@@ -64,9 +64,12 @@ class _ShellAppBarState extends State<ShellAppBar> {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
     return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: SystemUiOverlayStyle.dark.copyWith(
-        statusBarColor: Colors.transparent,
-      ),
+      // Dark status bar icons over the light header, light ones over the dark.
+      value:
+          (theme.brightness == Brightness.dark
+                  ? SystemUiOverlayStyle.light
+                  : SystemUiOverlayStyle.dark)
+              .copyWith(statusBarColor: Colors.transparent),
       child: Material(
         color: cs.surface,
         child: SafeArea(
@@ -98,7 +101,7 @@ class _ShellAppBarState extends State<ShellAppBar> {
 }
 
 /// The brand in two colors: the first word ("Uni") in dark brown, the rest
-/// ("Cronos") in gold, large and bold. It scales down to fit a narrow header
+/// ("Cronos") in yellow, large and bold. It scales down to fit a narrow header
 /// rather than being cut short.
 class _Wordmark extends StatelessWidget {
   const _Wordmark();

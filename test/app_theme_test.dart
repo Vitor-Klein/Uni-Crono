@@ -48,7 +48,7 @@ final designColors = <String, (Color Function(ColorScheme), Color)>{
   'onPrimaryContainer': ((c) => c.onPrimaryContainer, const Color(0xFF6F5600)),
   'secondary': ((c) => c.secondary, const Color(0xFF5B5F61)),
   'tertiary': ((c) => c.tertiary, const Color(0xFF4E3B00)),
-  'primaryFixedDim': ((c) => c.primaryFixedDim, const Color(0xFFF0B400)),
+  'primaryFixedDim': ((c) => c.primaryFixedDim, const Color(0xFFFFD238)),
   'surface': ((c) => c.surface, const Color(0xFFF9F9F9)),
   'surfaceContainerLowest': (
     (c) => c.surfaceContainerLowest,
@@ -371,15 +371,15 @@ void main() {
   });
 
   group('theme mode', () {
-    testWidgets('CA-06: renders light when the saved preference is dark', (
+    testWidgets('CA-06: renders dark when the saved preference is dark', (
       tester,
     ) async {
       final theme = await pumpAppTheme(tester, prefs: {'theme_mode': 1});
 
-      expect(theme.brightness, Brightness.light);
+      expect(theme.brightness, Brightness.dark);
     });
 
-    testWidgets('CA-06: renders light when following a dark system', (
+    testWidgets('CA-06: renders dark when following a dark system', (
       tester,
     ) async {
       tester.platformDispatcher.platformBrightnessTestValue = Brightness.dark;
@@ -387,12 +387,12 @@ void main() {
 
       final theme = await pumpAppTheme(tester, prefs: {'theme_mode': 2});
 
-      expect(theme.brightness, Brightness.light);
+      expect(theme.brightness, Brightness.dark);
     });
 
     testWidgets(
-      'CA-07: choosing dark in the accessibility menu saves it and keeps '
-      'rendering light',
+      'CA-07: choosing dark in the accessibility menu saves it and renders '
+      'dark',
       (tester) async {
         final theme = await pumpApp(
           tester,
@@ -418,7 +418,7 @@ void main() {
 
         final prefs = await SharedPreferences.getInstance();
         expect(prefs.getInt('theme_mode'), 1);
-        expect(theme().brightness, Brightness.light);
+        expect(theme().brightness, Brightness.dark);
       },
     );
   });

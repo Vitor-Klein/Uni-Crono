@@ -1,53 +1,112 @@
 import 'package:flutter/material.dart';
 
-/// Color roles of the light scheme that `AppThemeFactory` does not assemble —
-/// it only builds primary/secondary/tertiary/error/surface and their `on*`.
+/// Color roles that `AppThemeFactory` does not assemble — it only builds
+/// primary/secondary/tertiary/error/surface and their `on*` — in a light and
+/// a dark set.
 ///
 /// Applied on top of the factory's `ColorScheme` by the `builder` in
 /// `app/app.dart`, which runs each one through the color-blindness filter.
-abstract final class AppColorRoles {
-  static const primaryContainer = Color(0xFFFECB29);
-  static const onPrimaryContainer = Color(0xFF6F5600);
+final class AppColorRoles {
+  const AppColorRoles._({
+    required this.primaryContainer,
+    required this.onPrimaryContainer,
+    required this.tertiary,
+    required this.primaryFixedDim,
+    required this.surfaceContainerLowest,
+    required this.surfaceContainerLow,
+    required this.surfaceContainer,
+    required this.surfaceContainerHigh,
+    required this.surfaceContainerHighest,
+    required this.onSurfaceVariant,
+    required this.outline,
+    required this.outlineVariant,
+    required this.errorContainer,
+    required this.onErrorContainer,
+  });
 
-  /// Dark brown of the brand mark (the cap and "Uni" in the header), a deeper
-  /// shade of the progress-bar `primary`. Replaces the
-  /// factory's tertiary, which the design does not use.
-  static const tertiary = Color(0xFF4E3B00);
+  static const light = AppColorRoles._(
+    primaryContainer: Color(0xFFFECB29),
+    onPrimaryContainer: Color(0xFF6F5600),
+    tertiary: Color(0xFF4E3B00),
+    primaryFixedDim: Color(0xFFFFD238),
+    surfaceContainerLowest: Color(0xFFFFFFFF),
+    surfaceContainerLow: Color(0xFFF3F3F4),
+    surfaceContainer: Color(0xFFEEEEEE),
+    surfaceContainerHigh: Color(0xFFE8E8E8),
+    surfaceContainerHighest: Color(0xFFE2E2E2),
+    onSurfaceVariant: Color(0xFF4E4633),
+    outline: Color(0xFF807660),
+    outlineVariant: Color(0xFFD2C5AC),
+    errorContainer: Color(0xFFFFDAD6),
+    onErrorContainer: Color(0xFF93000A),
+  );
 
-  /// Gold of the "Cronos" in the brand wordmark. As a logotype it is exempt
-  /// from the text contrast minimum, which it does not meet.
-  static const primaryFixedDim = Color(0xFFF0B400);
-  static const surfaceContainerLowest = Color(0xFFFFFFFF);
-  static const surfaceContainerLow = Color(0xFFF3F3F4);
-  static const surfaceContainer = Color(0xFFEEEEEE);
-  static const surfaceContainerHigh = Color(0xFFE8E8E8);
-  static const surfaceContainerHighest = Color(0xFFE2E2E2);
-  static const onSurfaceVariant = Color(0xFF4E4633);
-  static const outline = Color(0xFF807660);
-  static const outlineVariant = Color(0xFFD2C5AC);
-  static const errorContainer = Color(0xFFFFDAD6);
-  static const onErrorContainer = Color(0xFF93000A);
+  /// Warm near-black with the brand gold as the accent. The cards
+  /// (`surfaceContainerLowest`) sit one shade above the screen, so they stand
+  /// out the way the white cards do in light.
+  static const dark = AppColorRoles._(
+    primaryContainer: Color(0xFF5A4500),
+    onPrimaryContainer: Color(0xFFFFE08B),
+    tertiary: Color(0xFFF3E6C8),
+    primaryFixedDim: Color(0xFFFFD238),
+    surfaceContainerLowest: Color(0xFF221F19),
+    surfaceContainerLow: Color(0xFF2B2720),
+    surfaceContainer: Color(0xFF353028),
+    surfaceContainerHigh: Color(0xFF403A31),
+    surfaceContainerHighest: Color(0xFF4B443A),
+    onSurfaceVariant: Color(0xFFD3C8B1),
+    outline: Color(0xFF9C917A),
+    outlineVariant: Color(0xFF4F4738),
+    errorContainer: Color(0xFF93000A),
+    onErrorContainer: Color(0xFFFFDAD6),
+  );
 
-  /// Returns [scheme] with the roles above, each passed through [filter].
+  final Color primaryContainer;
+  final Color onPrimaryContainer;
+
+  /// The brand mark (the cap and "Uni" in the header): dark brown, a deeper
+  /// shade of the progress-bar `primary`, in light; cream in dark. Replaces
+  /// the factory's tertiary, which the design does not use.
+  final Color tertiary;
+
+  /// Yellow of the "Cronos" in the brand wordmark. As a logotype it is exempt
+  /// from the text contrast minimum, which it does not meet in light.
+  final Color primaryFixedDim;
+  final Color surfaceContainerLowest;
+  final Color surfaceContainerLow;
+  final Color surfaceContainer;
+  final Color surfaceContainerHigh;
+  final Color surfaceContainerHighest;
+  final Color onSurfaceVariant;
+  final Color outline;
+  final Color outlineVariant;
+  final Color errorContainer;
+  final Color onErrorContainer;
+
+  /// Returns [scheme] with the roles of its brightness, each passed through
+  /// [filter].
   static ColorScheme applyTo(
     ColorScheme scheme, {
     required Color Function(Color) filter,
-  }) => scheme.copyWith(
-    primaryContainer: filter(primaryContainer),
-    onPrimaryContainer: filter(onPrimaryContainer),
-    tertiary: filter(tertiary),
-    primaryFixedDim: filter(primaryFixedDim),
-    surfaceContainerLowest: filter(surfaceContainerLowest),
-    surfaceContainerLow: filter(surfaceContainerLow),
-    surfaceContainer: filter(surfaceContainer),
-    surfaceContainerHigh: filter(surfaceContainerHigh),
-    surfaceContainerHighest: filter(surfaceContainerHighest),
-    onSurfaceVariant: filter(onSurfaceVariant),
-    outline: filter(outline),
-    outlineVariant: filter(outlineVariant),
-    errorContainer: filter(errorContainer),
-    onErrorContainer: filter(onErrorContainer),
-  );
+  }) {
+    final r = scheme.brightness == Brightness.dark ? dark : light;
+    return scheme.copyWith(
+      primaryContainer: filter(r.primaryContainer),
+      onPrimaryContainer: filter(r.onPrimaryContainer),
+      tertiary: filter(r.tertiary),
+      primaryFixedDim: filter(r.primaryFixedDim),
+      surfaceContainerLowest: filter(r.surfaceContainerLowest),
+      surfaceContainerLow: filter(r.surfaceContainerLow),
+      surfaceContainer: filter(r.surfaceContainer),
+      surfaceContainerHigh: filter(r.surfaceContainerHigh),
+      surfaceContainerHighest: filter(r.surfaceContainerHighest),
+      onSurfaceVariant: filter(r.onSurfaceVariant),
+      outline: filter(r.outline),
+      outlineVariant: filter(r.outlineVariant),
+      errorContainer: filter(r.errorContainer),
+      onErrorContainer: filter(r.onErrorContainer),
+    );
+  }
 }
 
 /// Spacing scale (4-point grid) of the design.

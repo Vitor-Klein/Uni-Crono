@@ -167,11 +167,11 @@ class _MyAppState extends State<MyApp> {
               title: kAppName,
               debugShowCheckedModeBanner: false,
               scaffoldMessengerKey: AppRouter.scaffoldMessengerKey,
-              // The app only has a light theme: the theme choice in the
-              // accessibility menu is still saved, but it does not change
-              // what is rendered.
+              // Follows the theme choice of the accessibility menu: light,
+              // dark, or the device's.
               theme: themeState.lightTheme,
-              themeMode: ThemeMode.light,
+              darkTheme: themeState.darkTheme,
+              themeMode: themeState.themeMode,
               // pt is the official language: with no saved choice the app
               // opens in pt whatever the device language; en/es are
               // translations, only by the user's saved choice.
