@@ -5,6 +5,7 @@ import 'package:supabase_flutter/supabase_flutter.dart' hide Session;
 
 import '../core/config/app_config.dart';
 import '../core/theme/template_theme_provider.dart';
+import '../core/utils/link_opener.dart';
 import '../features/auth/data/auth_gateway.dart';
 import '../features/auth/data/supabase_auth_gateway.dart';
 import '../features/auth/presentation/session_cubit.dart';
@@ -12,6 +13,10 @@ import '../features/hours/data/hours_repository.dart';
 import '../features/hours/data/supabase_hours_repository.dart';
 import '../features/notifications/data/notifications_preference.dart';
 import '../features/notifications/presentation/notifications_cubit.dart';
+import '../features/opportunities/data/opportunity_repository.dart';
+import '../features/opportunities/data/supabase_opportunity_repository.dart';
+import '../features/profile/data/profile_repository.dart';
+import '../features/profile/data/supabase_profile_repository.dart';
 import '../features/upload/data/certificate_launcher.dart';
 import '../features/upload/data/certificate_picker.dart';
 import '../features/upload/data/file_picker_certificate_picker.dart';
@@ -37,6 +42,9 @@ class AppProviders extends StatelessWidget {
     this.hoursRepository,
     this.certificatePicker,
     this.certificateLauncher,
+    this.opportunityRepository,
+    this.profileRepository,
+    this.linkOpener,
     super.key,
   });
 
@@ -59,6 +67,15 @@ class AppProviders extends StatelessWidget {
   /// Where certificates are sent to be read; the Supabase project and the
   /// reader when omitted.
   final CertificateLauncher? certificateLauncher;
+
+  /// The catalog of opportunities; the Supabase project when omitted.
+  final OpportunityRepository? opportunityRepository;
+
+  /// The student's profile; the Supabase project when omitted.
+  final ProfileRepository? profileRepository;
+
+  /// How links leave the app; the system browser when omitted.
+  final LinkOpener? linkOpener;
 
   @override
   Widget build(BuildContext context) {
@@ -83,6 +100,19 @@ class AppProviders extends StatelessWidget {
                 Supabase.instance.client,
                 readerUrl: AppConfig.certificateReaderUrl,
               ),
+        ),
+        RepositoryProvider<OpportunityRepository>(
+          create: (_) =>
+              opportunityRepository ??
+              SupabaseOpportunityRepository(Supabase.instance.client),
+        ),
+        RepositoryProvider<ProfileRepository>(
+          create: (_) =>
+              profileRepository ??
+              SupabaseProfileRepository(Supabase.instance.client),
+        ),
+        RepositoryProvider<LinkOpener>(
+          create: (_) => linkOpener ?? const ExternalLinkOpener(),
         ),
       ],
       child: MultiBlocProvider(

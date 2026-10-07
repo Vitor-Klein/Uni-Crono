@@ -17,6 +17,11 @@ import 'package:uni_cronos/features/auth/domain/sign_up_data.dart';
 import 'package:uni_cronos/features/hours/data/hours_repository.dart';
 import 'package:uni_cronos/features/hours/domain/hours.dart';
 import 'package:uni_cronos/features/notifications/data/notifications_preference.dart';
+import 'package:uni_cronos/core/utils/link_opener.dart';
+import 'package:uni_cronos/features/opportunities/data/opportunity_repository.dart';
+import 'package:uni_cronos/features/opportunities/domain/opportunity.dart';
+import 'package:uni_cronos/features/profile/data/profile_repository.dart';
+import 'package:uni_cronos/features/profile/domain/student_profile.dart';
 import 'package:uni_cronos/features/upload/data/certificate_launcher.dart';
 import 'package:uni_cronos/features/upload/data/certificate_picker.dart';
 import 'package:uni_cronos/features/upload/domain/picked_file.dart';
@@ -255,6 +260,130 @@ class FakeCertificateLauncher implements CertificateLauncher {
   }
 }
 
+/// The six example opportunities of the catalog.
+List<Opportunity> demoOpportunities() => [
+  Opportunity(
+    id: 'maratona',
+    kind: OpportunityKind.event,
+    category: HourCategory.complementary,
+    title: 'Maratona de Programação',
+    description: 'Resolva problemas de algoritmos em equipe.',
+    provider: 'Clube de Programação (exemplo)',
+    modality: Modality.hibrido,
+    hours: 10,
+    startsAt: DateTime(2026, 11, 15),
+    url: Uri.parse('https://example.com/maratona'),
+  ),
+  Opportunity(
+    id: 'python',
+    kind: OpportunityKind.course,
+    category: HourCategory.complementary,
+    title: 'Introdução ao Python para Dados',
+    description: 'Análise de dados do zero aos gráficos.',
+    provider: 'Escola Aberta de Dados (exemplo)',
+    modality: Modality.online,
+    hours: 40,
+    startsAt: DateTime(2026, 10, 20),
+    url: Uri.parse('https://example.com/python-dados'),
+  ),
+  Opportunity(
+    id: 'horta',
+    kind: OpportunityKind.event,
+    category: HourCategory.extension,
+    title: 'Projeto de Extensão Horta Comunitária',
+    description: 'Plantio, colheita e compostagem na horta do bairro.',
+    provider: 'Núcleo de Extensão (exemplo)',
+    modality: Modality.presencial,
+    hours: 30,
+    startsAt: DateTime(2026, 10, 25),
+  ),
+  Opportunity(
+    id: 'robotica',
+    kind: OpportunityKind.course,
+    category: HourCategory.extension,
+    title: 'Oficina de Robótica nas Escolas',
+    description: 'Robótica básica para alunos do ensino fundamental.',
+    provider: 'Núcleo de Extensão (exemplo)',
+    modality: Modality.presencial,
+    hours: 16,
+    startsAt: DateTime(2026, 11, 3),
+    url: Uri.parse('https://example.com/robotica'),
+  ),
+  Opportunity(
+    id: 'semana',
+    kind: OpportunityKind.event,
+    category: HourCategory.complementary,
+    title: 'Semana Acadêmica de Computação',
+    description: 'Palestras, minicursos e uma feira de projetos.',
+    provider: 'Centro Acadêmico (exemplo)',
+    modality: Modality.presencial,
+    hours: 20,
+    startsAt: DateTime(2026, 11, 9),
+    url: Uri.parse('https://example.com/semana-academica'),
+    featured: true,
+  ),
+  Opportunity(
+    id: 'mentoria',
+    kind: OpportunityKind.course,
+    category: HourCategory.extension,
+    title: 'Mentoria de Tecnologia Comunitária',
+    description: 'Ensine programação básica uma vez por semana.',
+    provider: 'Comunidade Tech (exemplo)',
+    modality: Modality.online,
+    hours: 24,
+    startsAt: DateTime(2026, 10, 30),
+    url: Uri.parse('https://example.com/mentoria'),
+  ),
+];
+
+/// A catalog in memory that can be told to fail its loads.
+class FakeOpportunityRepository implements OpportunityRepository {
+  FakeOpportunityRepository([List<Opportunity>? opportunities])
+    : opportunities = opportunities ?? demoOpportunities();
+
+  List<Opportunity> opportunities;
+  bool fail = false;
+  int loads = 0;
+
+  @override
+  Future<List<Opportunity>> list() async {
+    loads++;
+    if (fail) throw const OpportunityLoadFailure();
+    return opportunities;
+  }
+}
+
+/// The profile of [demoSession].
+const demoProfile = StudentProfile(
+  fullName: 'Ana Souza',
+  email: 'ana.souza@alunos.utfpr.edu.br',
+  institutionId: 'utfpr',
+  course: 'Engenharia de Software',
+  term: 5,
+);
+
+/// A profile in memory that can be told to fail its loads.
+class FakeProfileRepository implements ProfileRepository {
+  FakeProfileRepository([this.profile = demoProfile]);
+
+  StudentProfile profile;
+  bool fail = false;
+
+  @override
+  Future<StudentProfile> current() async {
+    if (fail) throw const ProfileLoadFailure();
+    return profile;
+  }
+}
+
+/// Records the links the app opens.
+class FakeLinkOpener implements LinkOpener {
+  final opened = <Uri>[];
+
+  @override
+  Future<void> open(Uri url) async => opened.add(url);
+}
+
 /// Pumps the real app — splash, router and shell — with [prefs] stored and
 /// no splash wait, and settles on the first screen after the splash. Signed
 /// in as [demoSession] unless [signedIn] is false or [auth] says otherwise.
@@ -267,6 +396,9 @@ Future<void> pumpRoutedApp(
   HoursRepository? hoursRepository,
   CertificatePicker? picker,
   CertificateLauncher? launcher,
+  OpportunityRepository? opportunities,
+  ProfileRepository? profile,
+  LinkOpener? links,
 }) async {
   SharedPreferences.setMockInitialValues(prefs);
   PackageInfo.setMockInitialValues(
@@ -284,6 +416,9 @@ Future<void> pumpRoutedApp(
           hoursRepository ?? FakeHoursRepository(demoCertificates()),
       certificatePicker: picker ?? FakeCertificatePicker(),
       certificateLauncher: launcher ?? FakeCertificateLauncher(),
+      opportunityRepository: opportunities ?? FakeOpportunityRepository(),
+      profileRepository: profile ?? FakeProfileRepository(),
+      linkOpener: links ?? FakeLinkOpener(),
       notificationsPreference: notifications ?? FakeNotificationsPreference(),
       child: const MyApp(
         enforceUpgradeGate: false,

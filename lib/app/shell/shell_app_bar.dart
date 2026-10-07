@@ -7,7 +7,7 @@ import '../../core/theme/app_tokens.dart';
 import '../../features/home/presentation/home_more_modal.dart';
 import '../../features/notifications/presentation/notifications_cubit.dart';
 import '../../features/notifications/presentation/open_notifications_sheet.dart';
-import '../../features/profile/domain/demo_student.dart';
+import '../../features/profile/presentation/profile_cubit.dart';
 import '../../l10n/app_localizations.dart';
 import '../app_info.dart';
 
@@ -78,12 +78,12 @@ class _ShellAppBarState extends State<ShellAppBar> {
                   child: CircleAvatar(
                     radius: 18,
                     backgroundColor: cs.primaryContainer,
-                    child: Text(
-                      DemoStudent.initials,
+                    child: _Initials(
                       style: theme.textTheme.labelLarge?.copyWith(
                         fontWeight: FontWeight.w700,
                         color: cs.onPrimaryContainer,
                       ),
+                      iconColor: cs.onPrimaryContainer,
                     ),
                   ),
                 ),
@@ -93,5 +93,20 @@ class _ShellAppBarState extends State<ShellAppBar> {
         ),
       ],
     );
+  }
+}
+
+/// The student's initials once the profile is loaded; a person icon before.
+class _Initials extends StatelessWidget {
+  const _Initials({required this.style, required this.iconColor});
+
+  final TextStyle? style;
+  final Color iconColor;
+
+  @override
+  Widget build(BuildContext context) {
+    final profile = context.watch<ProfileCubit>().state.profile;
+    if (profile == null) return Icon(Icons.person_outline, color: iconColor);
+    return Text(profile.initials, style: style);
   }
 }

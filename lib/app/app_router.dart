@@ -12,6 +12,11 @@ import '../features/auth/presentation/session_cubit.dart';
 import '../features/auth/presentation/sign_up_page.dart';
 import '../features/hours/presentation/dashboard_page.dart';
 import '../features/splash/presentation/splash_screen.dart';
+import '../features/hours/data/hours_repository.dart';
+import '../features/opportunities/presentation/opportunities_page.dart';
+import '../features/profile/data/profile_repository.dart';
+import '../features/profile/presentation/profile_cubit.dart';
+import '../features/profile/presentation/profile_page.dart';
 import '../features/upload/data/certificate_launcher.dart';
 import '../features/upload/data/certificate_picker.dart';
 import '../features/upload/presentation/manual_entry_page.dart';
@@ -19,9 +24,7 @@ import '../features/upload/presentation/upload_cubit.dart';
 import '../features/upload/presentation/upload_page.dart';
 import '../features/upgrade/domain/upgrade_gate_controller.dart';
 import '../features/upgrade/presentation/upgrade_required_page.dart';
-import '../l10n/app_localizations.dart';
 import 'shell/app_shell.dart';
-import 'shell/tab_placeholder_page.dart';
 
 class AppRouter {
   AppRouter._();
@@ -78,14 +81,24 @@ class AppRouter {
           pageBuilder: (context, state, navigationShell) => AppTransitions.fade(
             context: context,
             state: state,
-            // One Upload state for the whole shell: the form at
-            // /upload/manual works on the file chosen at /upload, and signing
-            // out (which leaves the shell) drops it.
-            child: BlocProvider(
-              create: (context) => UploadCubit(
-                context.read<CertificatePicker>(),
-                context.read<CertificateLauncher>(),
-              ),
+            // Shell-wide state, dropped on sign-out (which leaves the shell):
+            // the form at /upload/manual works on the file chosen at /upload,
+            // and the app bar shows the initials of the profile.
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider(
+                  create: (context) => UploadCubit(
+                    context.read<CertificatePicker>(),
+                    context.read<CertificateLauncher>(),
+                  ),
+                ),
+                BlocProvider(
+                  create: (context) => ProfileCubit(
+                    context.read<ProfileRepository>(),
+                    context.read<HoursRepository>(),
+                  ),
+                ),
+              ],
               child: AppShell(navigationShell: navigationShell),
             ),
           ),
@@ -112,22 +125,22 @@ class AppRouter {
                 ),
               ],
             ),
-            for (final (path, title)
-                in <(String, String Function(AppLocalizations))>[
-                  (AppRoutes.activities, (l) => l.navActivities),
-                  (AppRoutes.profile, (l) => l.navProfile),
-                ])
-              StatefulShellBranch(
-                routes: [
-                  GoRoute(
-                    path: path,
-                    builder: (context, state) => TabPlaceholderPage(
-                      key: ValueKey(path),
-                      title: title(AppLocalizations.of(context)!),
-                    ),
-                  ),
-                ],
-              ),
+            StatefulShellBranch(
+              routes: [
+                GoRoute(
+                  path: AppRoutes.activities,
+                  builder: (context, state) => const OpportunitiesPage(),
+                ),
+              ],
+            ),
+            StatefulShellBranch(
+              routes: [
+                GoRoute(
+                  path: AppRoutes.profile,
+                  builder: (context, state) => const ProfilePage(),
+                ),
+              ],
+            ),
           ],
         ),
         GoRoute(

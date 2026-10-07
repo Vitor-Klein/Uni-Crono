@@ -469,4 +469,116 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get manualSubmit => 'Registrar';
+
+  @override
+  String get hubTitle => 'Hub de Oportunidades';
+
+  @override
+  String get hubSubtitle =>
+      'Cursos y eventos en los que obtienes certificado de horas.';
+
+  @override
+  String get hubSearchLabel => 'Buscar oportunidades';
+
+  @override
+  String get hubSearchHint => 'Buscar oportunidades…';
+
+  @override
+  String get hubFilterAll => 'Todas';
+
+  @override
+  String get hubFilterCourses => 'Cursos';
+
+  @override
+  String get hubFilterEvents => 'Eventos';
+
+  @override
+  String get hubFilterExtension => 'Extensión';
+
+  @override
+  String get hubFilterComplementary => 'Complementarias';
+
+  @override
+  String get hubKindCourse => 'Curso';
+
+  @override
+  String get hubKindEvent => 'Evento';
+
+  @override
+  String get hubModalityOnline => 'En línea';
+
+  @override
+  String get hubModalityPresencial => 'Presencial';
+
+  @override
+  String get hubModalityHibrido => 'Híbrido';
+
+  @override
+  String hubHours(int hours) {
+    return '$hours h';
+  }
+
+  @override
+  String get hubSignUp => 'Inscribirse';
+
+  @override
+  String get hubEmpty => 'No se encontraron oportunidades';
+
+  @override
+  String get hubLoadError => 'No se pudieron cargar las oportunidades';
+
+  @override
+  String get cancelAction => 'Cancelar';
+
+  @override
+  String profileTerm(int term) {
+    return '$term.º semestre';
+  }
+
+  @override
+  String profileHoursValue(int hours) {
+    return '$hours h';
+  }
+
+  @override
+  String get profileHoursLabel => 'horas registradas';
+
+  @override
+  String get profileCertificatesLabel => 'certificados';
+
+  @override
+  String profileGoalValue(int percent) {
+    return '$percent%';
+  }
+
+  @override
+  String get profileGoalLabel => 'de la meta';
+
+  @override
+  String get profilePreferences => 'PREFERENCIAS';
+
+  @override
+  String get profileAccount => 'CUENTA';
+
+  @override
+  String get profileNotifications => 'Notificaciones';
+
+  @override
+  String get profileLanguage => 'Idioma';
+
+  @override
+  String get profileAccessibility => 'Accesibilidad';
+
+  @override
+  String get profileSignOut => 'Salir';
+
+  @override
+  String get profileSignOutTitle => '¿Salir de la cuenta?';
+
+  @override
+  String get profileSignOutBody =>
+      'Tendrás que entrar de nuevo para ver tus horas.';
+
+  @override
+  String get profileLoadError => 'No se pudo cargar tu perfil';
 }

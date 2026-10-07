@@ -466,4 +466,116 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get manualSubmit => 'Submit';
+
+  @override
+  String get hubTitle => 'Opportunity Hub';
+
+  @override
+  String get hubSubtitle =>
+      'Courses and events where you earn a certificate of hours.';
+
+  @override
+  String get hubSearchLabel => 'Search opportunities';
+
+  @override
+  String get hubSearchHint => 'Search opportunities…';
+
+  @override
+  String get hubFilterAll => 'All';
+
+  @override
+  String get hubFilterCourses => 'Courses';
+
+  @override
+  String get hubFilterEvents => 'Events';
+
+  @override
+  String get hubFilterExtension => 'Extension';
+
+  @override
+  String get hubFilterComplementary => 'Complementary';
+
+  @override
+  String get hubKindCourse => 'Course';
+
+  @override
+  String get hubKindEvent => 'Event';
+
+  @override
+  String get hubModalityOnline => 'Online';
+
+  @override
+  String get hubModalityPresencial => 'In person';
+
+  @override
+  String get hubModalityHibrido => 'Hybrid';
+
+  @override
+  String hubHours(int hours) {
+    return '$hours h';
+  }
+
+  @override
+  String get hubSignUp => 'Sign up';
+
+  @override
+  String get hubEmpty => 'No opportunities found';
+
+  @override
+  String get hubLoadError => 'Could not load the opportunities';
+
+  @override
+  String get cancelAction => 'Cancel';
+
+  @override
+  String profileTerm(int term) {
+    return 'Term $term';
+  }
+
+  @override
+  String profileHoursValue(int hours) {
+    return '$hours h';
+  }
+
+  @override
+  String get profileHoursLabel => 'hours submitted';
+
+  @override
+  String get profileCertificatesLabel => 'certificates';
+
+  @override
+  String profileGoalValue(int percent) {
+    return '$percent%';
+  }
+
+  @override
+  String get profileGoalLabel => 'of the goal';
+
+  @override
+  String get profilePreferences => 'PREFERENCES';
+
+  @override
+  String get profileAccount => 'ACCOUNT';
+
+  @override
+  String get profileNotifications => 'Notifications';
+
+  @override
+  String get profileLanguage => 'Language';
+
+  @override
+  String get profileAccessibility => 'Accessibility';
+
+  @override
+  String get profileSignOut => 'Sign out';
+
+  @override
+  String get profileSignOutTitle => 'Sign out?';
+
+  @override
+  String get profileSignOutBody =>
+      'You will need to sign in again to see your hours.';
+
+  @override
+  String get profileLoadError => 'Could not load your profile';
 }

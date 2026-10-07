@@ -467,4 +467,116 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get manualSubmit => 'Lançar';
+
+  @override
+  String get hubTitle => 'Hub de Oportunidades';
+
+  @override
+  String get hubSubtitle =>
+      'Cursos e eventos em que você ganha certificado de horas.';
+
+  @override
+  String get hubSearchLabel => 'Buscar oportunidades';
+
+  @override
+  String get hubSearchHint => 'Buscar oportunidades…';
+
+  @override
+  String get hubFilterAll => 'Todas';
+
+  @override
+  String get hubFilterCourses => 'Cursos';
+
+  @override
+  String get hubFilterEvents => 'Eventos';
+
+  @override
+  String get hubFilterExtension => 'Extensão';
+
+  @override
+  String get hubFilterComplementary => 'Complementares';
+
+  @override
+  String get hubKindCourse => 'Curso';
+
+  @override
+  String get hubKindEvent => 'Evento';
+
+  @override
+  String get hubModalityOnline => 'Online';
+
+  @override
+  String get hubModalityPresencial => 'Presencial';
+
+  @override
+  String get hubModalityHibrido => 'Híbrido';
+
+  @override
+  String hubHours(int hours) {
+    return '$hours h';
+  }
+
+  @override
+  String get hubSignUp => 'Inscrever-se';
+
+  @override
+  String get hubEmpty => 'Nenhuma oportunidade encontrada';
+
+  @override
+  String get hubLoadError => 'Não foi possível carregar as oportunidades';
+
+  @override
+  String get cancelAction => 'Cancelar';
+
+  @override
+  String profileTerm(int term) {
+    return '$termº período';
+  }
+
+  @override
+  String profileHoursValue(int hours) {
+    return '$hours h';
+  }
+
+  @override
+  String get profileHoursLabel => 'horas lançadas';
+
+  @override
+  String get profileCertificatesLabel => 'certificados';
+
+  @override
+  String profileGoalValue(int percent) {
+    return '$percent%';
+  }
+
+  @override
+  String get profileGoalLabel => 'da meta';
+
+  @override
+  String get profilePreferences => 'PREFERÊNCIAS';
+
+  @override
+  String get profileAccount => 'CONTA';
+
+  @override
+  String get profileNotifications => 'Notificações';
+
+  @override
+  String get profileLanguage => 'Idioma';
+
+  @override
+  String get profileAccessibility => 'Acessibilidade';
+
+  @override
+  String get profileSignOut => 'Sair';
+
+  @override
+  String get profileSignOutTitle => 'Sair da conta?';
+
+  @override
+  String get profileSignOutBody =>
+      'Você vai precisar entrar de novo para ver suas horas.';
+
+  @override
+  String get profileLoadError => 'Não foi possível carregar seu perfil';
 }

@@ -975,6 +975,210 @@ abstract class AppLocalizations {
   /// In pt, this message translates to:
   /// **'Lançar'**
   String get manualSubmit;
+
+  /// No description provided for @hubTitle.
+  ///
+  /// In pt, this message translates to:
+  /// **'Hub de Oportunidades'**
+  String get hubTitle;
+
+  /// No description provided for @hubSubtitle.
+  ///
+  /// In pt, this message translates to:
+  /// **'Cursos e eventos em que você ganha certificado de horas.'**
+  String get hubSubtitle;
+
+  /// No description provided for @hubSearchLabel.
+  ///
+  /// In pt, this message translates to:
+  /// **'Buscar oportunidades'**
+  String get hubSearchLabel;
+
+  /// No description provided for @hubSearchHint.
+  ///
+  /// In pt, this message translates to:
+  /// **'Buscar oportunidades…'**
+  String get hubSearchHint;
+
+  /// No description provided for @hubFilterAll.
+  ///
+  /// In pt, this message translates to:
+  /// **'Todas'**
+  String get hubFilterAll;
+
+  /// No description provided for @hubFilterCourses.
+  ///
+  /// In pt, this message translates to:
+  /// **'Cursos'**
+  String get hubFilterCourses;
+
+  /// No description provided for @hubFilterEvents.
+  ///
+  /// In pt, this message translates to:
+  /// **'Eventos'**
+  String get hubFilterEvents;
+
+  /// No description provided for @hubFilterExtension.
+  ///
+  /// In pt, this message translates to:
+  /// **'Extensão'**
+  String get hubFilterExtension;
+
+  /// No description provided for @hubFilterComplementary.
+  ///
+  /// In pt, this message translates to:
+  /// **'Complementares'**
+  String get hubFilterComplementary;
+
+  /// No description provided for @hubKindCourse.
+  ///
+  /// In pt, this message translates to:
+  /// **'Curso'**
+  String get hubKindCourse;
+
+  /// No description provided for @hubKindEvent.
+  ///
+  /// In pt, this message translates to:
+  /// **'Evento'**
+  String get hubKindEvent;
+
+  /// No description provided for @hubModalityOnline.
+  ///
+  /// In pt, this message translates to:
+  /// **'Online'**
+  String get hubModalityOnline;
+
+  /// No description provided for @hubModalityPresencial.
+  ///
+  /// In pt, this message translates to:
+  /// **'Presencial'**
+  String get hubModalityPresencial;
+
+  /// No description provided for @hubModalityHibrido.
+  ///
+  /// In pt, this message translates to:
+  /// **'Híbrido'**
+  String get hubModalityHibrido;
+
+  /// No description provided for @hubHours.
+  ///
+  /// In pt, this message translates to:
+  /// **'{hours} h'**
+  String hubHours(int hours);
+
+  /// No description provided for @hubSignUp.
+  ///
+  /// In pt, this message translates to:
+  /// **'Inscrever-se'**
+  String get hubSignUp;
+
+  /// No description provided for @hubEmpty.
+  ///
+  /// In pt, this message translates to:
+  /// **'Nenhuma oportunidade encontrada'**
+  String get hubEmpty;
+
+  /// No description provided for @hubLoadError.
+  ///
+  /// In pt, this message translates to:
+  /// **'Não foi possível carregar as oportunidades'**
+  String get hubLoadError;
+
+  /// No description provided for @cancelAction.
+  ///
+  /// In pt, this message translates to:
+  /// **'Cancelar'**
+  String get cancelAction;
+
+  /// No description provided for @profileTerm.
+  ///
+  /// In pt, this message translates to:
+  /// **'{term}º período'**
+  String profileTerm(int term);
+
+  /// No description provided for @profileHoursValue.
+  ///
+  /// In pt, this message translates to:
+  /// **'{hours} h'**
+  String profileHoursValue(int hours);
+
+  /// No description provided for @profileHoursLabel.
+  ///
+  /// In pt, this message translates to:
+  /// **'horas lançadas'**
+  String get profileHoursLabel;
+
+  /// No description provided for @profileCertificatesLabel.
+  ///
+  /// In pt, this message translates to:
+  /// **'certificados'**
+  String get profileCertificatesLabel;
+
+  /// No description provided for @profileGoalValue.
+  ///
+  /// In pt, this message translates to:
+  /// **'{percent}%'**
+  String profileGoalValue(int percent);
+
+  /// No description provided for @profileGoalLabel.
+  ///
+  /// In pt, this message translates to:
+  /// **'da meta'**
+  String get profileGoalLabel;
+
+  /// No description provided for @profilePreferences.
+  ///
+  /// In pt, this message translates to:
+  /// **'PREFERÊNCIAS'**
+  String get profilePreferences;
+
+  /// No description provided for @profileAccount.
+  ///
+  /// In pt, this message translates to:
+  /// **'CONTA'**
+  String get profileAccount;
+
+  /// No description provided for @profileNotifications.
+  ///
+  /// In pt, this message translates to:
+  /// **'Notificações'**
+  String get profileNotifications;
+
+  /// No description provided for @profileLanguage.
+  ///
+  /// In pt, this message translates to:
+  /// **'Idioma'**
+  String get profileLanguage;
+
+  /// No description provided for @profileAccessibility.
+  ///
+  /// In pt, this message translates to:
+  /// **'Acessibilidade'**
+  String get profileAccessibility;
+
+  /// No description provided for @profileSignOut.
+  ///
+  /// In pt, this message translates to:
+  /// **'Sair'**
+  String get profileSignOut;
+
+  /// No description provided for @profileSignOutTitle.
+  ///
+  /// In pt, this message translates to:
+  /// **'Sair da conta?'**
+  String get profileSignOutTitle;
+
+  /// No description provided for @profileSignOutBody.
+  ///
+  /// In pt, this message translates to:
+  /// **'Você vai precisar entrar de novo para ver suas horas.'**
+  String get profileSignOutBody;
+
+  /// No description provided for @profileLoadError.
+  ///
+  /// In pt, this message translates to:
+  /// **'Não foi possível carregar seu perfil'**
+  String get profileLoadError;
 }
 
 class _AppLocalizationsDelegate

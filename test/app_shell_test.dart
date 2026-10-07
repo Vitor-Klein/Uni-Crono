@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:uni_cronos/app/app_router.dart';
 import 'package:uni_cronos/app/shell/app_shell.dart';
 import 'package:uni_cronos/core/navigation/app_routes.dart';
+import 'package:uni_cronos/features/opportunities/presentation/opportunities_page.dart';
 
 import 'app_harness.dart';
 
@@ -60,20 +61,25 @@ void main() {
     await pumpRoutedApp(tester);
     await tester.tap(navLabel('Atividades'));
     await tester.pumpAndSettle();
+    // The first Scrollable is the page's list (the search field has its own).
     final activitiesState = tester.state(
-      find.descendant(
-        of: find.byKey(const ValueKey(AppRoutes.activities)),
-        matching: find.byType(Scrollable),
-      ),
+      find
+          .descendant(
+            of: find.byType(OpportunitiesPage),
+            matching: find.byType(Scrollable),
+          )
+          .first,
     );
 
     await tester.tap(navLabel('Dashboard'));
     await tester.pumpAndSettle();
 
-    final offstage = find.descendant(
-      of: find.byKey(const ValueKey(AppRoutes.activities), skipOffstage: false),
-      matching: find.byType(Scrollable, skipOffstage: false),
-    );
+    final offstage = find
+        .descendant(
+          of: find.byType(OpportunitiesPage, skipOffstage: false),
+          matching: find.byType(Scrollable, skipOffstage: false),
+        )
+        .first;
     expect(offstage, findsOneWidget);
     expect(identical(tester.state(offstage), activitiesState), isTrue);
   });
