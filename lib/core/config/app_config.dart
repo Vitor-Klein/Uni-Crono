@@ -6,9 +6,6 @@ abstract final class AppConfig {
   static const supabasePublishableKey = String.fromEnvironment(
     'SUPABASE_PUBLISHABLE_KEY',
   );
-  static const certificateReaderUrl = String.fromEnvironment(
-    'CERTIFICATE_READER_URL',
-  );
 
   static bool get isConfigured =>
       supabaseUrl.isNotEmpty && supabasePublishableKey.isNotEmpty;

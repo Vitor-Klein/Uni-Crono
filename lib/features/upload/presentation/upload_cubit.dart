@@ -86,11 +86,6 @@ class UploadCubit extends Cubit<UploadState> {
     return null;
   }
 
-  /// Gives up the [UploadState.pending] PDF: deleted, the file kept chosen.
-  Future<void> discardPending() async {
-    final pending = state.pending;
-    if (pending == null) return;
-    emit(UploadState(file: state.file));
-    await _launcher.discard(pending);
-  }
+  /// Gives up typing the data: the file stays chosen.
+  void discardPending() => emit(UploadState(file: state.file));
 }

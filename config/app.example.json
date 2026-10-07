@@ -1,5 +1,4 @@
 {
   "SUPABASE_URL": "https://<ref>.supabase.co",
-  "SUPABASE_PUBLISHABLE_KEY": "sb_publishable_...",
-  "CERTIFICATE_READER_URL": "https://<projeto>.vercel.app"
+  "SUPABASE_PUBLISHABLE_KEY": "sb_publishable_..."
 }

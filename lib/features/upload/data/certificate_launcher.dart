@@ -14,13 +14,15 @@ class LaunchedCertificate {
   final int hours;
 }
 
-/// A sent PDF the reader could not read: it stays stored until the student
-/// launches it by hand or gives up.
+/// A PDF whose text has no workload (or no text at all): the student types
+/// the data. Nothing was stored yet.
 class UnreadableCertificate {
-  const UnreadableCertificate({required this.path, required this.fileName});
+  const UnreadableCertificate({required this.file, required this.title});
 
-  final String path;
-  final String fileName;
+  final PickedFile file;
+
+  /// The title read from the text, or from the file name.
+  final String title;
 }
 
 /// Why a certificate was not launched.
@@ -28,7 +30,7 @@ sealed class LaunchFailure implements Exception {
   const LaunchFailure();
 }
 
-/// The PDF has no text, or the reader found no workload in it.
+/// The PDF has no text, or no workload was found in it.
 class Unreadable extends LaunchFailure {
   const Unreadable(this.pending);
 
@@ -40,24 +42,21 @@ class Duplicate extends LaunchFailure {
   const Duplicate();
 }
 
-/// No network, the reader is down, or it answered something unexpected.
+/// No network, or the server refused to store the certificate.
 class ReaderUnavailable extends LaunchFailure {
   const ReaderUnavailable();
 }
 
-/// Sends a certificate to be read and counted.
+/// Reads a certificate and counts it.
 abstract class CertificateLauncher {
   /// Throws a [LaunchFailure] when nothing was launched.
   Future<LaunchedCertificate> launch(PickedFile file);
 
-  /// Launches with the data the student typed; only for an [Unreadable] PDF.
+  /// Launches with the data the student typed; for an [Unreadable] PDF.
   Future<LaunchedCertificate> launchManual(
     UnreadableCertificate pending, {
     required String title,
     required HourCategory category,
     required int hours,
   });
-
-  /// Deletes the stored PDF the student gave up on.
-  Future<void> discard(UnreadableCertificate pending);
 }

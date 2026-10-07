@@ -10,7 +10,6 @@ import '../../auth/presentation/auth_form_fields.dart';
 import '../../auth/presentation/form_error.dart';
 import '../../hours/domain/hours.dart';
 import '../../hours/presentation/hour_category_labels.dart';
-import '../domain/certificate_file_rules.dart';
 import 'finish_launch.dart';
 import 'upload_cubit.dart';
 
@@ -36,9 +35,7 @@ class _ManualEntryPageState extends State<ManualEntryPage> {
   void initState() {
     super.initState();
     final pending = context.read<UploadCubit>().state.pending;
-    _title = TextEditingController(
-      text: pending == null ? '' : titleFromFileName(pending.fileName),
-    );
+    _title = TextEditingController(text: pending?.title ?? '');
     if (pending == null) {
       // Opened without a PDF waiting (a stale link): nothing to describe.
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -73,9 +70,9 @@ class _ManualEntryPageState extends State<ManualEntryPage> {
     finishLaunch(context, launched);
   }
 
-  Future<void> _cancel() async {
+  void _cancel() {
     final router = GoRouter.of(context);
-    await context.read<UploadCubit>().discardPending();
+    context.read<UploadCubit>().discardPending();
     if (router.canPop()) {
       router.pop();
     } else {

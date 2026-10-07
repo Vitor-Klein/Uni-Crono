@@ -219,7 +219,7 @@ class FakeCertificatePicker implements CertificatePicker {
   }
 }
 
-/// A reader in memory: answers [result], or throws [failure]; [gate], when
+/// A launcher in memory: answers [result], or throws [failure]; [gate], when
 /// set, holds the answer until completed. Records every call.
 class FakeCertificateLauncher implements CertificateLauncher {
   LaunchedCertificate result = const LaunchedCertificate(
@@ -232,7 +232,6 @@ class FakeCertificateLauncher implements CertificateLauncher {
   Completer<void>? gate;
   final launched = <PickedFile>[];
   final manual = <(String, String, HourCategory, int)>[];
-  final discarded = <String>[];
 
   @override
   Future<LaunchedCertificate> launch(PickedFile file) async {
@@ -249,14 +248,9 @@ class FakeCertificateLauncher implements CertificateLauncher {
     required HourCategory category,
     required int hours,
   }) async {
-    manual.add((pending.path, title, category, hours));
+    manual.add((pending.file.name, title, category, hours));
     if (manualFailure case final failure?) throw failure;
     return LaunchedCertificate(title: title, category: category, hours: hours);
-  }
-
-  @override
-  Future<void> discard(UnreadableCertificate pending) async {
-    discarded.add(pending.path);
   }
 }
 

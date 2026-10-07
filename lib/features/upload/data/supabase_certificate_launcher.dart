@@ -1,37 +1,95 @@
-import 'dart:convert';
 import 'dart:math';
 
+import 'package:crypto/crypto.dart';
 import 'package:flutter/foundation.dart';
-import 'package:http/http.dart' as http;
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../../auth/domain/institution.dart';
 import '../../hours/domain/hours.dart';
+import '../domain/certificate_reading.dart';
 import '../domain/picked_file.dart';
 import 'certificate_launcher.dart';
+import 'pdf_text_extractor.dart';
 
-/// Stores the PDF in the student's folder of the private `certificates`
-/// bucket, then asks the reader to count it. The reader is the only one that
-/// writes certificates: the app never sends hours it read itself.
+/// Reads the PDF on the device, stores it in the student's folder of the
+/// private `certificates` bucket and saves the certificate. The table only
+/// takes rows of the signed-in student; the same PDF counts once.
 class SupabaseCertificateLauncher implements CertificateLauncher {
   SupabaseCertificateLauncher(
     this._client, {
-    required String readerUrl,
-    http.Client? httpClient,
-  }) : _readerUrl = readerUrl,
-       _http = httpClient ?? http.Client();
+    required PdfTextExtractor extractor,
+  }) : _extractor = extractor;
 
   static const bucket = 'certificates';
-  static const _timeout = Duration(seconds: 30);
 
   final SupabaseClient _client;
-  final String _readerUrl;
-  final http.Client _http;
+  final PdfTextExtractor _extractor;
   final _random = Random.secure();
 
   @override
   Future<LaunchedCertificate> launch(PickedFile file) async {
+    final text = await _extractor.extract(file.bytes);
+    final reading = readCertificate(
+      text,
+      fileName: file.name,
+      institution: _institutionName(),
+    );
+    final hours = reading.hours;
+    if (text.isEmpty || hours == null) {
+      throw Unreadable(UnreadableCertificate(file: file, title: reading.title));
+    }
+    return _save(
+      file,
+      title: reading.title,
+      issuer: reading.issuer,
+      category: reading.category,
+      hours: hours,
+      source: 'extracted',
+    );
+  }
+
+  @override
+  Future<LaunchedCertificate> launchManual(
+    UnreadableCertificate pending, {
+    required String title,
+    required HourCategory category,
+    required int hours,
+  }) => _save(
+    pending.file,
+    title: title,
+    issuer: null,
+    category: category,
+    hours: hours,
+    source: 'manual',
+  );
+
+  Future<LaunchedCertificate> _save(
+    PickedFile file, {
+    required String title,
+    required String? issuer,
+    required HourCategory category,
+    required int hours,
+    required String source,
+  }) async {
     final userId = _client.auth.currentUser?.id;
-    if (userId == null || _readerUrl.isEmpty) throw const ReaderUnavailable();
+    if (userId == null) throw const ReaderUnavailable();
+    final sha = sha256.convert(file.bytes).toString();
+
+    try {
+      final existing = await _client
+          .from('certificates')
+          .select('id')
+          .eq('user_id', userId)
+          .eq('file_sha256', sha)
+          .limit(1);
+      if (existing.isNotEmpty) throw const Duplicate();
+    } on LaunchFailure {
+      rethrow;
+    } catch (e) {
+      debugPrint('Duplicate check failed: ${e.runtimeType}');
+      throw const ReaderUnavailable();
+    }
+
     final path = '$userId/${_uuidV4()}.pdf';
     try {
       await _client.storage
@@ -45,94 +103,46 @@ class SupabaseCertificateLauncher implements CertificateLauncher {
       debugPrint('Certificate upload failed: ${e.runtimeType}');
       throw const ReaderUnavailable();
     }
-    final response = await _post('read', {
-      'path': path,
-      'file_name': file.name,
-    });
-    return switch ((response.statusCode, _errorOf(response))) {
-      (201, _) => _launched(response),
-      (422, 'no_text' || 'no_hours') => throw Unreadable(
-        UnreadableCertificate(path: path, fileName: file.name),
-      ),
-      (409, 'duplicate') => throw const Duplicate(),
-      _ => throw const ReaderUnavailable(),
-    };
-  }
 
-  @override
-  Future<LaunchedCertificate> launchManual(
-    UnreadableCertificate pending, {
-    required String title,
-    required HourCategory category,
-    required int hours,
-  }) async {
-    if (_readerUrl.isEmpty) throw const ReaderUnavailable();
-    final response = await _post('manual', {
-      'path': pending.path,
-      'title': title,
-      'category': category.name,
-      'hours': hours,
-    });
-    return switch ((response.statusCode, _errorOf(response))) {
-      (201, _) => _launched(response),
-      (409, 'duplicate') => throw const Duplicate(),
-      _ => throw const ReaderUnavailable(),
-    };
-  }
-
-  @override
-  Future<void> discard(UnreadableCertificate pending) async {
     try {
-      await _client.storage.from(bucket).remove([pending.path]);
+      await _client.from('certificates').insert({
+        'user_id': userId,
+        'title': title,
+        'issuer': issuer,
+        'category': category.name,
+        'hours': hours,
+        'file_path': path,
+        'file_sha256': sha,
+        'source': source,
+      });
     } catch (e) {
-      // Best effort: a PDF left behind is only the student's own file.
-      debugPrint('Certificate discard failed: ${e.runtimeType}');
-    }
-  }
-
-  Future<http.Response> _post(String action, Map<String, Object> body) async {
-    final token = _client.auth.currentSession?.accessToken;
-    if (token == null) throw const ReaderUnavailable();
-    try {
-      return await _http
-          .post(
-            Uri.parse('$_readerUrl/api/certificates/$action'),
-            headers: {
-              'Authorization': 'Bearer $token',
-              'Content-Type': 'application/json',
-            },
-            body: jsonEncode(body),
-          )
-          .timeout(_timeout);
-    } catch (e) {
-      debugPrint('Certificate reader unreachable: ${e.runtimeType}');
+      // Nothing half done: the stored PDF goes with the failed save.
+      await _removeQuietly(path);
+      if (e is PostgrestException && e.code == '23505') {
+        throw const Duplicate();
+      }
+      debugPrint('Certificate save failed: ${e.runtimeType}');
       throw const ReaderUnavailable();
     }
+    return LaunchedCertificate(title: title, category: category, hours: hours);
   }
 
-  static String? _errorOf(http.Response response) {
+  Future<void> _removeQuietly(String path) async {
     try {
-      final body = jsonDecode(response.body);
-      return body is Map<String, dynamic> ? body['error'] as String? : null;
-    } on FormatException {
-      return null;
+      await _client.storage.from(bucket).remove([path]);
+    } catch (e) {
+      debugPrint('Certificate cleanup failed: ${e.runtimeType}');
     }
   }
 
-  /// The reader's answer is external data: anything unexpected is a failure.
-  static LaunchedCertificate _launched(http.Response response) {
-    try {
-      final body = jsonDecode(response.body) as Map<String, dynamic>;
-      final hours = body['hours'] as int;
-      if (hours < 1 || hours > 999) throw const FormatException('hours');
-      return LaunchedCertificate(
-        title: body['title'] as String,
-        category: HourCategory.values.byName(body['category'] as String),
-        hours: hours,
-      );
-    } catch (_) {
-      throw const ReaderUnavailable();
-    }
+  /// The name of the student's institution, as certificates print it.
+  String _institutionName() {
+    final id = _client.auth.currentUser?.userMetadata?['institution_id'];
+    return Institutions.all
+            .where((institution) => institution.id == id)
+            .map((institution) => institution.name)
+            .firstOrNull ??
+        '';
   }
 
   /// A random (version 4) UUID, the name of the stored file.

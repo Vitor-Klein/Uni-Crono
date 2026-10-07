@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:next_core_service/next_core_service.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' hide Session;
 
-import '../core/config/app_config.dart';
 import '../core/theme/template_theme_provider.dart';
 import '../core/utils/link_opener.dart';
 import '../features/auth/data/auth_gateway.dart';
@@ -20,6 +19,7 @@ import '../features/profile/data/supabase_profile_repository.dart';
 import '../features/upload/data/certificate_launcher.dart';
 import '../features/upload/data/certificate_picker.dart';
 import '../features/upload/data/file_picker_certificate_picker.dart';
+import '../features/upload/data/pdf_text_extractor.dart';
 import '../features/upload/data/supabase_certificate_launcher.dart';
 
 class AppThemeBootstrap {
@@ -64,8 +64,8 @@ class AppProviders extends StatelessWidget {
   /// How the student chooses a certificate; the system chooser when omitted.
   final CertificatePicker? certificatePicker;
 
-  /// Where certificates are sent to be read; the Supabase project and the
-  /// reader when omitted.
+  /// How certificates are read and saved; on the device and in the
+  /// Supabase project when omitted.
   final CertificateLauncher? certificateLauncher;
 
   /// The catalog of opportunities; the Supabase project when omitted.
@@ -98,7 +98,7 @@ class AppProviders extends StatelessWidget {
               certificateLauncher ??
               SupabaseCertificateLauncher(
                 Supabase.instance.client,
-                readerUrl: AppConfig.certificateReaderUrl,
+                extractor: const PdfrxTextExtractor(),
               ),
         ),
         RepositoryProvider<OpportunityRepository>(

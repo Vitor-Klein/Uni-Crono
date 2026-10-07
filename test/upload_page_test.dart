@@ -10,9 +10,9 @@ import 'package:uni_cronos/features/upload/domain/certificate_file_rules.dart';
 
 import 'app_harness.dart';
 
-const _pending = UnreadableCertificate(
-  path: 'user-ana/arquivo.pdf',
-  fileName: 'certificado-game-jam.pdf',
+final _pending = UnreadableCertificate(
+  file: pickedFile('certificado-game-jam.pdf', 180 * 1024),
+  title: 'Certificado Game Jam',
 );
 
 Finder _field(String label) => find.descendant(
@@ -163,8 +163,7 @@ void main() {
   });
 
   Future<FakeCertificateLauncher> openManual(WidgetTester tester) async {
-    final launcher = FakeCertificateLauncher()
-      ..failure = const Unreadable(_pending);
+    final launcher = FakeCertificateLauncher()..failure = Unreadable(_pending);
     await _openUpload(
       tester,
       picker: FakeCertificatePicker(
@@ -222,7 +221,7 @@ void main() {
       findsOneWidget,
     );
     expect(launcher.manual.single, (
-      _pending.path,
+      'certificado-game-jam.pdf',
       'Certificado Game Jam',
       HourCategory.extension,
       12,
@@ -233,13 +232,13 @@ void main() {
     expect(currentPath(), AppRoutes.upload);
   });
 
-  testWidgets('CA-04c: Cancelar on the form deletes the sent PDF and goes back '
-      'to /upload with the file still chosen', (tester) async {
+  testWidgets('CA-04c: Cancelar on the form goes back to /upload with the file '
+      'still chosen and nothing launched', (tester) async {
     final launcher = await openManual(tester);
 
     await _tap(tester, find.widgetWithText(TextButton, 'Cancelar'));
 
-    expect(launcher.discarded, [_pending.path]);
+    expect(launcher.manual, isEmpty);
     expect(currentPath(), AppRoutes.upload);
     expect(find.text('certificado-game-jam.pdf'), findsOneWidget);
   });
