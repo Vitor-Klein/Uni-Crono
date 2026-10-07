@@ -24,7 +24,10 @@ values
 -- CA-12: o gatilho cria o perfil a partir dos metadados do cadastro.
 do $$
 begin
-  if (select count(*) from public.profiles) <> 2 then
+  -- Só os perfis deste teste: o banco pode já ter alunos de verdade.
+  if (select count(*) from public.profiles
+      where id in ('00000000-0000-4000-8000-00000000000a',
+                   '00000000-0000-4000-8000-00000000000b')) <> 2 then
     raise exception 'CA-12: o cadastro não criou os perfis';
   end if;
   if (select term from public.profiles
@@ -71,16 +74,31 @@ begin
   end if;
 end $$;
 
--- CA-12: o aluno não cria certificado direto pela API, nem para si.
+-- CA-01: o aluno grava o próprio certificado (a leitura é feita no app).
+insert into public.certificates
+  (user_id, title, category, hours, file_path, file_sha256, source)
+values ('00000000-0000-4000-8000-00000000000a', 'Lido no app', 'extension',
+        260, '00000000-0000-4000-8000-00000000000a/c.pdf', 'sha-c',
+        'extracted');
+
+-- CA-01: mas não grava para outro aluno, e os limites do banco continuam.
 do $$
 begin
   begin
     insert into public.certificates
       (user_id, title, category, hours, file_path, file_sha256, source)
-    values ('00000000-0000-4000-8000-00000000000a', 'Forjado', 'extension',
-            999, 'x.pdf', 'sha-x', 'manual');
-    raise exception 'CA-12: o aluno inseriu um certificado';
+    values ('00000000-0000-4000-8000-00000000000b', 'Forjado', 'extension',
+            10, 'x.pdf', 'sha-x', 'manual');
+    raise exception 'CA-01: o aluno A gravou um certificado do aluno B';
   exception when insufficient_privilege then null;
+  end;
+  begin
+    insert into public.certificates
+      (user_id, title, category, hours, file_path, file_sha256, source)
+    values ('00000000-0000-4000-8000-00000000000a', 'Demais', 'extension',
+            1000, 'y.pdf', 'sha-y', 'manual');
+    raise exception 'CA-01: o banco aceitou 1000 horas';
+  exception when check_violation then null;
   end;
 end $$;
 
