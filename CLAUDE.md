@@ -76,6 +76,11 @@ está lá.
   - Ícones: `Icons.*_outlined` do SDK; nenhum pacote de ícones.
   - A fonte do design é a Page 1 do Figma do Uni Cronos; a Page 2 é de outro
     projeto e não vale.
+  - Servidor: Supabase (`uni-cronos`, org KleinOS). O app usa só a chave
+    publicável; só o leitor de certificados, com a `service_role`, grava
+    certificados.
+  - Leitura de certificados: serviço Python em `services/certificate_reader/`,
+    publicado no Vercel.
 </architecture>
 
 <test_strategy>
