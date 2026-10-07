@@ -169,11 +169,14 @@ no `AppProviders` como `RepositoryProvider<HoursRepository>`, acima de todos os
   `lib/features/hours/domain/`) aplica as regras:
   - horas de uma categoria = soma dos certificados dela; aluno novo começa
     em 0 h;
-  - metas (`HoursSnapshot.goals`): 200 h complementares e 100 h de extensão;
+  - metas (`HoursSnapshot.goals`): 35 h complementares e 200 h de extensão —
+    as da UTFPR, usadas para todas as instituições;
   - o percentual do resumo é a soma das horas sobre a soma das metas,
     arredondado para baixo;
   - a barra de progresso (`CategoryProgress.ratio`) para em 1,0, mesmo com as
     horas acima da meta;
+  - a % de cada categoria (`CategoryProgress.percent`) é inteira, arredondada
+    para baixo e para em 100;
   - `recent` traz todos os certificados, do mais novo ao mais antigo.
 - **`DashboardPage`:** o `DashboardCubit` (`DashboardState`: snapshot ou falha)
   assina o repositório e chama `refresh()` ao abrir. Carregando, indicador; com
