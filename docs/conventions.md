@@ -38,11 +38,28 @@ Teste de navegação e de tela dentro da casca passa pelo app real — splash,
 router e casca — com `pumpRoutedApp` de `test/app_harness.dart`: sem
 `debugHome`, splash com `Duration.zero`, preferências salvas por `prefs` e
 notificações por um `FakeNotificationsPreference` (que registra as gravações e
-pode falhar sob comando). O app entra **com sessão** por padrão
-(`demoSessionPrefs`, lida como no `AppBootstrap`); teste do login passa
-`signedIn: false`. O caminho atual sai de `currentPath()`; os rótulos da
-barra inferior, de `navLabel()`. Nada de Firebase em teste: o que depende dele
-entra por uma interface com versão falsa.
+pode falhar sob comando). O app entra **com sessão** por padrão (um
+`FakeAuthGateway` com `demoSession`); teste do login passa `signedIn: false`,
+ou um `FakeAuthGateway` próprio em `auth`. O caminho atual sai de
+`currentPath()`; os rótulos da barra inferior, de `navLabel()`.
+
+Nada de Firebase nem de Supabase em teste de widget: o que depende deles entra
+por uma interface com versão falsa — `FakeAuthGateway`, `FakeHoursRepository`
+(com `demoCertificates()`), `FakeCertificatePicker`/`FakeCertificateLauncher`,
+`FakeOpportunityRepository`, `FakeProfileRepository`, `FakeLinkOpener` — que
+pode falhar sob comando. Os adaptadores do Supabase são testados com um
+`SupabaseClient` sobre o `MockClient` do `http`; toda resposta simulada leva a
+`request` de origem, que o SDK lê de volta.
+
+Testes de banco: `supabase/tests/*.sql`, rodados contra o projeto numa
+transação com `rollback`, trocando de papel com `set local role` e
+`request.jwt.claims`.
+
+Leitor em Python: pytest em `services/certificate_reader/tests/`. O ID vai no
+nome da função (`test_ca08_…`), porque nome de função não aceita hífen. Os PDFs
+de teste são gerados pelo próprio teste (`tests/pdf_factory.py`) — nenhum
+certificado real entra no repositório — e o Supabase entra por um `Gateway`
+falso ou por um `httpx2.MockTransport`.
 
 Toque em widget que pode estar fora da tela padrão do teste (800×600) — ou de
 uma tela reduzida no próprio teste — vem depois de `tester.ensureVisible`: um
@@ -86,7 +103,12 @@ têm o mesmo `top`.
 Pares em que mexer num obriga a atualizar os outros **no mesmo ciclo** — é a lista
 que impede o repo de acumular arquivo gerado defasado:
 
-- … → … , … , …
+- migração em `supabase/migrations/` → teste em `supabase/tests/` e a seção
+  **Supabase** de `docs/architecture.md`
+- `lib/l10n/app_pt.arb` → `app_en.arb` e `app_es.arb` (mesmas chaves) e os
+  `app_localizations*.dart` gerados (`flutter gen-l10n`)
+- `services/certificate_reader/requirements*.txt` → o `.venv` reinstalado e a
+  seção **Leitor de certificados** de `docs/architecture.md`
 
 Um par típico: schema → migration, cliente gerado, e o documento que descreve o
 modelo de dados. O gerado nunca se edita à mão; regenera-se.

@@ -1,6 +1,6 @@
 ---
 id: 009
-status: aprovada
+status: implementada
 depende_de: [008, 012]
 ---
 
@@ -221,7 +221,34 @@ abstract class CertificateLauncher {          // SupabaseCertificateLauncher em 
 
 ## Decisões durante a implementação
 
-- …
+- **`file_picker` 11.0.3** em vez de 13.1.0: o 13 e o 12 exigem `win32` 6, e
+  `share_plus ^11`/`package_info_plus ^9` exigem `win32` 5.
+- **`httpx2` em vez de `httpx`** no leitor: o Starlette 1.7 deprecou o `httpx`
+  no `TestClient`; o `httpx2` é da organização pydantic (conferido no PyPI).
+- **PDFs de teste gerados à mão** (`tests/pdf_factory.py`), sem `reportlab`.
+- **O leitor lê até 10 páginas** do PDF.
+- **No manual, o token e a pasta são conferidos antes dos campos:** quem não
+  está autenticado nunca recebe detalhe de validação.
+- **Falha inesperada do leitor (configuração faltando, Supabase fora) vira
+  503 `unavailable`**, só o tipo do erro no log.
+- **Categoria padrão do formulário manual: Horas Complementares.**
+- **O formulário manual não é lista preguiçosa** (`SingleChildScrollView`):
+  campo construído fora da tela sairia do `Form` e escaparia da validação.
+- **Depois do lançamento manual, `go('/upload')` e, no frame seguinte,
+  `go('/dashboard')`:** `pop` + `go` no mesmo frame deixava a aba Enviar
+  reabrir no formulário.
+- **Mensagem única para `Unreadable` inesperado, `ReaderUnavailable` e o 409
+  `readable`:** "Não foi possível ler o certificado. Tente de novo.".
+- **Testes Python nomeados `test_caNN_…`:** nome de função não aceita hífen.
+- **`ruff` S105/S106 desligados só em `tests/`:** tokens de fixture, nunca
+  credencial real.
+- **Teste do bucket (`supabase/tests/storage.sql`) não foi executado:** a
+  execução foi recusada (tem `insert`/`delete` numa transação desfeita).
+  Verificado só por leitura: bucket privado, 10 MB, só PDF, e as três
+  políticas presas à pasta `auth.uid()`.
+- **Deploy no Vercel pendente:** precisa da `SUPABASE_SERVICE_ROLE_KEY`, que o
+  MCP não expõe. Até lá, `CERTIFICATE_READER_URL` fica vazio e o envio mostra
+  "Não foi possível ler o certificado".
 
 ## Perguntas em aberto
 

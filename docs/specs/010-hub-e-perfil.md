@@ -1,6 +1,6 @@
 ---
 id: 010
-status: aprovada
+status: implementada
 depende_de: [007, 008, 012]
 ---
 
@@ -164,7 +164,23 @@ abstract class ProfileRepository { Future<StudentProfile> current(); }
 
 ## Decisões durante a implementação
 
-- …
+- **A busca procura também em quem oferece:** "extensao" acha a Horta (título)
+  e a Robótica ("Núcleo de Extensão (exemplo)").
+- **Linha malformada do catálogo é pulada; link que não é `https` é
+  descartado:** o resto do catálogo continua aparecendo.
+- **`ProfileCubit` na casca, ao lado do `UploadCubit`:** a app bar usa as
+  iniciais do perfil. O `DemoStudent` saiu; antes do perfil chegar, o avatar
+  mostra um ícone de pessoa.
+- **Falha ao carregar o perfil mostra mensagem e "Tentar de novo"** (não estava
+  na spec; mesmo padrão do Dashboard e do Hub).
+- **`TabPlaceholderPage` removido:** nenhuma aba é provisória. O teste CA-03 da
+  casca (aba viva fora do palco) passou a achar a `OpportunitiesPage`.
+- **Seed com "(exemplo)" em quem oferece e links em `example.com`** (domínio
+  reservado), para nenhum exemplo imitar evento real.
+- **"Sair da conta?" usa o `AlertDialog` do Flutter:** o `next_widgets_service`
+  não tem diálogo de confirmação e nenhum lint pede outro.
+- **Testes de banco** (`supabase/tests/opportunities.sql`) rodados pelo MCP:
+  `opportunities ok`.
 
 ## Perguntas em aberto
 

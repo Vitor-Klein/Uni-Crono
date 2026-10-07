@@ -1,6 +1,6 @@
 ---
 id: 012
-status: aprovada
+status: implementada
 depende_de: [007, 008]
 ---
 
@@ -181,7 +181,42 @@ class SupabaseHoursRepository implements HoursRepository { /* lê certificates *
 
 ## Decisões durante a implementação
 
-- …
+- **O login mantém o seletor de instituição do Figma e confere a conta.** A
+  instituição já vem na conta; um seletor sem efeito enganaria. Conta de
+  outra instituição não entra e mostra "Esta conta é de outra instituição"
+  (`WrongInstitution`), depois de encerrar a sessão no servidor.
+- **O `SessionCubit` só aceita do servidor o fim da sessão.** Se ele repassasse
+  todo evento do SDK, uma conta de outra instituição apareceria logada por um
+  instante (o SDK avisa o login antes da checagem). O login emite a sessão
+  depois de conferir; do servidor vem só o "acabou" (sair em outro lugar,
+  sessão vencida).
+- **A instituição viaja nos metadados da conta** (`user_metadata`), lida sem
+  requisição ao abrir o app. Conta sem instituição conhecida não entra.
+- **Perfil sem política de `update`** (a spec dizia select/update): não há
+  edição de perfil; a superfície fica menor.
+- **`ConfirmationRequired`:** com a confirmação de e-mail ligada no painel, o
+  cadastro mostra "Conta criada. Confirme o e-mail para entrar.". O MCP do
+  Supabase não configura o Auth: desligar a confirmação é passo manual
+  (pendente).
+- **O RF-06 da 007 sai** (entrar sem salvar quando o armazenamento bloqueia):
+  quem guarda a sessão agora é o SDK do Supabase.
+- **`AppBootstrap.connectAccountServer()` separado do `initialize()`:** o teste
+  de licenças das fontes chama o `initialize()` sem configuração.
+- **Horas-base saem da produção; a fixture de teste as guarda como
+  certificados** (os 3 antigos + 98 h e 30 h antigos), para os testes do
+  Dashboard manterem os números (130/45). O resumo passou de 3 para 5
+  certificados nos testes; o teste "toda instância começa dos mesmos dados"
+  saiu, porque a produção começa do servidor.
+- **O `SupabaseHoursRepository` esquece as horas no sign-out:** ele vive acima
+  do router, e o próximo aluno no mesmo aparelho veria as horas do anterior
+  por um instante.
+- **Erros no stream de sessão do SDK são descartados no `changes()`:** o SDK
+  reporta falha de renovação como erro no stream, o que quebraria a escuta.
+- **Dashboard ganhou estado de carregamento**, além de vazio e erro.
+- **Configuração por `--dart-define-from-file=config/app.json`** (fora do git),
+  com `config/app.example.json` versionado.
+- **Testes de RLS** (`supabase/tests/rls.sql`) rodados pelo MCP
+  (`execute_sql`), numa transação desfeita: `rls ok`.
 
 ## Perguntas em aberto
 
