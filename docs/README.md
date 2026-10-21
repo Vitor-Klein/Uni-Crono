@@ -1,4 +1,4 @@
-# docs/ — Uni-Crono
+# docs/ — Uni Cronos
 
 Toda a documentação do projeto mora aqui. Ela se divide em duas naturezas que não
 se misturam:

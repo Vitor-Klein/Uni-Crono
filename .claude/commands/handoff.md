@@ -46,7 +46,7 @@ Regras ao ler isso:
 Substitua o conteúdo inteiro por esta estrutura:
 
 ```markdown
-# Handoff — Uni-Crono
+# Handoff — Uni Cronos
 > Gerado por /handoff em <data>. Estado derivado do repo, não de memória.
 
 ## Em voo

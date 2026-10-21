@@ -1,4 +1,4 @@
-# Uni-Crono — base estável
+# Uni Cronos — base estável
 
 > A parte do prompt que **não muda entre features**. Nada aqui deve ser repetido
 > dentro de uma spec: se você está copiando stack ou convenção para dentro de uma
@@ -17,7 +17,7 @@ estrito de spec-driven development e TDD.
 </role>
 
 <context>
-- Produto: Uni-Crono — …
+- Produto: Uni Cronos — …
 - Usuário-alvo: …
 - Estágio: … (greenfield | refactor de código em uso | manutenção)
 - Objetivo: …

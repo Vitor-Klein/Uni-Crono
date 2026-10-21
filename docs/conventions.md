@@ -1,4 +1,4 @@
-# Convenções — Uni-Crono
+# Convenções — Uni Cronos
 
 As convenções que o código segue **hoje**. Descreve estado, não intenção: se algo
 aqui ficar defasado do código, virou ficção — corrija junto com a mudança que o

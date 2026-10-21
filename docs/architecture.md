@@ -1,4 +1,4 @@
-# Arquitetura — Uni-Crono
+# Arquitetura — Uni Cronos
 
 Como o sistema é montado **hoje**. Descreve estado, não intenção: se algo aqui
 ficar defasado do código, virou ficção — corrija junto com a mudança que o defasou.

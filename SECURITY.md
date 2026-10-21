@@ -1,4 +1,4 @@
-# Política de segurança — Uni-Crono
+# Política de segurança — Uni Cronos
 
 Define as práticas obrigatórias de segurança para o código deste repositório,
 **incluindo código produzido com auxílio de IA**.
