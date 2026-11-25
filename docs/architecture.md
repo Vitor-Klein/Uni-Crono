@@ -226,7 +226,7 @@ numa transação desfeita no fim e levanta exceção a cada asserção que falha
 A aba Enviar (`lib/features/upload/`) lê o PDF no próprio aparelho e conta as
 horas; elas entram sem tela de conferência.
 
-- **Escolha:** `CertificatePicker` (em produção, `FilePickerCertificatePicker`,
+- **Escolha:** `CertificatePicker` (em produção, `FileSelectorCertificatePicker`,
   só PDF). O app aceita o arquivo que termina em `.pdf`, tem até 10 MB e começa
   com `%PDF-` (`isAcceptedCertificate`); senão, "Use um PDF de até 10 MB".
 - **Leitura:** `PdfTextExtractor` (em produção, `PdfrxTextExtractor`: o texto

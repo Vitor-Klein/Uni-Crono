@@ -43,7 +43,7 @@ interface ([abrir no Figma](https://www.figma.com/design/vNP3TPcSQFyIJEEPhlqSCE/
 | pdfrx | 2.4.7 | Leitura do texto do PDF no aparelho |
 | flutter_bloc | 9.1.1 | Gerência de estado (Cubits) |
 | go_router | 17.5.0 | Navegação |
-| file_picker | 11.0.3 | Escolha do arquivo PDF |
+| file_selector | 1.1.0 | Escolha do arquivo PDF |
 | firebase_messaging / firebase_remote_config | 16.2.2 / 6.5.1 | Notificações push e configuração remota |
 | shared_preferences | 2.5.5 | Preferências salvas no aparelho |
 

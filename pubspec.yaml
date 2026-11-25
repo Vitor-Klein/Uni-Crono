@@ -62,12 +62,11 @@ dependencies:
   next_core_service: any
   next_widgets_service: any
   pdf_service: any
-  rss_feed_service: any
   subscribe_service: any
   supabase_flutter: 2.18.0
   http: ^1.6.0
-  file_picker: ^11.0.3
   pdfrx: ^2.4.7
+  file_selector: ^1.1.0
 
 dev_dependencies:
   flutter_test:
@@ -108,10 +107,6 @@ dependency_overrides:
   pdf_service:
     git:
       url: https://github.com/BFAC-Microservices/pdf-service.git
-      ref: 1.0.0
-  rss_feed_service:
-    git:
-      url: https://github.com/BFAC-Microservices/rss-feed-service.git
       ref: 1.0.0
   subscribe_service:
     git:

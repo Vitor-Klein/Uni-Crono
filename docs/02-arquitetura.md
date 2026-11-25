@@ -70,7 +70,7 @@ flowchart TB
     P["Apresentação<br/>telas + Cubits"]
     D["Domínio<br/>regras puras"]
     I["Dados<br/>interfaces"]
-    S["Implementações<br/>Supabase, pdfrx, file_picker"]
+    S["Implementações<br/>Supabase, pdfrx, file_selector"]
     P -- "chama regras" --> D
     P -- "usa interfaces" --> I
     S -. "implementa" .-> I
@@ -234,7 +234,7 @@ Versões resolvidas em `pubspec.lock`.
 | Flutter / Dart | 3.41.5 / 3.11.3 | Framework de interface e linguagem. |
 | `supabase_flutter` | 2.18.0 | Cliente do Supabase: Auth, Postgres e Storage. |
 | `pdfrx` | 2.4.7 | Extração do texto do PDF no aparelho (PDFium). |
-| `file_picker` | 11.0.3 | Seletor de arquivos do sistema para escolher o PDF. |
+| `file_selector` | 1.1.0 | Seletor de arquivos do sistema (oficial do Flutter) para escolher o PDF. |
 | `crypto` | 3.0.7 | SHA-256 do arquivo, para detectar duplicados. |
 | `flutter_bloc` | 9.1.1 | Gerência de estado com Cubits. |
 | `go_router` | 17.5.0 | Rotas, casca com abas e redirecionamento por sessão. |

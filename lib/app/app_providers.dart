@@ -18,7 +18,7 @@ import '../features/profile/data/profile_repository.dart';
 import '../features/profile/data/supabase_profile_repository.dart';
 import '../features/upload/data/certificate_launcher.dart';
 import '../features/upload/data/certificate_picker.dart';
-import '../features/upload/data/file_picker_certificate_picker.dart';
+import '../features/upload/data/file_selector_certificate_picker.dart';
 import '../features/upload/data/pdf_text_extractor.dart';
 import '../features/upload/data/supabase_certificate_launcher.dart';
 
@@ -91,7 +91,7 @@ class AppProviders extends StatelessWidget {
         ),
         RepositoryProvider<CertificatePicker>(
           create: (_) =>
-              certificatePicker ?? const FilePickerCertificatePicker(),
+              certificatePicker ?? const FileSelectorCertificatePicker(),
         ),
         RepositoryProvider<CertificateLauncher>(
           create: (_) =>
