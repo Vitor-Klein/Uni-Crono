@@ -50,7 +50,14 @@ android {
 
     buildTypes {
         release {
-            signingConfig = signingConfigs.getByName("release")
+            // Sem key.properties (máquina sem a chave de produção) o release sai
+            // assinado com a chave de debug: serve para testar, nunca para a loja.
+            signingConfig = if (keystorePropertiesFile.exists()) {
+                signingConfigs.getByName("release")
+            } else {
+                logger.warn("key.properties ausente: release assinado com a chave de DEBUG")
+                signingConfigs.getByName("debug")
+            }
             isMinifyEnabled = false
             isShrinkResources = false
             proguardFiles(
